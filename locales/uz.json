@@ -1,0 +1,59 @@
+{
+    "buttons": {
+        "term_payment": "Muddatli to'lov",
+        "discounts": "Chegirmalar",
+        "lucky_game": "Yutuqli o'yinlar",
+        "site_map": "Sayt Xaritasi",
+        "sell": "Olcha da soting",
+        "add_cart":"Savatga solish",
+        "next_cart":"Savatga solindi",
+        "category":"Toifalar",
+        "home":"Asosiy",
+        "likes":"Sevimlilar",
+        "cart":"Savatcha",
+        "login":"Kirish",
+        "cabinet":"Kabinet",
+        "logout":"Chiqish",
+        "mainMenu":"Bosh sahifa",
+        "cartOrdering":"Buyurtma Berish",
+        "delete":"o'chirish",
+        "addComment":"Izoh qoldirish"
+
+    },
+
+    "cart": {
+        "emptyTitle":"Savatingiz hozircha bo'sh",
+        "emptyDisc":"lekin uni siz har doim to'ldirishingiz mumkin!?",
+        "in":"Savatingizda: {count} mahsulot bor",
+        "about":"Siz uchun eshikkacha bepul yetkazib berish mavjud Tanlovingizga ko'ra tez yetkazib berish",
+        "yourOrder":"Buyurtmangiz",
+        "products":"Mahsulotlar ({count}):",
+        "delivery":"Yetkazib berish ({day})",
+        "totalPrice":"Jami:",
+        "discount":"{percent}% Chegirma",
+        "saving":"Tejovingiz:{sum} so'm",
+        "productSaller":"Sotuvchi:",
+        "productColor":"Rangi:",
+        "productSize":"O'lchami:"
+
+    },
+
+    "product": {
+        "saller":"Sotuvchi:",
+        "onSale":"Sotuvda {count} dona bor",
+        "property":"Xususiyatlari",
+        "discription":"Tavsif",
+        "similar":"O'xshash mahsulotlar",
+        "comments":"Izohlar",
+        "commentWrite":"Izohingizni qo'diring!",
+        "all":"Barcha mahsulotlar"
+
+    },
+
+    "footer": {
+        "appsInfo":"Bizning mobil ilovamiz mavjud AppGallery, App Store va Google Play-da"
+    },
+
+    "sum":"{sum} so'm",
+    "search_input": "Toifa bo'yicha qidirish"
+}

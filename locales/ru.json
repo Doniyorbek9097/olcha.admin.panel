@@ -1,0 +1,56 @@
+{
+    "buttons": {
+        "term_payment": "Рассрочка платежа",
+        "discounts": "Скидки",
+        "lucky_game": "Выигрышные игры",
+        "site_map": "Карта сайта",
+        "sell": "Продам в Cherries",
+        "add_cart": "Добавить в корзину",
+        "next_cart": "Доступно в корзине",
+        "likes": "Избранное",
+        "cart": "Корзина",
+        "category": "Категории",
+        "home":"Главная",
+        "login": "Входить",
+        "cabinet":"Кабинет",
+        "logout":"Выход",
+        "mainMenu": "Главная страница",
+        "cartOrdering": "Разместить заказ",
+        "delete":"удалить",
+        "addCart":"Добавить в корзину",
+        "addComment":"Оставить комментарий"
+    },
+    "cart": {
+        "emptyTitle": "Ваша корзина на данный момент пуста",
+        "emptyDisc": "но вы всегда можете пополнить корзину!?",
+        "in": "В вашей корзине {count} товаров",
+        "about": "Для вас доступна бесплатная доставка от двери до двери. Быстрая доставка по вашему выбору.",
+        "yourOrder": "Ваш заказ",
+        "products": "Продукты ({count}):",
+        "delivery": "Доставка ({day})",
+        "totalPrice": "Общий:",
+        "discount": "{percent}% Скидка",
+        "saving": "Экономия:",
+        "productSaller": "Продавец:",
+        "productColor": "Цвет:",
+        "productSize": "Размер:"
+    },
+
+    "product": {
+        "saller":"Продавец:",
+        "onSale":"Есть {count} единиц на продажу",
+        "property":"Характеристики",
+        "discription":"Описание",
+        "similar":"Похожие продукты",
+        "comments":"Комментарии",
+        "commentWrite":"Оставить комментарий!",
+        "all":"Все продукты"
+
+    },
+    "footer": {
+        "appsInfo":"Наше мобильное приложение доступно в AppGallery, App store и Google play"
+    },
+
+    "sum": "{sum} сум",
+    "search_input": "Поиск по категории"
+}

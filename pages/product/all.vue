@@ -1,0 +1,162 @@
+<template>
+    <q-page class="q-pa-sm">
+        <q-card>
+            <q-table :grid="grid" :filter="filter" flat bordered title="Products" :rows="productStore.products"
+                :columns="columns" virtual-scroll v-model:pagination="pagination">
+                <template #top>
+                    <q-toolbar style="padding:0 !important;">
+                        <q-btn flat round dense icon="category" />
+                        <q-toolbar-title>
+                            Products
+                        </q-toolbar-title>
+                        <q-space />
+                        <GirdList v-model="grid" />
+                        <q-btn flat round dense icon="add" class="q-mr-xs"
+                            @click="navigateTo(localePath('/product/add'))" />
+
+                    </q-toolbar>
+                    <q-toolbar>
+                        <q-space />
+                        <q-input v-model="filter" dense outlined placeholder="Slug nomi bo'yicha qidirish"
+                            :class="$q.screen.lt.sm ? 'full-width' : 'w-50'">
+                            <template #append>
+                                <q-icon name="search" />
+                            </template>
+                        </q-input>
+                        <q-space />
+                    </q-toolbar>
+                </template>
+
+
+                <template #body-cell-image="props">
+                    <q-td :props="props">
+                        <q-img :src="props.row.images[0]" draggable width="50px"></q-img>
+                    </q-td>
+                </template>
+
+
+                <template #body-cell-name="props">
+                    <q-td :props="props">
+                        {{ textSlice(props.row.name, 0, 50) }}
+                    </q-td>
+                </template>
+
+
+                <template #body-cell-action="props">
+                    <q-td :props="props">
+                        <q-btn icon="edit" size="sm" flat dense color="blue"
+                            :to="{ name: 'EditProduct', params: { id: props.row._id } }" />
+
+                        <q-btn icon="delete" size="sm" class="q-ml-sm" flat dense color="red"
+                            @click="productStore.deleteProduct(props.row._id, productStore.products.indexOf(props.row))" />
+
+                    </q-td>
+                </template>
+
+                <template v-if="grid" #item="props">
+                    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 q-pa-xs">
+                        <q-card bordered :class="$q.dark.isActive ? 'hover:bg-gray-700' : 'hover:bg-gray-100'">
+                            <q-img :src="props.row.images[0]" style="max-height: 200px;">
+                                <q-badge v-if="props.row?.discount" color="red" rounded floating
+                                    :label="props.row?.discount_percent + '0% Chegirma'" />
+                            </q-img>
+
+                            <q-card-section>
+                                <div class="text-subtitle1">
+                                    {{ textSlice(props.row.name, 0, 50) }}
+                                </div>
+
+                            </q-card-section>
+
+                            <q-card-section>
+                                <div class="text-bold">
+                                    Narxi: {{ $n(props.row.price) }} {{ $t('sum') }}
+                                </div>
+                            </q-card-section>
+
+                            <q-card-actions align="right">
+                                    <q-btn type="primary" icon="edit"
+                                        :to="{ name: 'EditProduct', params: { id: props.row._id } }" />
+                                    <q-btn type="primary" icon="share" />
+                                    <q-btn type="primary" icon="delete"
+                                        @click="productStore.deleteProduct(props.row._id, productStore.products.indexOf(props.row))" />
+                            </q-card-actions>
+
+                        </q-card>
+
+                    </div>
+                </template>
+
+            </q-table>
+        </q-card> <!-- GRID TEMPLATE -->
+
+
+    </q-page>
+</template>
+  
+<script lang="ts" setup>
+definePageMeta({
+    layout: "default"
+})
+
+const { get } = useLocalStorage()
+
+const localePath = useLocalePath();
+const productStore = useProductStore();
+productStore.getProducts();
+
+const filter = ref("");
+const pagination = ref({ rowsPerPage: 100 })
+const grid = ref(false);
+onMounted(() => grid.value = get("isGrid"))
+
+
+const columns = [
+
+    {
+        name: 'image',
+        field: "image",
+        label: 'Image',
+        align: 'left',
+        required: true
+    },
+
+    {
+        name: 'name',
+        label: 'Nomi',
+        align: 'left',
+        field: row => row.name,
+        format: val => `${val}`,
+        sortable: true,
+        required: true
+    },
+
+    {
+        name: 'price',
+        label: 'Narxi',
+        align: 'left',
+        field: row => row.price,
+        format: val => `${val}`,
+        sortable: true,
+        required: true
+    },
+
+
+
+    { 
+        name: 'action', 
+        label: 'Action', 
+        align: "right", 
+        field: 'action' 
+    },
+
+]
+
+
+
+
+
+</script>
+  
+<style lang="scss" scoped></style>
+  
