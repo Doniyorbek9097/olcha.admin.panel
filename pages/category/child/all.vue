@@ -1,8 +1,8 @@
 <template>
     <q-page class="q-pa-sm">
        <q-card flat>
-         <q-table :grid="grid"  :filter="filter" flat bordered title="Category" :rows="categories"
-           :hide-bottom="true" :columns="columns" virtual-scroll v-model:pagination="pagination">
+         <q-table :grid="grid"  :filter="filter" flat bordered title="Category" :rows="categoryStore.childCategories"
+          :columns="columns" virtual-scroll v-model:pagination="pagination">
            <template #top>
              <q-toolbar style="padding:0 !important;">
                <q-btn flat round dense icon="category" />
@@ -39,9 +39,9 @@
                  </q-card-section>
    
                  <q-card-actions align="right">
-                   <q-btn icon="edit" size="sm" flat dense color="blue"/>
+                   <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/category/child/${props.row._id}`"/>
                  <q-btn size="sm" flat icon="delete" color="red"
-                   @click="deleteCategory(props.row._id, categoryStore.categories.indexOf(props.row))" />
+                   @click="deleteCategory(props.row._id, categoryStore.childCategories.indexOf(props.row))" />
                </q-card-actions>
    
                </q-card>
@@ -64,9 +64,9 @@
    
            <template #body-cell-action="props">
              <q-td :props="props">
-               <q-btn icon="edit" size="sm" flat dense color="blue"  :to="'/update'"/>
+               <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/category/child/${props.row._id}`"/>
                <q-btn icon="delete" size="sm" class="q-ml-sm" flat dense color="red"
-                 @click="deleteCategory(props.row._id, categories.indexOf(props.row))" />
+                 @click="deleteCategory(props.row._id, categoryStore.childCategories.indexOf(props.row))" />
              </q-td>
            </template>
          </q-table>
@@ -91,7 +91,6 @@
 
    await categoryStore.getCategory();
    
-   categories.value = categoryStore.categories.flatMap(cate => cate.children.flatMap(child => child ? child.children : []));
    onMounted(() => grid.value = get("isGrid"))
    
    
@@ -123,13 +122,7 @@
    ]);
    
    
-   const deleteCategory = async (id, index) => {
-       if(confirm("Rostdan ham o'chirilsinmi ?")) {
-        categoryStore.deleteCategory(id, index)
-        .then(data => data && categories.value.splice(index, 1))
-        .catch(err  => console.log(err));
-       }
-   }
+   const deleteCategory = async (id, index) => categoryStore.deleteCategory(id, index);
    
    
    </script>

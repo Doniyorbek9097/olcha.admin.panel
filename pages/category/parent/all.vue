@@ -2,7 +2,7 @@
  <q-page class="q-pa-sm">
     <q-card flat>
       <q-table :grid="grid"  :filter="filter" flat bordered title="Category" :rows="categoryStore.categories"
-        :hide-bottom="true" :columns="columns" virtual-scroll v-model:pagination="pagination">
+        :columns="columns" virtual-scroll v-model:pagination="pagination">
         <template #top>
           <q-toolbar style="padding:0 !important;">
             <q-btn flat round dense icon="category" />
@@ -39,7 +39,7 @@
               </q-card-section>
 
               <q-card-actions align="right">
-                <q-btn icon="edit" size="sm" flat dense color="blue"/>
+                <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/category/parent/${props.row._id}`"/>
               <q-btn size="sm" flat icon="delete" color="red"
                 @click="deleteCategory(props.row._id, categoryStore.categories.indexOf(props.row))" />
             </q-card-actions>
@@ -64,7 +64,7 @@
 
         <template #body-cell-action="props">
           <q-td :props="props">
-            <q-btn icon="edit" size="sm" flat dense color="blue"  :to="'/update'"/>
+            <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/category/parent/${props.row._id}`"/>
             <q-btn icon="delete" size="sm" class="q-ml-sm" flat dense color="red"
               @click="deleteCategory(props.row._id, categoryStore.categories.indexOf(props.row))" />
           </q-td>
@@ -98,14 +98,14 @@ const columns = ref([
   name: 'image',
   field: "image",
   label: 'Image',
-  align: 'center',
+  align: 'left',
   required: true
 },
 
 {
   name: 'name',
   label: 'Categories',
-  align: 'center',
+  align: 'left',
   field: row => row.name,
   format: val => `${val}`,
   sortable: true,
@@ -114,7 +114,7 @@ const columns = ref([
 { 
     name: 'action', 
     label: 'Action', 
-    align: "center", 
+    align: "right", 
     field: 'action' 
 },
 

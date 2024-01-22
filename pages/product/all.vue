@@ -1,6 +1,6 @@
 <template>
     <q-page class="q-pa-sm">
-        <q-card>
+        <q-card flat>
             <q-table :grid="grid" :filter="filter" flat bordered title="Products" :rows="productStore.products"
                 :columns="columns" virtual-scroll v-model:pagination="pagination">
                 <template #top>
@@ -44,8 +44,7 @@
 
                 <template #body-cell-action="props">
                     <q-td :props="props">
-                        <q-btn icon="edit" size="sm" flat dense color="blue"
-                            :to="{ name: 'EditProduct', params: { id: props.row._id } }" />
+                        <q-btn icon="edit" size="sm" flat dense color="blue" />
 
                         <q-btn icon="delete" size="sm" class="q-ml-sm" flat dense color="red"
                             @click="productStore.deleteProduct(props.row._id, productStore.products.indexOf(props.row))" />
@@ -75,11 +74,9 @@
                             </q-card-section>
 
                             <q-card-actions align="right">
-                                    <q-btn type="primary" icon="edit"
-                                        :to="{ name: 'EditProduct', params: { id: props.row._id } }" />
+                                    <q-btn type="primary" icon="edit" />
                                     <q-btn type="primary" icon="share" />
-                                    <q-btn type="primary" icon="delete"
-                                        @click="productStore.deleteProduct(props.row._id, productStore.products.indexOf(props.row))" />
+                                    <q-btn type="primary" icon="delete" @click="productStore.deleteProduct(props.row._id, productStore.products.indexOf(props.row))" />
                             </q-card-actions>
 
                         </q-card>

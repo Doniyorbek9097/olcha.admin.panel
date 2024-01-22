@@ -2,11 +2,11 @@
     <q-page>
         <q-form class="row" @submit="submitForm" @reset="resetForm">
             <div class="col-6 p-2">Banner uz
-                <AdminFileUploader @result="ImageUz"/>
+                <FileUploader @result="ImageUz"/>
             </div>
 
             <div class="col-6 p-2">Banner ru
-                <AdminFileUploader @result="ImageRu"/>
+                <FileUploader @result="ImageRu"/>
             </div>
             <div class="col-12 p-2">Banner path link
                 <q-input v-model="carousel.slug" label="/path"/>
@@ -21,23 +21,15 @@
 </template>
   
 <script setup lang="ts">
-import type { ICarousel } from '~/types';
-const categoryStore = useCategoryStore();
-const carouselStore = useCarouselStore();
-
 definePageMeta({
     layout: "default"
 });
 
+const categoryStore = useCategoryStore();
+const carouselStore = useCarouselStore();
+await carouselStore.getCarousel();
+const { carousel } = carouselStore;
 
-const carousel = reactive<ICarousel>({
-    image: {
-        uz: "",
-        ru: ""
-    },
-
-    slug: ""
-})
 
 
 const ImageUz = (files: any) => {
@@ -66,7 +58,13 @@ const submitForm = async () => {
 }
 
 const resetForm = () => {
-    
+    carouselStore.carousel = {
+        image: {
+            uz: "",
+            ru: ""
+        },
+        slug: ""
+    }
 }
 
 

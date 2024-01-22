@@ -2,19 +2,31 @@
   <q-page>
     <q-form class="row p-5" @submit="submitForm" @reset="resetForm">
       <div class="col-12 p-2">Parent Cateogry
-        <q-select v-model="product.parentCategory" @update:model-value="ParentCategory" outlined dense lazy-rules emit-value map-options
-          :options="parent_categories" label="Parent Category" />
+        <q-select 
+        v-model="product.parentCategory" 
+        @update:model-value="ParentCategory" 
+        outlined dense lazy-rules emit-value map-options
+        :rules="[ val => val && val.length > 0 || 'Please type something']"
+        :options="parent_categories" label="Parent Category" />
       </div>
 
       <div class="col-12 p-2">Sub Cateogry
-        <q-select v-model="product.subCategory" @update:model-value="SubCategory" outlined dense lazy-rules emit-value map-options
-          :options="sub_categories" label="Sub Category" />
+        <q-select 
+        v-model="product.subCategory" 
+        @update:model-value="SubCategory" 
+        outlined dense lazy-rules emit-value map-options
+        :rules="[ val => val && val.length > 0 || 'Please type something']"
+        :options="sub_categories" label="Sub Category" />
       </div>
 
       <div class="col-12 p-2">Child Cateogry
-        <q-select v-model="product.childCategory" outlined dense lazy-rules emit-value map-options
-          :options="child_categories" label="Child Category" />
+        <q-select 
+        v-model="product.childCategory" 
+        outlined dense lazy-rules emit-value map-options
+        :rules="[ val => val && val.length > 0 || 'Please type something']"
+        :options="child_categories" label="Child Category" />
       </div>
+
 
       <div class="col-6 p-2">Product nomi (uzbekcha)
         <q-input v-model="product.name.uz" label="Product name" outlined dense/>
@@ -100,24 +112,22 @@ const product = ref<IProduct>({
 
     });
 
-const parent_categories = ref<ICategory[]>([]);
-const sub_categories = ref<ICategory[]>([]);
-const child_categories = ref<ICategory[]>([]);
+const parent_categories = ref([]);
+const sub_categories = ref([]);
+const child_categories = ref([]);
 
 parent_categories.value = categoryStore.categories.flatMap((cate: ICategory) => ({ label: cate.name, value: cate._id }));
 
 const ParentCategory = (id:string) => {
-  const parent = categoryStore.categories.find((cate: ICategory) => cate._id == id);
-  sub_categories.value = parent.children.flatMap((cate: ICategory) => ({ label: cate.name, value: cate._id }));
+  sub_categories.value = categoryStore.subCategories.flatMap((cate: ICategory) => cate.parentId == id ? { label: cate.name, value: cate._id } : null);
 }
 
 const SubCategory = (id:string) => {
-  const sub = categoryStore.categories.flatMap((cate: ICategory) => cate.children?.filter(sub => sub._id == id));
-  child_categories.value = sub[0].children.flatMap((cate: ICategory) => ({ label: cate.name, value: cate._id }));
+  child_categories.value = categoryStore.childCategories.flatMap((cate: ICategory) => cate.parentId == id ? { label: cate.name, value: cate._id } : null);
 }
 
 
-const ProductImagesUpload = (files: never) => {
+const ProductImagesUpload = (files: any) => {
 const images = ref([])
   for (const file of files) {
     fileReander(file, (err: string, file: string): void => {

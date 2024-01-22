@@ -6,6 +6,8 @@
 </template>
 
 <script setup>
-const categoryStore = useCategoryStore();
 
 </script>
+
+<style>
+</style>

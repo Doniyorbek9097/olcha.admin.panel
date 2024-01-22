@@ -4,7 +4,6 @@
         <q-card flat>
          
           <q-card-section class="row">
-
             <div class="col-12 p-2">Parent Cateogry
                 <q-select 
                 v-model="category.parentId" 
@@ -82,37 +81,21 @@
   </template>
   
   <script setup lang="ts">
-  import type { ICategory } from '~/types';
   definePageMeta({
     layout: "default"
   });
   
   
   const categoryStore = useCategoryStore();
+  const { category } = categoryStore;
   categoryStore.getCategory();
-  const categories = categoryStore.categories.flatMap(cate => cate.children?.flatMap(sub => ({label: sub.name, value: sub._id})))
-
-  const category = ref<ICategory>({
-    name: {
-      uz: "",
-      ru: "",
-    },
-  
-    image: "",
-    icon: "",
-    top_banner: [],
-    left_banner: [],
-    parentId:""
-  
-  })
-  
-
+  const categories = categoryStore.subCategories.flatMap(sub => ({label: sub.name, value: sub._id}))
 
   const Image = (files: any) => {
   for (const file of files) {
     fileReander(file, (err: string, file: string): void => {
       if (err) return console.log(err);
-      category.value.image = file;
+      category.image = file;
     })
   }
 
@@ -123,7 +106,7 @@ const TopImageUz = (files: any, index: number) => {
   for (const file of files) {
     fileReander(file, (err: string, file: string): void => {
       if (err) return console.log(err);
-      category.value.top_banner![index].image.uz = file;
+      category.top_banner![index].image.uz = file;
     })
   }
 }
@@ -133,7 +116,7 @@ const TopImageRu = (files: any, index: number) => {
   for (const file of files) {
     fileReander(file, (err: string, file: string): void => {
       if (err) return console.log(err);
-      category.value.top_banner![index].image.ru = file;
+      category.top_banner![index].image.ru = file;
     })
   }
 }
@@ -142,7 +125,7 @@ const TopImageRu = (files: any, index: number) => {
   
   
   const addToTopBanner = () => {
-    category.value.top_banner!.push({
+    category.top_banner!.push({
       image: {
         uz: "",
         ru: ""
@@ -153,11 +136,11 @@ const TopImageRu = (files: any, index: number) => {
   
   
   const submitForm = async () => {
-        categoryStore.addCategory(category.value)
+        categoryStore.addCategory(category)
   }
   
   const resetForm = () => {
-    category.value = {
+   categoryStore.category = {
     name: {
       uz: "",
       ru: "",
