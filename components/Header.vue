@@ -3,7 +3,7 @@
       <q-toolbar :class="$q.dark.isActive ? 'bg-black text-white' : 'bg-white text-black'">
         <q-btn flat dense round @click="" icon="menu" aria-label="Menu" />
         <q-toolbar-title>
-          Admin dashboard
+          Olcha admin dashboard
         </q-toolbar-title>
         <q-space />
         <div class="row q-gutter-xs items-center no-wrap">

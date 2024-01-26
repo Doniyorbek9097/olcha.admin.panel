@@ -2,7 +2,7 @@
   <q-toolbar>
         <q-btn flat round dense icon="shop" />
         <q-toolbar-title>
-          Clozzone.com
+          OLCHA admin
         </q-toolbar-title>
         <q-btn flat round dense icon="close" @click="emits('update:modelValue', !modelValue)" />
       </q-toolbar>

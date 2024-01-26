@@ -19,14 +19,6 @@
         <ElInput v-model="category.name.ru" placeholder="* Category rus tilida"/>
       </ElFormItem>
 
-      <ElFormItem prop="image">
-          <Uploader @result="Image" :limit="1" list-type="picture">
-            <ElButton>
-              <q-icon name="add" size="20px" />
-              Category rasm yuklash
-            </ElButton>
-          </Uploader>
-      </ElFormItem>
 
       <ElFormItem>
         <ElButton @click="submitForm(ruleFormRef)" color="lime">
@@ -64,40 +56,13 @@ const ruleFormRef = ref<FormInstance>()
 const rules = reactive({
   "parentId": [{ required: true, message: "Iltimos parent category tanlang", trigger: "change" }],
   "name.uz": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-  "name.ru": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-  "image": [{ required: true, message: "Iltimos rasmni yuklang", trigger: "change" }]
+  "name.ru": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }]
 
 })
 
 
 
 
-const Image = async (file: any) => {
-  category.image = await fileReander(file.raw).catch(err => console.log(err)) as string;
-}
-
-
-const TopImageUz = async (file: any, index: number) => {
-  category.top_banner![index].image.uz = await fileReander(file.raw).catch((err: string) => console.log(err)) as string;
-
-}
-
-
-const TopImageRu = async (file: any, index: number) => {
-  category.top_banner![index].image.ru = await fileReander(file.raw).catch(err => console.log(err)) as string;
-
-}
-
-
-const addToTopBanner = () => {
-  category.top_banner!.push({
-    image: {
-      uz: "",
-      ru: ""
-    },
-    slug: ""
-  });
-}
 
 
 
