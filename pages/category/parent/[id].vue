@@ -1,76 +1,79 @@
 <template>
-    <q-page>
-      <q-form @submit="submitForm" @reset="resetForm" class="q-gutter-md">
-        <q-card>
-         
-          <q-card-section class="row">
-            <div class="col-6 p-2">Category name uz
-              <q-input 
-              v-model="category.name.uz" 
-              label="Category name uz *" 
-              outlined 
-              dense
-              lazy-rules
-              :rules="[ val => val && val.length > 0 || 'Please type something']"
-              />
-  
-            </div>
-            <div class="col-6 p-2">Category name ru
-              <q-input 
-              v-model="category.name.ru" 
-              label="Category name ru *" 
-              outlined 
-              dense 
-              lazy-rules
-              :rules="[ val => val && val.length > 0 || 'Please type something']"
-              />
-            </div>
-  
-          </q-card-section>
-  
-          <q-card-actions align="right" class="p-[100px]">
-            <q-btn label="Saqlash" type="submit" color="primary" />
-            <q-btn label="Tozalash" type="reset" color="primary" flat class="q-ml-sm" />
-          </q-card-actions>
-  
-        </q-card>
-      </q-form>
-    </q-page>
-  </template>
-  
-  <script setup lang="ts">
-  definePageMeta({
-    layout: "default"
-  });
-  
-  const route = useRoute();
-  const categoryStore = useCategoryStore();
-  await categoryStore.getOneCategory(route.params.id as string);
-  const { category } = categoryStore;
-  
-  
-  const submitForm = async () => {
-        categoryStore.updateCategory(category._id as string, category);
-  }
-  
-  const resetForm = () => {
-    category = {
-    name: {
-      uz: "",
-      ru: "",
-    },
-  
-    image: "",
-    icon: "",
-    left_banner: [],
-    top_banner: []
-  }
-  
-  }
-  
-  
-  
-  
-  </script>
-  
-  <style scoped></style>
+  <q-page class="p-5">
+    <ElForm ref="ruleFormRef" :model="category" :rules="rules" label-width="120px" label-position="top"
+      class="demo-ruleForm" size="large" status-icon>
+
+      <ElFormItem prop="name.uz">
+        <ElInput v-model="category.name.uz" placeholder="* Category o'zbek tilida"/>
+      </ElFormItem>
+
+      <ElFormItem prop="name.ru">
+        <ElInput v-model="category.name.ru" placeholder="* Category rus tilida"/>
+      </ElFormItem>
+
+      <ElFormItem>
+        <ElButton @click="submitForm(ruleFormRef)" color="lime">
+          <q-icon name="save" size="20px"/>
+          Saqlash
+        </ElButton>
+        <ElButton @click="resetForm(ruleFormRef)" color="red">
+          <q-icon name="clear" size="20px"/>
+          Tozalash
+        </ElButton>
+
+      </ElFormItem>
+
+
+    </ElForm>
+  </q-page>
+</template>
+
+<script setup lang="ts">
+import type { FormInstance } from 'element-plus'
+
+definePageMeta({
+  layout: "default"
+});
+
+
+const id = useRoute().params.id as string;
+
+const categoryStore = useCategoryStore();
+await categoryStore.getCategory();
+await categoryStore.getOneCategory(id);
+const { category } = categoryStore;
+
+
+const ruleFormRef = ref<FormInstance>();
+
+const rules = reactive({
+  "name.uz": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
+  "name.ru": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }]
+
+})
+
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      console.log('submit!')
+      await categoryStore.updateCategory(id, category);
+    } else {
+      console.log('error submit!', fields)
+    }
+  })
+}
+
+
+const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.resetFields()
+}
+
+
+
+
+</script>
+
+<style scoped></style>

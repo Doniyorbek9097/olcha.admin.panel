@@ -10,7 +10,9 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@element-plus/nuxt": "^1.0.7",
     "autoprefixer": "^10.4.17",
+    "element-plus": "^2.5.3",
     "nuxt": "^3.9.3",
     "nuxt-quasar-ui": "^2.0.7",
     "postcss": "^8.4.33",
@@ -19,7 +21,6 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
-    "@nuxt/image-edge": "^1.3.0-28427865.ae93934",
     "@nuxtjs/i18n": "^8.0.0-beta.10",
     "@pinia/nuxt": "^0.5.1",
     "@quasar/extras": "^1.16.9",

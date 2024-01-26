@@ -1,17 +1,17 @@
 interface ICategoryTopBanner {
     image: {
-        uz: string | null,
-        ru: string | null,
+        uz: string,
+        ru: string,
     },
-    slug: string | null
+    slug: string 
 }
 
 interface ICategoryLeftBanner {
     image: {
-        uz: string | null,
-        ru: string | null,
+        uz: string,
+        ru: string,
     },
-    slug: string | null
+    slug: string 
 }
 
 export interface ICategory {
@@ -26,7 +26,7 @@ export interface ICategory {
     left_banner?: ICategoryLeftBanner[],
     top_banner?: ICategoryTopBanner[],
     children?: ICategory[],
-    parentId?: string | null,
+    parentId?: string,
     updatedAt?: string,
     createdAt?: string
 

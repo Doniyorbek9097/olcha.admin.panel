@@ -7,22 +7,6 @@ export default defineNuxtConfig({
   ssr: true,
   target:"static",
 
-  image: {
-    inject: true,
-    quality: 80,
-    format: ['avif'],
-    loading:'lazy',
-  screens: {
-    'xs': 320,
-    'sm': 640,
-    'md': 768,
-    'lg': 1024,
-    'xl': 1280,
-    'xxl': 1536,
-    '2xl': 1536
-  },
-
-  },
 
   css: [
     '~/assets/css/main.css',
@@ -32,14 +16,14 @@ export default defineNuxtConfig({
   ],
   modules: [
     'nuxt-quasar-ui',
+    '@element-plus/nuxt',
     ['@pinia/nuxt',
       {
         autoImports: ["defineStore", "acceptHMRUpdate"],
       },
     ],
 
-    '@nuxtjs/i18n',
-    '@nuxt/image-edge'
+    '@nuxtjs/i18n'
   ],
 
   imports: {

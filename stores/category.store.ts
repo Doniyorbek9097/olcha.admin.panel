@@ -1,4 +1,4 @@
-import { defineStore } from "pinia"
+import { acceptHMRUpdate, defineStore } from "pinia"
 import type { ICategory } from "~/types";
 import { useRouter } from "#vue-router";
 import { useQuasar } from "quasar";
@@ -17,13 +17,15 @@ export const useCategoryStore = defineStore("categoryStore", () => {
                 ru: "",
             },
 
-            image: "",
+            image: [],
             left_banner: [],
             top_banner: []
 
         });
 
     const addCategory = async (category: ICategory) => {
+        console.log(category);
+        
         $q.loading.show({ delay: 400 });
         const { data, status } = await useAPIFetch("/category", { method: "post", body: category });
 
@@ -188,3 +190,9 @@ export const useCategoryStore = defineStore("categoryStore", () => {
     }
 
 });
+
+
+if (import.meta.hot) {
+    import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot));
+}
+  

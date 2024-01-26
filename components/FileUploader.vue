@@ -2,18 +2,18 @@
   <q-file 
   v-model="file" 
   @update:model-value="uploader" 
-  @clear="clear"
   outlined 
-  label="rasm"
+  label="Rasm Yuklash"
   dense 
   lazy-rules
+  accept="image/*"
   >
     <template #prepend>
       <q-icon :name="props.icon" />
     </template>
 
-    <template #selected>
-      Yana yuklash
+    <template #selected="files">
+      {{ props.multiple ? (list.length > 0 ? "Yana Yuklash" :"Rasm Yuklash") : `Rasm yuklandi` }}
     </template>
 
   </q-file>
@@ -44,6 +44,11 @@ const props = defineProps({
   required: {
     type: Boolean,
     default: false
+  },
+
+  multiple: {
+    type: Boolean,
+    default: false
   }
   
 });
@@ -54,13 +59,16 @@ const file = ref(null);
 const list = ref([]);
 
 const uploader = (file:any) => {
-  list.value.push(file);
-  file.value = ""
-  emits("result", list.value);
+  if(props.multiple) {
+    list.value.push(file);
+    emits("result", list.value)
+  }else {
+    emits("result", file);
+  }
+
 }
 
 const clear = () => {
-  file.value = "";
   emits("result", list.value);
 
 }
