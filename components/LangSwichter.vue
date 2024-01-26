@@ -1,6 +1,6 @@
 <template>
     <div class="custom-select">
-      <select v-model="language" class="max-lg:text-[red]">
+      <select v-model="language">
       <option
         v-for="item in locales"
         :key="typeof item === 'object' ? item.code : item"
@@ -29,10 +29,7 @@
   
   
   <style scoped>
-  .custom-select {
-    background-color: red;
-    color: white;
-  }
+  
   
   select {
     appearance: none;
@@ -46,7 +43,6 @@
     /* border: 1px solid #caced1; */
     outline: none;
     border-radius: 0.25rem;
-    color: black;
     cursor: pointer;
   }
   
