@@ -53,12 +53,11 @@ const ImgListPush = (file: UploadFile, files: UploadFile[]) => {
         image.onload = () => {
             if (image.width !== props.width && image.height !== props.height) {
                 isError.value = true;
-                ElMessage.error(`Rasmning ${props.width ? "Bo'yi:" + props.width : ""} ${props.height ? "Kengligi:"+ props.height : ""} pixel bo'lishi lozim`);
-                return ElMessage.error(`Siz tanlangan rasmning ${image.width ? "Bo'yi:" + image.width : ""} ${image.height ? "Kengligi:"+ image.height : ""} pixel`)
+                ElMessage.error(`Rasmning ${props.width ? "Bo'yi:" + props.width : ""} ${props.height ? "Kengligi:" + props.height : ""} pixel bo'lishi lozim`);
+                return ElMessage.error(`Siz tanlangan rasmning ${image.width ? "Bo'yi:" + image.width : ""} ${image.height ? "Kengligi:" + image.height : ""} pixel`)
             }
 
         }
-
 
         if (props.multiple) {
             emits("update:modelValue", files);
@@ -67,6 +66,18 @@ const ImgListPush = (file: UploadFile, files: UploadFile[]) => {
             emits("update:modelValue", file);
             emits("result", file);
         }
+
+
+    } else {
+
+        if (props.multiple) {
+            emits("update:modelValue", files);
+            emits("result", files);
+        } else {
+            emits("update:modelValue", file);
+            emits("result", file);
+        }
+
 
     }
 

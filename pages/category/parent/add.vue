@@ -87,7 +87,7 @@
 
           <ElCol :span="12"> 
             <ElFormItem prop="top_banner.0.image.ru">
-              <Uploader @result="(files) => TopImageRu(files, i)" :limit="1" list-type="picture" >
+              <Uploader @result="(files) => TopImageRu(files, i)" :limit="1" list-type="picture">
               <ElButton>
                 <QIcon name="upload" size="20px"></QIcon>
                 Rus tilidagi bannerni yuklash
