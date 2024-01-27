@@ -53,7 +53,7 @@
               <el-select v-model="banner.slug" size="large" filterable allow-create default-first-option
                 :reserve-keyword="false" placeholder="Bannerga havola yo'lini ko'rsating">
                 <el-option v-for="item in subCategories.concat(childCategories)" :key="item._id" :label="item.slug"
-                  :value="item.slug" />
+                  :value="(item.slug as string)" />
               </el-select>
             </ElFormItem>
           </ElCol>
@@ -70,7 +70,7 @@
       <ElFormItem required>
         <ElRow class="w-full" v-for="banner, i in category.top_banner">
 
-          <ElCol :span="12">
+          <ElCol :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <ElFormItem prop="top_banner.0.image.uz">
               <Uploader @result="(files) => TopImageUz(files, i)" :limit="1" list-type="picture">
                 <ElButton>
@@ -81,7 +81,7 @@
             </ElFormItem>
           </ElCol>
 
-          <ElCol :span="12">
+          <ElCol :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <ElFormItem prop="top_banner.0.image.ru">
               <Uploader @result="(files) => TopImageRu(files, i)" :limit="1" list-type="picture">
                 <ElButton>
@@ -98,7 +98,7 @@
               <el-select v-model="banner.slug" filterable allow-create default-first-option :reserve-keyword="false"
                 placeholder="Bannerga havola yo'lini ko'rsating">
                 <el-option v-for="item in subCategories.concat(childCategories)" :key="item._id" :label="item.slug"
-                  :value="item.slug" />
+                  :value="(item.slug as string)" />
               </el-select>
             </ElFormItem>
           </ElCol>
