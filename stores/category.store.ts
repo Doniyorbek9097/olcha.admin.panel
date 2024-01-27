@@ -94,7 +94,6 @@ export const useCategoryStore = defineStore("categoryStore", () => {
 
     const getOneCategory = async (id: string) => {
         $q.loading.show({ delay: 400 });
-
         const { data, status } = await useAPIFetch(`/category/${id}`);
         
         status.value == "success" && (
