@@ -24,8 +24,6 @@ export const useCategoryStore = defineStore("categoryStore", () => {
         });
 
     const addCategory = async (category: ICategory) => {
-        console.log(category);
-        
         $q.loading.show({ delay: 400 });
         const { data, status } = await useAPIFetch("/category", { method: "post", body: category });
 

@@ -6,9 +6,8 @@ import { useRouter } from "vue-router"
 export const useProductStore = defineStore("productStore", () => {
     const $q = useQuasar();
     const router = useRouter();
-    const message = ref("");
     const products = ref<IProduct[]>([]);
-    const product = ref<IProduct>({
+    const product = ref({
         name: {
             uz: "",
             ru: ""
@@ -35,19 +34,17 @@ export const useProductStore = defineStore("productStore", () => {
         images: [],
         // size: [],
         isDiscount: false,
-        discount: null,
+        discount: 0,
         // country: "",
 
     });
 
 
-    const addProduct = async (product: IProduct) => {
+    const addProduct = async (result: IProduct) => {
         $q.loading.show();
-        console.log(product);
-        
         const { data, status } = await useAPIFetch("/product", {
             method: "post",
-            body: product
+            body: result
         });
 
         if (status.value == "success") {
@@ -56,40 +53,9 @@ export const useProductStore = defineStore("productStore", () => {
                 message: "Muoffaqqiyatli saqlandi",
                 color: "green",
                 position: "top-right"
-            })
-            router.back();
+            });
 
-            product.value = {
-                name: {
-                    uz: "",
-                    ru: ""
-                },
-                discription: {
-                    uz: "",
-                    ru: ""
-                },
-                properteis: [
-                    {
-                        uz: "",
-                        ru: ""
-                    }
-                ],
-        
-                isPropery: false,
-                price: null,
-                countInStock: 1,
-                parentCategory: "",
-                subCategory: "",
-                childCategory: "",
-                shop: "",
-                colors: [],
-                images: [],
-                // size: [],
-                isDiscount: false,
-                discount: null,
-                // country: "",
-        
-            };        
+            router.back();
 
         }
 
@@ -102,6 +68,38 @@ export const useProductStore = defineStore("productStore", () => {
             })
         }
 
+        product.value = {
+            name: {
+                uz: "",
+                ru: ""
+            },
+            discription: {
+                uz: "",
+                ru: ""
+            },
+            properteis: [
+                {
+                    uz: "",
+                    ru: ""
+                }
+            ],
+    
+            isPropery: false,
+            price: null,
+            countInStock: 1,
+            parentCategory: "",
+            subCategory: "",
+            childCategory: "",
+            shop: "",
+            colors: [],
+            images: [],
+            // size: [],
+            isDiscount: false,
+            discount: null,
+            // country: "",
+    
+        };    
+        
 
 
     }
