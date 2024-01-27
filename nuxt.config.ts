@@ -44,34 +44,43 @@ export default defineNuxtConfig({
   },
 
   pwa: {
-    /* PWA options */
-    registerType:"autoUpdate",
-    manifest: {
-      name: "SportsWire",
-      short_name: "SportsWire",
-      description: "Up-to-date Sports News and Analysis App.",
-      theme_color: "#6a5acd",
-      lang: "en",
-      background_color: "#6a5acd",
-    },
+    // manifest: {
+    //   name: "Nuxt3 PWA",
+    //   short_name: "Nuxt3 PWA",
+    //   description: "Testing Nuxt3 PWA",
+    //   icons: [
+    //     {
+    //       src: "icons/icon_64x64.png",
+    //       sizes: "64x64",
+    //       type: "image/png",
+    //     },
+    //     {
+    //       src: "icons/icon_144x144.png",
+    //       sizes: "144x144",
+    //       type: "image/png",
+    //     },
+    //     {
+    //       src: "icons/icon_192x192.png",
+    //       sizes: "192x192",
+    //       type: "image/png",
+    //     },
+    //     {
+    //       src: "icons/icon_512x512.png",
+    //       sizes: "512x512",
+    //       type: "image/png",
+    //     },
+    //   ],
+    // },
+    // workbox: {
+    //   navigateFallback: "/",
+    // },
+    // devOptions: {
+    //   enabled: true,
+    //   type: "module",
+    // },
 
-    // https://pwa.nuxtjs.org/icon
-    icon: {
-      fileName:"./assets/logo.png",
-      sizes: [64, 120, 144, 152, 192, 384, 512], //Array of sizes to be generated (Square).These are the default values
-    },
-    // https://pwa.nuxtjs.org/meta
-    // Meta easily adds common meta tags into your project with zero-config needed. 
-    meta: {
-      name: "SportsWire",
-      description: "Up-to-date Sports News and Analysis App.",
-      author: "Vino Samari",
-      theme_color: "#6a5acd",
-      nativeUi: true,
-      appleStatusBarStyle: "black",
-      mobileAppIOS: true,
-    }
   },
+
 
   i18n: {
     langDir: "./locales",
