@@ -51,11 +51,16 @@ export interface IProduct {
     },
     properteis?: [
         {
-            uz: string,
-            ru: string
+            uz: {
+                key: string,
+                value: string
+            },
+            ru: {
+                key: string,
+                value: string
+            }
         }
     ],
-    isPropery: boolean,
     price: number,
     countInStock: number,
     parentCategory: string,

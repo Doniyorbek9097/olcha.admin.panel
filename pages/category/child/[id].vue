@@ -1,7 +1,7 @@
 <template>
   <q-page class="p-5">
     <ElForm ref="ruleFormRef" :model="category" :rules="rules" label-width="120px" label-position="top"
-      class="demo-ruleForm" size="large" status-icon>
+      class="demo-ruleForm" :size="$q.screen.md ? 'large': 'small'" status-icon>
       <ElFormItem prop="parentId">
         <ElCol :span="24">
             <el-select v-model="category.parentId" filterable allow-create default-first-option :reserve-keyword="false"

@@ -16,13 +16,7 @@ export const useProductStore = defineStore("productStore", () => {
             uz: "",
             ru: ""
         },
-        properteis: [
-            {
-                uz: "",
-                ru: ""
-            }
-        ],
-
+        properteis: [],
         isPropery: false,
         price: null,
         countInStock: 1,

@@ -1,11 +1,11 @@
 <template>
   <q-page class="p-5">
-    <ElForm ref="ruleFormRef" :model="product" label-width="120px" label-position="top" class="demo-ruleForm" size="large"
-      status-icon>
+    <ElForm ref="ruleFormRef" :model="product" label-width="120px" label-position="top" :rules="rules"
+      class="demo-ruleForm" :size="$q.screen.md ? 'large': 'small'" status-icon>
 
-      <ElFormItem prop="name.uz">
-        <ElCascader v-model="categoriesId" :options="options" :props="{ expandTrigger: 'hover'}"
-          @change="handleChange" class="w-full" placeholder="Categorylarini tanlash">
+      <ElFormItem prop="parentCategory">
+        <ElCascader v-model="categoriesId" :options="options" :props="{ expandTrigger: 'hover' }" @change="handleChange"
+          class="w-full" placeholder="Categorylarini tanlash">
           <template #default="{ node, data }">
             <span>{{ data.label }}</span>
             <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -22,42 +22,62 @@
       </ElFormItem>
 
       <p>Tafsif o'zbek tilda</p>
-      <ElFormItem prop="name.ru">
+      <ElFormItem prop="discription.uz">
         <ElCol :span="24">
-        <CreatePost v-model="product.discription.uz"></CreatePost>
+          <CreatePost v-model="product.discription.uz"></CreatePost>
         </ElCol>
       </ElFormItem>
 
       <p>Tafsif rus tilida</p>
-      <ElFormItem prop="name.ru">
+      <ElFormItem prop="discription.ru">
         <ElCol :span="24">
-        <CreatePost v-model="product.discription.ru"></CreatePost>
+          <CreatePost v-model="product.discription.ru"></CreatePost>
         </ElCol>
       </ElFormItem>
 
+
+      <p class="text-xl">Mahsulot Xususiyatlarini qo'shish</p>
+      <ElButton class="my-5" @click="AddPropery">Xususiyat qo'shish</ElButton>
+      <ElFormItem prop="countInStock">
+        <ElRow :gutter="12" v-for="property, i in product.properteis">
+          <ElCol :span="24">Xususiyat {{ i+1 }}</ElCol>
+          <ElCol :span="12">
+            <ElInput v-model="property.uz.key" placeholder="O'zbekcha key"></ElInput>
+            <ElInput v-model="property.ru.key" placeholder="Ruscha key"></ElInput>
+          </ElCol>
+          <ElSpace direction="horizontal" size="large"></ElSpace>
+          <ElCol :span="12">
+            <ElInput v-model="property.uz.value" placeholder="O'zbekcha value"></ElInput>
+            <ElInput v-model="property.ru.value" placeholder="Ruscha value"></ElInput>
+          </ElCol>
+              <ElButton class="my-5" color="red" @click="product.properteis.splice(i, 1)">Xususiyat o'chirish</ElButton>
+        </ElRow>
+      </ElFormItem>
+
       <p class="py-5">Mahsulot rasmlarini qoshing maxsimal <b>5 ta</b> Ini: <b>450-pixelda</b> va
-        <b>bo'yiga:700-pixelda</b> bo'lsin!</p>
-      <ElFormItem prop="name.ru">
+        <b>bo'yiga:700-pixelda</b> bo'lsin!
+      </p>
+      <ElFormItem prop="images">
         <Uploader :limit="5" list-type="picture-card" @result="ProductImagesUpload">
           <q-icon name="upload"></q-icon>
         </Uploader>
       </ElFormItem>
 
       <p class="py-5">Mahsulot narxi</p>
-      <ElFormItem prop="name.ru">
-        <el-input v-model="product.price" placeholder="Please input"
-          :formatter="(value:string) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-          :parser="(value:string) => value.replace(/\$\s?|(,*)/g, '')" />
+      <ElFormItem prop="price">
+        <el-input v-model="product.price"
+          :formatter="(value: string) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+          :parser="(value: string) => value.replace(/\$\s?|(,*)/g, '')" />
       </ElFormItem>
 
-      
+
       <p class="py-5">Mahsulot Miqdori</p>
-      <ElFormItem prop="name.ru">
-        <ElInputNumber v-model="product.countInStock" :min="1"/>
+      <ElFormItem prop="countInStock">
+        <ElInputNumber v-model="product.countInStock" :min="1" />
       </ElFormItem>
 
       <p class="py-5">Mahsulot Chegirmasi</p>
-      <ElFormItem prop="name.ru">
+      <ElFormItem prop="discount">
         <el-slider v-model="product.discount" size="large" />
       </ElFormItem>
 
@@ -120,13 +140,25 @@ const handleChange = (category: string[]) => {
   product.childCategory = category[2];
 }
 
+const AddPropery = () => {
+  product.properteis.push({
+    uz: {
+      key: "",
+      value: ""
+    },
+    ru: {
+      key: "",
+      value: ""
+    }
+  });
+
+}
 
 
 const ProductImagesUpload = async (file: any) => {
-    const data = await fileReander(file.raw).catch((err: string) => console.log(err)) as string;
+  const data = await fileReander(file.raw).catch((err: string) => console.log(err)) as string;
   product.images.push(data);
-  console.log(product.images);
-  
+
 }
 
 
@@ -134,9 +166,14 @@ const ProductImagesUpload = async (file: any) => {
 const ruleFormRef = ref<FormInstance>()
 
 const rules = reactive({
+  "parentCategory": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "change" }],
   "name.uz": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
   "name.ru": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-
+  "discription.uz": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
+  "dicription.ru": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
+  "images": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "change" }],
+  "price": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
+  "countInStock": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }]
 
 })
 
@@ -173,13 +210,15 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 @media not (min-width:768px) {
   .el-cascader-panel {
     max-width: 100%;
-    height: 0% !important;
     display: flex !important;
     flex-direction: column !important;
+    z-index: 999 !important;
   }
 
   .el-cascader-menu__wrap.el-scrollbar__wrap {
     height: 100% !important;
+    min-width: 300px !important;
+    z-index: 999 !important;
 
   }
 

@@ -1,7 +1,7 @@
 <template>
   <q-page class="p-5">
     <ElForm ref="ruleFormRef" :model="category" :rules="rules" label-width="120px" label-position="top"
-      class="demo-ruleForm" size="large" status-icon>
+      class="demo-ruleForm" :size="$q.screen.md ? 'large': 'small'" status-icon>
 
       <ElFormItem prop="name.uz">
         <ElInput v-model="category.name.uz" placeholder="Category o'zbek tilida" />
