@@ -176,13 +176,10 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     height: 0% !important;
     display: flex !important;
     flex-direction: column !important;
-    z-index: 999 !important;
   }
 
   .el-cascader-menu__wrap.el-scrollbar__wrap {
     height: 100% !important;
-    min-width: 300px !important;
-    z-index: 999 !important;
 
   }
 

@@ -22,7 +22,7 @@
             </q-menu>
           </q-btn>
           <q-btn round dense flat :icon="$q.fullscreen?.isActive ? 'fullscreen_exit' : 'fullscreen'"
-            @click="$q.fullscreen.toggle()" v-if="$q.screen.gt.sm">
+            @click="$q.fullscreen.toggle()">
           </q-btn>
           <q-avatar>
             <img src="https://cdn.quasar.dev/img/boy-avatar.png">

@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@element-plus/nuxt": "^1.0.7",
+    "@vite-pwa/nuxt": "^0.4.0",
     "autoprefixer": "^10.4.17",
     "element-plus": "^2.5.3",
     "nuxt": "^3.9.3",

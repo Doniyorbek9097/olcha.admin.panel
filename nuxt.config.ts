@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     '@quasar/extras/bootstrap-icons/bootstrap-icons.css',
   ],
   modules: [
+    '@vite-pwa/nuxt',
     'nuxt-quasar-ui',
     '@element-plus/nuxt',
     ['@pinia/nuxt',
@@ -40,6 +41,39 @@ export default defineNuxtConfig({
       "LocalStorage",
       "AppFullscreen" 
     ]
+  },
+
+  pwa: {
+    /* PWA options */
+    workbox: {
+      enabled: true, // true yoki false bo'lishi mumkin
+    },
+    registerType:"autoUpdate",
+    manifest: {
+      name: "SportsWire",
+      short_name: "SportsWire",
+      description: "Up-to-date Sports News and Analysis App.",
+      theme_color: "#6a5acd",
+      lang: "en",
+      background_color: "#6a5acd",
+    },
+
+    // https://pwa.nuxtjs.org/icon
+    icon: {
+      fileName:"./assets/logo.png",
+      sizes: [64, 120, 144, 152, 192, 384, 512], //Array of sizes to be generated (Square).These are the default values
+    },
+    // https://pwa.nuxtjs.org/meta
+    // Meta easily adds common meta tags into your project with zero-config needed. 
+    meta: {
+      name: "SportsWire",
+      description: "Up-to-date Sports News and Analysis App.",
+      author: "Vino Samari",
+      theme_color: "#6a5acd",
+      nativeUi: true,
+      appleStatusBarStyle: "black",
+      mobileAppIOS: true,
+    }
   },
 
   i18n: {
