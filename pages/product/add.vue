@@ -37,7 +37,6 @@
 
 
       <p class="text-xl">Mahsulot Xususiyatlarini qo'shish</p>
-      <ElButton class="my-5" @click="AddPropery">Xususiyat qo'shish</ElButton>
       <ElFormItem prop="countInStock">
         <ElRow :gutter="12" v-for="property, i in product.properteis">
           <ElCol :span="24">Xususiyat {{ i+1 }}</ElCol>
@@ -52,6 +51,7 @@
           </ElCol>
               <ElButton class="my-5" color="red" @click="product.properteis.splice(i, 1)">Xususiyat o'chirish</ElButton>
         </ElRow>
+          <ElButton class="my-5" @click="AddPropery">Xususiyat qo'shish</ElButton>
       </ElFormItem>
 
       <p class="py-5">Mahsulot rasmlarini qoshing maxsimal <b>5 ta</b> Ini: <b>450-pixelda</b> va
