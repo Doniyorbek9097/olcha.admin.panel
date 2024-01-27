@@ -45,9 +45,6 @@ export default defineNuxtConfig({
 
   pwa: {
     /* PWA options */
-    workbox: {
-      enabled: true, // true yoki false bo'lishi mumkin
-    },
     registerType:"autoUpdate",
     manifest: {
       name: "SportsWire",
