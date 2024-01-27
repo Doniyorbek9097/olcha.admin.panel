@@ -4,7 +4,7 @@
       status-icon>
 
       <ElFormItem prop="name.uz">
-        <ElCascader v-model="categoriesId" :options="options" :props="$q.screen.md && { expandTrigger: 'hover' as const }"
+        <ElCascader v-model="categoriesId" :options="options" :props="{ expandTrigger: 'hover'}"
           @change="handleChange" class="w-full" placeholder="Categorylarini tanlash">
           <template #default="{ node, data }">
             <span>{{ data.label }}</span>
@@ -87,8 +87,7 @@ definePageMeta({
 
 const categoryStore = useCategoryStore();
 const productStore = useProductStore();
-categoryStore.getCategory();
-
+await categoryStore.getCategory();
 const { categories } = categoryStore;
 const { product } = productStore;
 
