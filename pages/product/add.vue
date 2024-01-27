@@ -1,76 +1,85 @@
 <template>
-  <q-page>
-    <q-form class="row p-5" @submit="submitForm" @reset="resetForm">
-      <div class="col-12 p-2">Parent Cateogry
-        <q-select 
-        v-model="product.parentCategory" 
-        @update:model-value="ParentCategory" 
-        outlined dense lazy-rules emit-value map-options
-        :rules="[ val => val && val.length > 0 || 'Please type something']"
-        :options="parent_categories" label="Parent Category" />
-      </div>
+  <q-page class="p-5">
+    <ElForm ref="ruleFormRef" :model="product" label-width="120px" label-position="top" class="demo-ruleForm" size="large"
+      status-icon>
 
-      <div class="col-12 p-2">Sub Cateogry
-        <q-select 
-        v-model="product.subCategory" 
-        @update:model-value="SubCategory" 
-        outlined dense lazy-rules emit-value map-options
-        :rules="[ val => val && val.length > 0 || 'Please type something']"
-        :options="sub_categories" label="Sub Category" />
-      </div>
+      <ElFormItem prop="name.uz">
+        <ElCascader v-model="categoriesId" :options="options" :props="$q.screen.md && { expandTrigger: 'hover' as const }"
+          @change="handleChange" class="w-full" placeholder="Categorylarini tanlash">
+          <template #default="{ node, data }">
+            <span>{{ data.label }}</span>
+            <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+          </template>
+        </ElCascader>
+      </ElFormItem>
 
-      <div class="col-12 p-2">Child Cateogry
-        <q-select 
-        v-model="product.childCategory" 
-        outlined dense lazy-rules emit-value map-options
-        :rules="[ val => val && val.length > 0 || 'Please type something']"
-        :options="child_categories" label="Child Category" />
-      </div>
+      <ElFormItem prop="name.uz">
+        <ElInput v-model="product.name.uz" placeholder="Nomi o'zbek tilida" />
+      </ElFormItem>
 
+      <ElFormItem prop="name.ru">
+        <ElInput v-model="product.name.ru" placeholder="Nomi rus tilida" />
+      </ElFormItem>
 
-      <div class="col-6 p-2">Product nomi (uzbekcha)
-        <q-input v-model="product.name.uz" label="Product name" outlined dense/>
-      </div>
+      <p>Tafsif o'zbek tilda</p>
+      <ElFormItem prop="name.ru">
+        <ElCol :span="24">
+        <CreatePost v-model="product.discription.uz"></CreatePost>
+        </ElCol>
+      </ElFormItem>
 
-      <div class="col-6 p-2">Product nomi (ruscha)
-        <q-input v-model="product.name.ru" label="Product name" outlined dense/>
-      </div>
+      <p>Tafsif rus tilida</p>
+      <ElFormItem prop="name.ru">
+        <ElCol :span="24">
+        <CreatePost v-model="product.discription.ru"></CreatePost>
+        </ElCol>
+      </ElFormItem>
 
-      <div class="col-12 p-2">Product tavsif (o'zbekcha)
-        <CreatePost  v-model="product.discription.uz"/>
-      </div>
+      <p class="py-5">Mahsulot rasmlarini qoshing maxsimal <b>5 ta</b> Ini: <b>450-pixelda</b> va
+        <b>bo'yiga:700-pixelda</b> bo'lsin!</p>
+      <ElFormItem prop="name.ru">
+        <Uploader :limit="5" list-type="picture-card" @result="ProductImagesUpload">
+          <q-icon name="upload"></q-icon>
+        </Uploader>
+      </ElFormItem>
 
-      <div class="col-12 p-2">Product tavsif (ruscha)
-        <CreatePost  v-model="product.discription.ru"/>
-      </div>
-  
-      <div class="col-12 p-2">Product rasmlarni yuklash
-         <FileUploader @result="ProductImagesUpload" />
-      </div>
-
-      <div class="col-12 p-2">Product narxi
-        <q-input class="col-6" v-model="product.price" type="number" outlined label="Product price" dense />
-      </div>
-
-      <div class="col-12 p-2">Product miqdori
-        <q-input class="col-6" v-model="product.countInStock" type="number" outlined label="Product miqdori" dense />
-      </div>
+      <p class="py-5">Mahsulot narxi</p>
+      <ElFormItem prop="name.ru">
+        <el-input v-model="product.price" placeholder="Please input"
+          :formatter="(value:string) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+          :parser="(value:string) => value.replace(/\$\s?|(,*)/g, '')" />
+      </ElFormItem>
 
       
-      
-      <div class="col-12 p-10 row gap-2">
-      <q-btn type="submit" color="blue" label="Saqlash"/>
-      <q-btn type="reset" color="red">Tozalash</q-btn>
-      </div>
-      
-    </q-form>
+      <p class="py-5">Mahsulot Miqdori</p>
+      <ElFormItem prop="name.ru">
+        <ElInputNumber v-model="product.countInStock" :min="1"/>
+      </ElFormItem>
+
+      <p class="py-5">Mahsulot Chegirmasi</p>
+      <ElFormItem prop="name.ru">
+        <el-slider v-model="product.discount" size="large" />
+      </ElFormItem>
+
+      <ElFormItem>
+        <ElButton @click="submitForm(ruleFormRef)" color="teal">
+          <q-icon name="save" size="20px" />
+          Saqlash
+        </ElButton>
+        <ElButton @click="$router.back()" color="red">
+          <q-icon name="close" size="20px" />
+          Bekor qilish
+        </ElButton>
+      </ElFormItem>
+
+
+    </ElForm>
   </q-page>
-
 </template>
 
 <script setup lang="ts">
+import type { FormInstance, FormRules } from 'element-plus'
 import type { ICategory, IProduct } from '~/types';
-
 definePageMeta({
   layout: "default"
 });
@@ -80,140 +89,77 @@ const categoryStore = useCategoryStore();
 const productStore = useProductStore();
 categoryStore.getCategory();
 
-const product = ref<IProduct>({
-        name: {
-            uz: "",
-            ru: ""
-        },
-        discription: {
-            uz: "",
-            ru: ""
-        },
-        properteis: [
-            {
-                uz: "",
-                ru: ""
-            }
-        ],
+const { categories } = categoryStore;
+const { product } = productStore;
 
-        isPropery: false,
-        price: null,
-        countInStock: null,
-        parentCategory: "",
-        subCategory: "",
-        childCategory: "",
-        shop: "",
-        colors: [],
-        images: [],
-        // size: [],
-        isDiscount: false,
-        discount: null,
-        // country: "",
-
-    });
-
-const parent_categories = ref([]);
-const sub_categories = ref([]);
-const child_categories = ref([]);
-
-parent_categories.value = categoryStore.categories.flatMap((cate: ICategory) => ({ label: cate.name, value: cate._id }));
-
-const ParentCategory = (id:string) => {
-  sub_categories.value = categoryStore.subCategories.flatMap((cate: ICategory) => cate.parentId == id ? { label: cate.name, value: cate._id } : null);
-}
-
-const SubCategory = (id:string) => {
-  child_categories.value = categoryStore.childCategories.flatMap((cate: ICategory) => cate.parentId == id ? { label: cate.name, value: cate._id } : null);
-}
-
-
-const ProductImagesUpload = (files: any) => {
-const images = ref([])
-  for (const file of files) {
-    fileReander(file, (err: string, file: string): void => {
-      if (err) return console.log(err);
-      images.value.push(file);
+const options = categories.flatMap(parent => {
+  return {
+    value: parent._id,
+    label: parent.name,
+    children: parent.children?.flatMap(sub => {
+      return {
+        value: sub._id,
+        label: sub.name,
+        children: sub.children?.flatMap(child => {
+          return {
+            value: child._id,
+            label: child.name
+          }
+        })
+      }
     })
   }
+})
 
-  product.value.images = images.value;
+
+
+const categoriesId = ref([]);
+
+const handleChange = (category: string[]) => {
+  product.parentCategory = category[0];
+  product.subCategory = category[1];
+  product.childCategory = category[2];
 }
 
 
-// const ProductColorsUpload = (files: never) => {
-//   console.log(files)
-// }
 
-
-const submitForm = async () => {
-    await productStore.addProduct(product.value);
-
-      product.value = {
-        name: {
-            uz: "",
-            ru: ""
-        },
-        discription: {
-            uz: "",
-            ru: ""
-        },
-        properteis: [
-            {
-                uz: "",
-                ru: ""
-            }
-        ],
-
-        isPropery: false,
-        price: null,
-        countInStock: 0,
-        parentCategory: "",
-        subCategory: "",
-        childCategory: "",
-        shop: "",
-        colors: [],
-        images: [],
-        // size: [],
-        isDiscount: false,
-        discount: null,
-        // country: "",
-
-    } 
+const ProductImagesUpload = async (file: any) => {
+    const data = await fileReander(file.raw).catch((err: string) => console.log(err)) as string;
+  product.images.push(data);
+  console.log(product.images);
+  
 }
 
-const resetForm = () => {
-  product.value = {
-        name: {
-            uz: "",
-            ru: ""
-        },
-        discription: {
-            uz: "",
-            ru: ""
-        },
-        properteis: [
-            {
-                uz: "",
-                ru: ""
-            }
-        ],
 
-        isPropery: false,
-        price: null,
-        countInStock: 0,
-        parentCategory: "",
-        subCategory: "",
-        childCategory: "",
-        shop: "",
-        colors: [],
-        images: [],
-        // size: [],
-        isDiscount: false,
-        discount: null,
-        // country: "",
 
-    } 
+const ruleFormRef = ref<FormInstance>()
+
+const rules = reactive({
+  "name.uz": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
+  "name.ru": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
+
+
+})
+
+
+
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      console.log('submit!')
+      await productStore.addProduct(product);
+    } else {
+      console.log('error submit!', fields)
+    }
+  })
 }
+
+
+
+
+
 
 
 
@@ -222,4 +168,21 @@ const resetForm = () => {
 
 </script>
 
-<style scoped></style>
+<style>
+/* Mobil uchun moslashgan stil (style) */
+
+@media not (min-width:768px) {
+  .el-cascader-panel {
+    max-width: 100%;
+    height: 0% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .el-cascader-menu__wrap.el-scrollbar__wrap {
+    height: 100% !important;
+    min-width: 300px !important;
+  }
+
+}
+</style>

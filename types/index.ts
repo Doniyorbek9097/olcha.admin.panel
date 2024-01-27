@@ -56,8 +56,8 @@ export interface IProduct {
         }
     ],
     isPropery: boolean,
-    price: number | null,
-    countInStock: number | null,
+    price: number,
+    countInStock: number,
     parentCategory: string,
     subCategory: string,
     childCategory: string,
@@ -66,7 +66,7 @@ export interface IProduct {
     brend?: string,
     colors?: IColors[],
     size?: string[],
-    discount?: number | null,
+    discount?: number,
     isDiscount: boolean,
     country?: string
 

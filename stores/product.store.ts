@@ -8,10 +8,43 @@ export const useProductStore = defineStore("productStore", () => {
     const router = useRouter();
     const message = ref("");
     const products = ref<IProduct[]>([]);
-    const product = ref<IProduct>({})
+    const product = ref<IProduct>({
+        name: {
+            uz: "",
+            ru: ""
+        },
+        discription: {
+            uz: "",
+            ru: ""
+        },
+        properteis: [
+            {
+                uz: "",
+                ru: ""
+            }
+        ],
+
+        isPropery: false,
+        price: null,
+        countInStock: 1,
+        parentCategory: "",
+        subCategory: "",
+        childCategory: "",
+        shop: "",
+        colors: [],
+        images: [],
+        // size: [],
+        isDiscount: false,
+        discount: null,
+        // country: "",
+
+    });
+
 
     const addProduct = async (product: IProduct) => {
         $q.loading.show();
+        console.log(product);
+        
         const { data, status } = await useAPIFetch("/product", {
             method: "post",
             body: product
@@ -25,6 +58,38 @@ export const useProductStore = defineStore("productStore", () => {
                 position: "top-right"
             })
             router.back();
+
+            product.value = {
+                name: {
+                    uz: "",
+                    ru: ""
+                },
+                discription: {
+                    uz: "",
+                    ru: ""
+                },
+                properteis: [
+                    {
+                        uz: "",
+                        ru: ""
+                    }
+                ],
+        
+                isPropery: false,
+                price: null,
+                countInStock: 1,
+                parentCategory: "",
+                subCategory: "",
+                childCategory: "",
+                shop: "",
+                colors: [],
+                images: [],
+                // size: [],
+                isDiscount: false,
+                discount: null,
+                // country: "",
+        
+            };        
 
         }
 
@@ -132,6 +197,7 @@ export const useProductStore = defineStore("productStore", () => {
 
     return {
         products,
+        product,
         addProduct,
         getProducts,
         getOneProduct,

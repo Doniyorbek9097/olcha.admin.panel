@@ -4,23 +4,22 @@
       class="demo-ruleForm" size="large" status-icon>
 
       <ElFormItem prop="name.uz">
-        <ElInput v-model="category.name.uz" placeholder="Category o'zbek tilida"/>
+        <ElInput v-model="category.name.uz" placeholder="Category o'zbek tilida" />
       </ElFormItem>
 
       <ElFormItem prop="name.ru">
-        <ElInput v-model="category.name.ru" placeholder="Category rus tilida"/>
+        <ElInput v-model="category.name.ru" placeholder="Category rus tilida" />
       </ElFormItem>
 
       <ElFormItem>
-        <ElButton @click="submitForm(ruleFormRef)" color="lime">
-          <q-icon name="save" size="20px"/>
+        <ElButton @click="submitForm(ruleFormRef)" color="teal">
+          <q-icon name="save" size="20px" />
           Saqlash
         </ElButton>
-        <ElButton @click="resetForm(ruleFormRef)" color="red">
-          <q-icon name="clear" size="20px"/>
-          Tozalash
+        <ElButton @click="$router.back()" color="red">
+          <q-icon name="close" size="20px" />
+          Bekor qilish
         </ElButton>
-
       </ElFormItem>
 
 
@@ -67,11 +66,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   })
 }
 
-
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
-}
 
 
 

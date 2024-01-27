@@ -29,7 +29,7 @@
         <template v-if="grid" #item="props">
           <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 q-pa-xs">
             <q-card bordered :class="$q.dark.isActive ? 'hover:bg-gray-700':'hover:bg-gray-100'">
-              <q-img :src="props.row.image"/>
+              <q-img v-if="props.row.image" :src="props.row.image"/>
 
               <q-card-section>
                 <div class="text-subtitle1">
@@ -52,7 +52,7 @@
 
         <template #body-cell-image="props">
           <q-td :props="props">
-            <q-img :src="props.row.image" width="50px"/>
+            <q-img v-if="props.row.image" :src="props.row.image" width="50px"/>
           </q-td>
         </template>
 

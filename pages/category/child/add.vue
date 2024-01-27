@@ -20,16 +20,16 @@
       </ElFormItem>
 
 
+
       <ElFormItem>
-        <ElButton @click="submitForm(ruleFormRef)" color="lime">
-          <q-icon name="save" size="20px"/>
+        <ElButton @click="submitForm(ruleFormRef)" color="teal">
+          <q-icon name="save" size="20px" />
           Saqlash
         </ElButton>
-        <ElButton @click="resetForm(ruleFormRef)" color="red">
-          <q-icon name="clear" size="20px"/>
-          Tozalash
+        <ElButton @click="$router.back()" color="red">
+          <q-icon name="close" size="20px" />
+          Bekor qilish
         </ElButton>
-
       </ElFormItem>
 
 

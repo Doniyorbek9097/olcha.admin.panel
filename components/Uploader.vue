@@ -44,8 +44,8 @@ const upload = ref<UploadInstance>();
 const images = ref([]);
 const isError = ref(false);
 
-const ImgListPush = (file: UploadFile, files: UploadFile[]) => {
 
+const ImgListPush = (file: UploadFile, files: UploadFile[]) => {
     if (props.width || props.height) {
         const image = new Image();
         image.src = file.url as string;
@@ -123,3 +123,7 @@ const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
 
 </script>
   
+<style>
+.el-upload--picture-card {
+}
+</style>
