@@ -89,7 +89,7 @@ const localePath = useLocalePath();
 
 <style scoped>
 .q-router-link--exact-active {
-  background-color: rgb(227, 225, 225);
+  background-color: rgba(180, 179, 179, 0.158);
 
 } 
 </style>
