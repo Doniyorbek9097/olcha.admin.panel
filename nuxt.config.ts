@@ -15,7 +15,6 @@ export default defineNuxtConfig({
     '@quasar/extras/bootstrap-icons/bootstrap-icons.css',
   ],
   modules: [
-    '@vite-pwa/nuxt',
     'nuxt-quasar-ui',
     '@element-plus/nuxt',
     ['@pinia/nuxt',
@@ -43,7 +42,7 @@ export default defineNuxtConfig({
     ]
   },
 
-  pwa: {
+  // pwa: {
     // manifest: {
     //   name: "Nuxt3 PWA",
     //   short_name: "Nuxt3 PWA",
@@ -79,7 +78,7 @@ export default defineNuxtConfig({
     //   type: "module",
     // },
 
-  },
+  // },
 
 
   i18n: {

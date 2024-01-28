@@ -1,7 +1,7 @@
 <template>
   <q-page class="p-5">
     <ElForm ref="ruleFormRef" :model="product" label-width="120px" label-position="top" :rules="rules"
-      class="demo-ruleForm" :size="$q.screen.md ? 'large': 'small'" status-icon>
+      class="demo-ruleForm" :size="$q.screen.md ? 'large': 'default'" status-icon>
 
       <ElFormItem prop="parentCategory">
         <ElCascader v-model="categoriesId" :options="options" :props="{ expandTrigger: 'hover' }" @change="handleChange"
