@@ -61,7 +61,7 @@ export interface IProduct {
             }
         }
     ],
-    price: number,
+    price: number | null,
     countInStock: number,
     parentCategory: string,
     subCategory: string,

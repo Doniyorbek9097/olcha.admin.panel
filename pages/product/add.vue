@@ -1,7 +1,7 @@
 <template>
   <q-page class="p-5">
     <ElForm ref="ruleFormRef" :model="product" label-width="120px" label-position="top" :rules="rules"
-      class="demo-ruleForm" :size="$q.screen.md ? 'large': 'default'" status-icon>
+      class="demo-ruleForm" status-icon>
 
       <ElFormItem prop="parentCategory">
         <ElCascader v-model="categoriesId" :options="options" :props="{ expandTrigger: 'hover' }" @change="handleChange"
@@ -49,7 +49,7 @@
             <ElInput v-model="property.uz.value" placeholder="O'zbekcha value"></ElInput>
             <ElInput v-model="property.ru.value" placeholder="Ruscha value"></ElInput>
           </ElCol>
-              <ElButton class="my-5" color="red" @click="product.properteis.splice(i, 1)">Xususiyat o'chirish</ElButton>
+              <ElButton class="my-5" color="red" @click="product.properteis?.splice(i, 1)">Xususiyat o'chirish</ElButton>
         </ElRow>
           <ElButton class="my-5" @click="AddPropery">Xususiyat qo'shish</ElButton>
       </ElFormItem>
@@ -109,6 +109,8 @@ const categoryStore = useCategoryStore();
 const productStore = useProductStore();
 await categoryStore.getCategory();
 const categories = categoryStore.categories;
+await productStore.Reset()
+
 const { product } = productStore;
 
 const options = categories.flatMap(parent => {
@@ -141,7 +143,7 @@ const handleChange = (category: string[]) => {
 }
 
 const AddPropery = () => {
-  product.properteis.push({
+  product.properteis?.push({
     uz: {
       key: "",
       value: ""

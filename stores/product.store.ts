@@ -7,7 +7,7 @@ export const useProductStore = defineStore("productStore", () => {
     const $q = useQuasar();
     const router = useRouter();
     const products = ref<IProduct[]>([]);
-    const product = ref({
+    const product = ref<IProduct>({
         name: {
             uz: "",
             ru: ""
@@ -48,7 +48,7 @@ export const useProductStore = defineStore("productStore", () => {
                 color: "green",
                 position: "top-right"
             });
-
+            reset()
             router.back();
 
         }
@@ -62,40 +62,6 @@ export const useProductStore = defineStore("productStore", () => {
             })
         }
 
-        product.value = {
-            name: {
-                uz: "",
-                ru: ""
-            },
-            discription: {
-                uz: "",
-                ru: ""
-            },
-            properteis: [
-                {
-                    uz: "",
-                    ru: ""
-                }
-            ],
-    
-            isPropery: false,
-            price: null,
-            countInStock: 1,
-            parentCategory: "",
-            subCategory: "",
-            childCategory: "",
-            shop: "",
-            colors: [],
-            images: [],
-            // size: [],
-            isDiscount: false,
-            discount: null,
-            // country: "",
-    
-        };    
-        
-
-
     }
 
 
@@ -105,8 +71,8 @@ export const useProductStore = defineStore("productStore", () => {
         const { data, status, error } = await useAPIFetch<any>("/products");
 
         status.value == "success" && (
-        products.value = data.value,
-        $q.loading.hide()   
+            products.value = data.value,
+            $q.loading.hide()
         )
 
         status.value == "error" && (
@@ -125,17 +91,17 @@ export const useProductStore = defineStore("productStore", () => {
 
         status.value == "success" && (
             product.value = data.value,
-            $q.loading.hide()   
-            )
-    
-            status.value == "error" && (
-                $q.loading.hide(),
-                $q.notify({
-                    message: error.value?.message,
-                    color: "red",
-                    position: "top-right"
-                })
-            )
+            $q.loading.hide()
+        )
+
+        status.value == "error" && (
+            $q.loading.hide(),
+            $q.notify({
+                message: error.value?.message,
+                color: "red",
+                position: "top-right"
+            })
+        )
     }
 
 
@@ -155,46 +121,73 @@ export const useProductStore = defineStore("productStore", () => {
             message: "Rostan ham o'chirmoqchimisiz?",
             cancel: true,
             persistent: true
-          }).onOk(async () => {
+        }).onOk(async () => {
             $q.loading.show({ delay: 400 });
             const { data, status } = await useAPIFetch(`/product/${id}`, { method: "delete" })
-       
+
             if (status.value == "success") {
                 products.value.splice(index, 1),
-                $q.notify({
-                    message: "Muoffaqqiyatli o'chirildi",
-                    color:"green",
-                    position:'top-right'
-                });
+                    $q.notify({
+                        message: "Muoffaqqiyatli o'chirildi",
+                        color: "green",
+                        position: 'top-right'
+                    });
                 $q.loading.hide();
                 return true
             };
-            
+
             status.value == "error" && (
                 $q.loading.hide(),
                 $q.notify({
                     message: "Serverda Xatolik",
-                    color:"red",
-                    position:'top-right'
+                    color: "red",
+                    position: 'top-right'
                 })
             );
 
-          })
-        
+        })
 
-
-
-}
-
-
-    return {
-        products,
-        product,
-        addProduct,
-        getProducts,
-        getOneProduct,
-        deleteProduct,
-        updateProduct
     }
 
-})
+
+    const Reset = async () => {
+        products.value = [];
+        product.value = {
+            name: {
+                uz: "",
+                ru: ""
+            },
+            discription: {
+                uz: "",
+                ru: ""
+            },
+            properteis: [],
+            isPropery: false,
+            price: null,
+            countInStock: 1,
+            parentCategory: "",
+            subCategory: "",
+            childCategory: "",
+            shop: "",
+            colors: [],
+            images: [],
+            // size: [],
+            isDiscount: false,
+            discount: 0,
+            // country: "",
+        }
+    
+    }
+
+        return {
+            products,
+            product,
+            addProduct,
+            getProducts,
+            getOneProduct,
+            deleteProduct,
+            updateProduct,
+            Reset
+        }
+
+    })
