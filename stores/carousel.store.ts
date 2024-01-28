@@ -43,14 +43,7 @@ export const useCarouselStore = defineStore("carouselStore", () => {
 
 
     const getCarousel = async () => {
-        carousel.value = {
-            image: {
-                uz: "",
-                ru: ""
-            },
-            slug: ""
-        };
-
+        await Reset()
         $q.loading.show();
         const { data, status } = await useAPIFetch("/carousel");
        
@@ -105,13 +98,24 @@ export const useCarouselStore = defineStore("carouselStore", () => {
 
     }
 
+    const Reset = async () => {
+        carousel.value = {
+            image: {
+                uz: "",
+                ru: ""
+            },
+            slug: ""
+        };
+    }
+
 
     return {
         carouseles,
         carousel,
         addCarousel,
         getCarousel,
-        deleteCarousel
+        deleteCarousel,
+        Reset
     }
 
 })

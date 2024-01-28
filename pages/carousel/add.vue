@@ -1,72 +1,97 @@
 <template>
-    <q-page>
-        <q-form class="row" @submit="submitForm" @reset="resetForm">
-            <div class="col-6 p-2">Banner uz
-                <FileUploader @result="ImageUz"/>
-            </div>
+    <q-page class="p-5">
+        <ElForm ref="ruleFormRef" :model="carousel" :rules="rules" label-width="120px" label-position="top"
+            class="demo-ruleForm" :size="$q.screen.md ? 'large' : 'default'" status-icon>
 
-            <div class="col-6 p-2">Banner ru
-                <FileUploader @result="ImageRu"/>
-            </div>
-            <div class="col-12 p-2">Banner path link
-                <q-input v-model="carousel.slug" label="/path"/>
-            </div>
+            <p class="text-xl py-2"> O'zbek tilidagi bannerni yuklash uchun bosing</p>
+            <ElFormItem prop="image.uz">
+                <Uploader @result="(files) => ImageUz(files, i)" :limit="1" list-type="picture">
+                    <ElButton>
+                        <QIcon name="upload" size="20px"></QIcon>
+                        O'zbek tilidagi bannerni yuklash
+                    </ElButton>
+                </Uploader>
+            </ElFormItem>
 
-            <div class="col-12 p-2 row gap-2">
-                <q-btn type="submit" color="primary" icon="check" label="Saqlash" />
-                <q-btn type="reset" color="red" icon="check" label="Tozalash" />
-            </div>
-        </q-form>
+            <p class="text-xl py-2"> Rus tilidagi bannerni yuklash uchun bosing</p>
+            <ElFormItem prop="image.ru">
+                <Uploader @result="(files) => ImageRu(files, i)" :limit="1" list-type="picture">
+                    <ElButton>
+                        <QIcon name="upload" size="20px"></QIcon>
+                        Ruscha tilidagi bannerni yuklash
+                    </ElButton>
+                </Uploader>
+            </ElFormItem>
+
+            <ElFormItem prop="slug">
+                <el-select v-model="carousel.slug" size="large" filterable allow-create default-first-option
+                    :reserve-keyword="false" placeholder="Bannerga havola yo'lini ko'rsating">
+                    <el-option v-for="item in subCategories.concat(childCategories, categories)" :key="item._id" :label="item.slug"
+                        :value="(item.slug as string)" />
+                </el-select>
+            </ElFormItem>
+
+            <ElFormItem>
+                <ElButton @click="submitForm(ruleFormRef)" color="teal">
+                    <q-icon name="save" size="20px" />
+                    Saqlash
+                </ElButton>
+                <ElButton @click="$router.back()" color="red">
+                    <q-icon name="close" size="20px" />
+                    Bekor qilish
+                </ElButton>
+            </ElFormItem>
+
+        </ElForm>
     </q-page>
 </template>
   
 <script setup lang="ts">
+import type { FormInstance, FormRules } from 'element-plus'
+
 definePageMeta({
     layout: "default"
 });
 
+
+
 const categoryStore = useCategoryStore();
 const carouselStore = useCarouselStore();
-await carouselStore.getCarousel();
+await categoryStore.getCategory();
+const { categories, subCategories, childCategories } = categoryStore;
 const { carousel } = carouselStore;
 
+const ruleFormRef = ref<FormInstance>()
+
+const rules = reactive({
+    "image.uz": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "change" }],
+    "image.ru": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "change" }],
+    "slug": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
+
+})
 
 
-const ImageUz = (files: any) => {
-    for (const file of files) {
-    fileReander(file, (err: string, file: string): void => {
-      if (err) return console.log(err);
-      carousel.image.uz = file;
+
+const ImageUz = async (file:any) => {
+    carousel.image.uz = await fileReander(file.raw).catch(err => console.log(err)) as string;
+}
+
+
+const ImageRu = async (file:any) => {
+    carousel.image.ru = await fileReander(file.raw).catch(err => console.log(err)) as string;
+}
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+    if (!formEl) return
+    await formEl.validate(async (valid, fields) => {
+        if (valid) {
+            console.log('submit!')
+            await carouselStore.addCarousel(carousel);
+        } else {
+            console.log('error submit!', fields)
+        }
     })
-  }
-    
 }
-
-
-const ImageRu = (files: any) => {
-    for (const file of files) {
-    fileReander(file, (err: string, file: string): void => {
-      if (err) return console.log(err);
-      carousel.image.ru = file;
-    })
-  }
-}
-
-
-const submitForm = async () => {
-    carouselStore.addCarousel(carousel)
-}
-
-const resetForm = () => {
-    carouselStore.carousel = {
-        image: {
-            uz: "",
-            ru: ""
-        },
-        slug: ""
-    }
-}
-
 
 
 
@@ -74,6 +99,4 @@ const resetForm = () => {
 
 </script>
   
-<style scoped>
-
-</style>
+<style scoped></style>
