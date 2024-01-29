@@ -133,7 +133,7 @@ export const useProductStore = defineStore("productStore", () => {
                         position: 'top-right'
                     });
                 $q.loading.hide();
-                return true
+                router.back();
             };
 
             status.value == "error" && (

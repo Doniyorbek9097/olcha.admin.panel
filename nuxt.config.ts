@@ -1,7 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
-
-import { Loading, Notify } from "quasar";
-
 export default defineNuxtConfig({
   devtools: { enabled: false },
   ssr: true,

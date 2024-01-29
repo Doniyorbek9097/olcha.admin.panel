@@ -13,7 +13,7 @@
 
       <p class=" text-xl">Categoryga rasm qo'shish</p>
       <ElFormItem prop="image">
-        <Uploader @result="Image" :limit="1" list-type="picture" :width="128" :height="128">
+        <Uploader @result="Image" :limit="1" list-type="picture">
           <ElButton>
             <q-icon name="add" size="20px" />
             Category rasm yuklash
@@ -24,7 +24,7 @@
       <p class=" text-xl">Yon tomonga banner qo'shish</p>
       <!-- left banner add  -->
       <ElFormItem required>
-        <ElRow class="w-full" v-for="banner, i in category.left_banner">
+        <ElRow class="w-full my-2" v-for="banner, i in category.left_banner">
           <ElCol :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <ElFormItem prop="left_banner.0.image.uz">
               <Uploader @result="(files) => LeftImageUz(files, i)" :limit="1" list-type="picture" :width="822">
