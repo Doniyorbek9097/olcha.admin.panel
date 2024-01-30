@@ -111,6 +111,7 @@ export const useCategoryStore = defineStore("categoryStore", () => {
     }
 
     const updateCategory = async (id: string, category: ICategory) => {
+        $q.loading.show();
         const { data, status } = await useAPIFetch(`/category/${id}`, { method: "put", body: category });
         status.value == "success" && (
             $q.loading.hide(),
