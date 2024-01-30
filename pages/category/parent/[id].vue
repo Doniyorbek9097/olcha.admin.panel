@@ -24,7 +24,7 @@
       <p class=" text-xl">Yon tomonga banner qo'shish</p>
       <!-- left banner add  -->
       <ElFormItem required>
-        <ElRow class="w-full my-2" v-for="banner, i in category.left_banner">
+        <ElRow class="w-full" v-for="banner, i in category.left_banner">
           <ElCol :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <ElFormItem prop="left_banner.0.image.uz">
               <Uploader @result="(files) => LeftImageUz(files, i)" :limit="1" list-type="picture" :width="822">
@@ -73,7 +73,7 @@
           <ElCol :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <ElFormItem prop="top_banner.0.image.uz">
               <Uploader @result="(files) => TopImageUz(files, i)" :limit="1" list-type="picture">
-                <ElButton>
+                <ElButton class="my-2">
                   <QIcon name="upload" size="20px"></QIcon>
                   O'zbek tilidagi bannerni yuklash
                 </ElButton>
@@ -84,7 +84,7 @@
           <ElCol :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <ElFormItem prop="top_banner.0.image.ru">
               <Uploader @result="(files) => TopImageRu(files, i)" :limit="1" list-type="picture">
-                <ElButton>
+                <ElButton class="my-2">
                   <QIcon name="upload" size="20px"></QIcon>
                   Rus tilidagi bannerni yuklash
                 </ElButton>

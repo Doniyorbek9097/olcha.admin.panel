@@ -44,7 +44,7 @@
 
                 <template #body-cell-action="props">
                     <q-td :props="props">
-                        <q-btn icon="edit" size="sm" flat dense color="blue" />
+                        <q-btn icon="edit" size="sm" flat dense color="blue" @click="navigateTo(localePath(`/product/${props.row._id}`))"/>
 
                         <q-btn icon="delete" size="sm" class="q-ml-sm" flat dense color="red"
                             @click="productStore.deleteProduct(props.row._id, productStore.products.indexOf(props.row))" />
@@ -74,8 +74,7 @@
                             </q-card-section>
 
                             <q-card-actions align="right">
-                                    <q-btn type="primary" icon="edit" />
-                                    <q-btn type="primary" icon="share" />
+                                    <q-btn type="primary" icon="edit" @click="navigateTo(localePath(`/product/${props.row._id}`))"/>
                                     <q-btn type="primary" icon="delete" @click="productStore.deleteProduct(props.row._id, productStore.products.indexOf(props.row))" />
                             </q-card-actions>
 

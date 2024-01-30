@@ -48,8 +48,8 @@ export const useProductStore = defineStore("productStore", () => {
                 color: "green",
                 position: "top-right"
             });
-            reset()
             router.back();
+            await Reset();
 
         }
 
@@ -78,7 +78,7 @@ export const useProductStore = defineStore("productStore", () => {
         status.value == "error" && (
             $q.loading.hide(),
             $q.notify({
-                message: error.value?.message,
+                message: "Serverda Xatolik",
                 color: "red",
                 position: "top-right"
             })
@@ -97,7 +97,7 @@ export const useProductStore = defineStore("productStore", () => {
         status.value == "error" && (
             $q.loading.hide(),
             $q.notify({
-                message: error.value?.message,
+                message: "Serverda Xatolik",
                 color: "red",
                 position: "top-right"
             })
@@ -105,11 +105,56 @@ export const useProductStore = defineStore("productStore", () => {
     }
 
 
-    const updateProduct = async (product: object) => {
-        const { data, status, error } = await useAPIFetch("/product/" + product._id, {
+
+    const getById = async (id: string) => {
+        $q.loading.show();
+        const { data, status, error } = await useAPIFetch("/product/" + id);
+
+        status.value == "success" && (
+            product.value = data.value,
+            $q.loading.hide()
+        )
+
+        status.value == "error" && (
+            $q.loading.hide(),
+            $q.notify({
+                message: "Serverda Xatolik",
+                color: "red",
+                position: "top-right"
+            })
+        )
+    }
+
+
+
+    const updateProduct = async (id: string, product) => {
+        $q.loading.show();
+        const { data, status, error } = await useAPIFetch("/product/" + id, {
             method: "put",
             body: product
         });
+
+        if(status.value == "success") {
+            $q.loading.hide(),
+            $q.notify({
+                message: "Muoffaqqiyatli yangilandi",
+                color: "green",
+                position: "top-right"
+            })
+            router.back();
+            await Reset()
+        }
+
+
+        if(status.value == "error") {
+            $q.loading.hide(),
+            $q.notify({
+                message: "Serverda Xatolik",
+                color: "red",
+                position: "top-right"
+            })
+            router.back();
+        }
 
     }
 
@@ -133,7 +178,6 @@ export const useProductStore = defineStore("productStore", () => {
                         position: 'top-right'
                     });
                 $q.loading.hide();
-                router.back();
             };
 
             status.value == "error" && (
@@ -185,6 +229,7 @@ export const useProductStore = defineStore("productStore", () => {
             addProduct,
             getProducts,
             getOneProduct,
+            getById,
             deleteProduct,
             updateProduct,
             Reset
