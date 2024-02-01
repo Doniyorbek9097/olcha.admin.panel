@@ -117,11 +117,13 @@
   const id = useRoute().params.id as string;
 
   const categoryStore = useCategoryStore();
+  const brendStore = useBrendStore();
   const productStore = useProductStore();
   await categoryStore.getCategory();
-  const categories = categoryStore.categories;
+  await brendStore.getBrends();
   await productStore.getById(id);
   
+  const { categories } = categoryStore;
   const { product } = productStore;
   
   const options = categories.flatMap(parent => {
