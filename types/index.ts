@@ -115,3 +115,25 @@ export interface ICarousel {
     slug: string
 
 }
+
+
+export interface IBrend {
+    name: string,
+    slug?: string
+    title: {
+        uz: string,
+        ru: string
+    },
+
+    image?: {
+        uz: string,
+        ru: string
+    },
+
+    logo: string,
+
+    discription: {
+       uz: string,
+       ru: string
+    }
+}
