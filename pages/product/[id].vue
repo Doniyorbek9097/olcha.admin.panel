@@ -12,6 +12,16 @@
             </template>
           </ElCascader>
         </ElFormItem>
+
+        <ElFormItem prop="brend">
+        <ElCol :span="24">
+            <el-select v-model="product.brend" filterable allow-create default-first-option :reserve-keyword="false"
+              placeholder="Mahsulot brendini tanlang">
+              <el-option v-for="item in brendStore.brends" :key="item._id" :label="item.slug" :value="(item._id as string)" />
+            </el-select>
+          </ElCol>
+      </ElFormItem>
+
   
         <ElFormItem prop="name.uz">
           <ElInput v-model="product.name.uz" placeholder="Nomi o'zbek tilida" />
