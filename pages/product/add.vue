@@ -169,12 +169,6 @@ const AddPropery = () => {
 }
 
 
-const ProductImagesUpload = async (file: any) => {
-  const data = await fileReander(file.raw).catch((err: string) => console.log(err)) as string;
-  product.images.push(data);
-
-}
-
 
 
 const ruleFormRef = ref<FormInstance>()
