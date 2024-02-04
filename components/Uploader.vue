@@ -11,7 +11,7 @@
     </el-upload>
 
         <div class="flex items-start gap-2 p-2">
-        <q-card v-for="image, i in imagesList" class="w-[120px] relative">
+        <q-card v-for="image, i in imagesList" v-if="image" class="w-[120px] relative">
             <q-img :src="image" />
             <div class=" w-[100%] h-[100%] bg-[#00000049] absolute z-20 left-0 top-0 flex justify-center items-center">
                 <q-icon name="delete" class="text-[30px] text-[white] hover:text-[red]" @click="deleteListItem(i)"/>

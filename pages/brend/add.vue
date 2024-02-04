@@ -27,7 +27,7 @@
 
       <p class="text-[20px] text-bold">Brend Logo</p>
       <ElFormItem prop="logo">
-        <Uploader @result="(file) => BrendLogo(file)" :limit="1" list-type="picture">
+        <Uploader v-model="brend.logo">
           <ElButton class="my-2">
             <QIcon name="upload" size="20px"></QIcon>
             Brend logotipini yuklash
@@ -37,7 +37,7 @@
 
       <p class="text-[20px] text-bold">Brend Banner uzbekcha</p>
       <ElFormItem prop="image.uz">
-        <Uploader @result="(file) => BrendBannerUz(file)" :limit="1" list-type="picture">
+        <Uploader v-model="brend.image.uz">
           <ElButton class="my-2">
             <QIcon name="upload" size="20px"></QIcon>
             Brend Banneri uzbekcha yuklash
@@ -47,7 +47,7 @@
 
       <p class="text-[20px] text-bold">Brend Banner ruscha</p>
       <ElFormItem prop="image.ru">
-        <Uploader @result="(file) => BrendBannerRu(file)" :limit="1" list-type="picture">
+        <Uploader v-model="brend.image.ru">
           <ElButton class="my-2">
             <QIcon name="upload" size="20px"></QIcon>
             Brend Banneri ruscha yuklash
@@ -89,17 +89,6 @@ const rules = reactive({
   "logo": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }]
 })
 
-const BrendLogo = async(file:any) => {
-  brend.logo = await fileReander(file.raw).catch((err) => err && console.log(err)) as string;
-}
-
-const BrendBannerUz = async(file:any) => {
-  brend.image!.uz = await fileReander(file.raw).catch((err) => err && console.log(err)) as string; 
-}
-
-const BrendBannerRu = async(file:any) => {
-  brend.image!.ru = await fileReander(file.raw).catch((err) => err && console.log(err)) as string; 
-}
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return

@@ -5,7 +5,7 @@
 
             <p class="text-xl py-2"> O'zbek tilidagi bannerni yuklash uchun bosing</p>
             <ElFormItem prop="image.uz">
-                <Uploader @result="(files) => ImageUz(files, i)" :limit="1" list-type="picture">
+                <Uploader v-model="carousel.image.uz">
                     <ElButton>
                         <QIcon name="upload" size="20px"></QIcon>
                         O'zbek tilidagi bannerni yuklash
@@ -15,7 +15,7 @@
 
             <p class="text-xl py-2"> Rus tilidagi bannerni yuklash uchun bosing</p>
             <ElFormItem prop="image.ru">
-                <Uploader @result="(files) => ImageRu(files, i)" :limit="1" list-type="picture">
+                <Uploader v-model="carousel.image.ru">
                     <ElButton>
                         <QIcon name="upload" size="20px"></QIcon>
                         Ruscha tilidagi bannerni yuklash
@@ -71,15 +71,6 @@ const rules = reactive({
 })
 
 
-
-const ImageUz = async (file:any) => {
-    carousel.image.uz = await fileReander(file.raw).catch(err => console.log(err)) as string;
-}
-
-
-const ImageRu = async (file:any) => {
-    carousel.image.ru = await fileReander(file.raw).catch(err => console.log(err)) as string;
-}
 
 const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return

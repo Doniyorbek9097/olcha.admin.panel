@@ -12,7 +12,6 @@
       </ElFormItem>
 
       <p class=" text-xl">Categoryga rasm qo'shish</p>
-      {{ category.image }}
       <ElFormItem prop="image">
         <Uploader v-model="category.image" :limit="1">
           <ElButton>
@@ -163,34 +162,6 @@ const rules = reactive({
   "top_banner.0.slug": [{ required: true, message: "Iltimos banner havola (slug)", trigger: "change" }],
 
 })
-
-
-
-
-
-
-const LeftImageUz = async (file: any, index: number) => {
-  category.left_banner![index].image.uz = await fileReander(file.raw).catch((err: string) => console.log(err)) as string;
-
-}
-
-const LeftImageRu = async (file: any, index: number) => {
-  category.left_banner![index].image.ru = await fileReander(file.raw).catch((err: string) => console.log(err)) as string;
-}
-
-
-const TopImageUz = async (file: any, index: number) => {
-  category.top_banner![index].image.uz = await fileReander(file.raw).catch((err: string) => console.log(err)) as string;
-
-}
-
-
-const TopImageRu = async (file: any, index: number) => {
-  category.top_banner![index].image.ru = await fileReander(file.raw).catch(err => console.log(err)) as string;
-
-}
-
-
 
 
 
