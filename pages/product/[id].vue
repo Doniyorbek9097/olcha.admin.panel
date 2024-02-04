@@ -64,14 +64,6 @@
             <ElButton class="my-5" @click="AddPropery">Xususiyat qo'shish</ElButton>
         </ElFormItem>
   
-        <!-- <p class="py-5">Mahsulot rasmlarini qoshing maxsimal <b>5 ta</b> Ini: <b>450-pixelda</b> va
-          <b>bo'yiga:700-pixelda</b> bo'lsin!
-        </p>
-        <ElFormItem prop="images">
-          <Uploader :limit="5" list-type="picture-card" @result="ProductImagesUpload">
-            <q-icon name="upload"></q-icon>
-          </Uploader>
-        </ElFormItem> -->
   
         <p class="py-5">Mahsulot narxi</p>
         <ElFormItem prop="price">

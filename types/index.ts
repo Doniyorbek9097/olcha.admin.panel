@@ -21,7 +21,6 @@ export interface ICategory {
         ru: string
     },
     image?: string,
-    icon?: string,
     slug?: string,
     left_banner?: ICategoryLeftBanner[],
     top_banner?: ICategoryTopBanner[],

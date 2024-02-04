@@ -12,8 +12,9 @@
       </ElFormItem>
 
       <p class=" text-xl">Categoryga rasm qo'shish</p>
+      {{ category.image }}
       <ElFormItem prop="image">
-        <Uploader @result="Image" :limit="1" list-type="picture">
+        <Uploader v-model="category.image" :limit="1">
           <ElButton>
             <q-icon name="add" size="20px" />
             Category rasm yuklash
@@ -27,7 +28,7 @@
         <ElRow class="w-full" v-for="banner, i in category.left_banner">
           <ElCol :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <ElFormItem prop="left_banner.0.image.uz">
-              <Uploader @result="(files) => LeftImageUz(files, i)" :limit="1" list-type="picture" :width="822">
+              <Uploader v-model="banner.image.uz" :width="822">
                 <ElButton>
                   <QIcon name="upload" size="20px"></QIcon>
                   O'zbek tilidagi bannerni yuklash
@@ -38,7 +39,7 @@
 
           <ElCol :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <ElFormItem prop="left_banner.0.image.ru">
-              <Uploader @result="(files) => LeftImageRu(files, i)" :limit="1" list-type="picture" :width="822">
+              <Uploader v-model="banner.image.ru" :width="822">
                 <ElButton>
                   <QIcon name="upload" size="20px"></QIcon>
                   Ruscha tilidagi bannerni yuklash
@@ -72,7 +73,7 @@
 
           <ElCol :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <ElFormItem prop="top_banner.0.image.uz">
-              <Uploader @result="(files) => TopImageUz(files, i)" :limit="1" list-type="picture">
+              <Uploader v-model="banner.image.uz">
                 <ElButton class="my-2">
                   <QIcon name="upload" size="20px"></QIcon>
                   O'zbek tilidagi bannerni yuklash
@@ -83,7 +84,7 @@
 
           <ElCol :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
             <ElFormItem prop="top_banner.0.image.ru">
-              <Uploader @result="(files) => TopImageRu(files, i)" :limit="1" list-type="picture">
+              <Uploader v-model="banner.image.ru">
                 <ElButton class="my-2">
                   <QIcon name="upload" size="20px"></QIcon>
                   Rus tilidagi bannerni yuklash
@@ -165,10 +166,6 @@ const rules = reactive({
 
 
 
-
-const Image = async (file: any) => {
-  category.image = await fileReander(file.raw).catch(err => console.log(err)) as string;
-}
 
 
 

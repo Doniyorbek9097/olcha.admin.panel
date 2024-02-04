@@ -3,12 +3,13 @@ import { useUserStore } from "~/stores/user.store";
 export default defineNuxtRouteMiddleware(async (to, from) => {
    const userStore = useUserStore();
    await userStore.IsAuth();
-   // const { user } = userStore;
+  //  const { user } = userStore;
    
    const user = {
       role: "admin",
       verified: true
    }
+   
    
  if(!user && to.meta.layout !== "register") return navigateTo("/register")
 

@@ -17,7 +17,7 @@ export const useCategoryStore = defineStore("categoryStore", () => {
                 ru: "",
             },
 
-            image: [],
+            image: "",
             left_banner: [],
             top_banner: []
 
