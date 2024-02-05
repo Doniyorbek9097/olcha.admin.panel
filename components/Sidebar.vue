@@ -60,12 +60,6 @@
           </q-item-section>
         </q-item>
 
-        <q-item :inset-level=".5" active-class="q-item-no-link-highlighting" :to="localePath('/carousel/all')">
-          <q-item-section avatar><q-icon name="arrow_outward"></q-icon></q-item-section>
-          <q-item-section>
-            <q-item-label>Memory</q-item-label>
-          </q-item-section>
-        </q-item>
 
         <q-item :inset-level=".5" active-class="q-item-no-link-highlighting" :to="localePath('/carousel/all')">
           <q-item-section avatar><q-icon name="arrow_outward"></q-icon></q-item-section>

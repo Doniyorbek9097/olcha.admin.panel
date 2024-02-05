@@ -10,6 +10,15 @@
             </el-select>
           </ElCol>
       </ElFormItem>
+
+      <ElFormItem>
+        <ElCol :span="24">
+            <el-select v-model="category.brendId" filterable allow-create default-first-option :reserve-keyword="false"
+              placeholder="Brend mavjud bo'lsa tanlang">
+              <el-option v-for="item in brends" :key="item._id" :label="item.slug" :value="(item._id as string)" />
+            </el-select>
+          </ElCol>
+      </ElFormItem>
       
       <ElFormItem prop="name.uz">
         <ElInput v-model="category.name.uz" placeholder="* Category o'zbek tilida"/>
@@ -18,6 +27,8 @@
       <ElFormItem prop="name.ru">
         <ElInput v-model="category.name.ru" placeholder="* Category rus tilida"/>
       </ElFormItem>
+
+   
 
 
 
@@ -48,8 +59,11 @@ definePageMeta({
 
 
 const categoryStore = useCategoryStore();
-const { category, subCategories } = categoryStore;
+const brendStore = useBrendStore();
 await categoryStore.getCategory();
+await brendStore.getBrends();
+const { brends } = brendStore;
+const { category, subCategories } = categoryStore;
 
 const ruleFormRef = ref<FormInstance>()
 

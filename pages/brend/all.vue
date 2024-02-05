@@ -39,7 +39,7 @@
                  </q-card-section>
    
                  <q-card-actions align="right">
-                   <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/brend/${props.row._id}`"/>
+                   <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/brend/${props.row.slug}`"/>
                  <q-btn size="sm" flat icon="delete" color="red"
                    @click="Deleted(props.row._id, brendStore.brends.indexOf(props.row))" />
                </q-card-actions>
@@ -64,7 +64,7 @@
    
            <template #body-cell-action="props">
              <q-td :props="props">
-               <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/category/parent/${props.row._id}`"/>
+               <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/brend/${props.row.slug}`"/>
                <q-btn icon="delete" size="sm" class="q-ml-sm" flat dense color="red"
                  @click="Deleted(props.row._id, brendStore.brends.indexOf(props.row))" />
              </q-td>

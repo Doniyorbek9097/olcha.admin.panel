@@ -26,6 +26,7 @@ export interface ICategory {
     top_banner?: ICategoryTopBanner[],
     children?: ICategory[],
     parentId?: string,
+    brendId?: string,
     updatedAt?: string,
     createdAt?: string
 

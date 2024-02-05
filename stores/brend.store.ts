@@ -98,6 +98,59 @@ export const useBrendStore = defineStore("brendStore", () => {
     }
 
 
+    const getBrend = async (slug:string) => {
+        $q.loading.show();
+        const { data, status } = await useAPIFetch(`/brend/${slug}`);
+        
+        status.value == "success" && (
+            await Reset(),
+            $q.loading.hide(),
+            brend.value = data.value as IBrend
+        );
+
+        status.value == "error" && (
+            $q.loading.hide(),
+            $q.notify({
+                message: "Serverda Xatolik",
+                color: "red",
+                position:"top-right"
+            })
+        );
+
+    }
+
+
+    const updateBrend = async (id:string, brend:IBrend) => {
+        $q.loading.show();
+        const { data, status } = await useAPIFetch(`/brend/${id}`, {
+            method:"put",
+            body: brend
+        });
+
+        if(status.value == "success") {
+            $q.loading.hide();
+            $q.notify({
+                message: "Muoffaqqiyatli Saqlandi",
+                color: "green",
+                position:"top-right"
+            }),
+
+            router.back()
+        }
+
+        if(status.value == "error") {
+            $q.loading.hide();
+            $q.notify({
+                message: "Serverda Xatolik",
+                color: "red",
+                position:"top-right"
+            })
+        }
+
+    }
+
+
+
     const deleteBrend = async(id: string, index: number) => {
         $q.dialog({
             dark: true,
@@ -136,6 +189,8 @@ export const useBrendStore = defineStore("brendStore", () => {
         brend,
         addBrend,
         getBrends,
+        getBrend,
+        updateBrend,
         deleteBrend,
         Reset
     }
