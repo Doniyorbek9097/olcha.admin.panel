@@ -18,7 +18,8 @@ export const useProductStore = defineStore("productStore", () => {
         },
         properteis: [],
         isPropery: false,
-        price: null,
+        orginal_price: null,
+        sale_price: null,
         countInStock: 1,
         parentCategory: "",
         subCategory: "",
@@ -134,25 +135,25 @@ export const useProductStore = defineStore("productStore", () => {
             body: product
         });
 
-        if(status.value == "success") {
+        if (status.value == "success") {
             $q.loading.hide(),
-            $q.notify({
-                message: "Muoffaqqiyatli yangilandi",
-                color: "green",
-                position: "top-right"
-            })
+                $q.notify({
+                    message: "Muoffaqqiyatli yangilandi",
+                    color: "green",
+                    position: "top-right"
+                })
             router.back();
             await Reset()
         }
 
 
-        if(status.value == "error") {
+        if (status.value == "error") {
             $q.loading.hide(),
-            $q.notify({
-                message: "Serverda Xatolik",
-                color: "red",
-                position: "top-right"
-            })
+                $q.notify({
+                    message: "Serverda Xatolik",
+                    color: "red",
+                    position: "top-right"
+                })
             router.back();
         }
 
@@ -207,7 +208,8 @@ export const useProductStore = defineStore("productStore", () => {
             },
             properteis: [],
             isPropery: false,
-            price: null,
+            orginal_price: null,
+            sale_price: null,
             countInStock: 1,
             parentCategory: "",
             subCategory: "",
@@ -220,19 +222,19 @@ export const useProductStore = defineStore("productStore", () => {
             discount: 0,
             // country: "",
         }
-    
+
     }
 
-        return {
-            products,
-            product,
-            addProduct,
-            getProducts,
-            getOneProduct,
-            getById,
-            deleteProduct,
-            updateProduct,
-            Reset
-        }
+    return {
+        products,
+        product,
+        addProduct,
+        getProducts,
+        getOneProduct,
+        getById,
+        deleteProduct,
+        updateProduct,
+        Reset
+    }
 
-    })
+})

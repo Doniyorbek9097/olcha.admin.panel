@@ -61,7 +61,8 @@ export interface IProduct {
             }
         }
     ],
-    price: number | null,
+    orginal_price: number | null,
+    sale_price: number | null,
     countInStock: number,
     parentCategory: string,
     subCategory: string,
@@ -71,8 +72,6 @@ export interface IProduct {
     brend?: string,
     colors?: IColors[],
     size?: string[],
-    discount?: number,
-    isDiscount: boolean,
     country?: string
 
 };

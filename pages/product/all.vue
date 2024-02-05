@@ -35,16 +35,11 @@
                 </template>
 
 
-                <template #body-cell-name="props">
-                    <q-td :props="props">
-                        {{ textSlice(props.row.name, 0, 50) }}
-                    </q-td>
-                </template>
-
 
                 <template #body-cell-action="props">
                     <q-td :props="props">
-                        <q-btn icon="edit" size="sm" flat dense color="blue" @click="navigateTo(localePath(`/product/${props.row._id}`))"/>
+                        <q-btn icon="edit" size="sm" flat dense color="blue"
+                            @click="navigateTo(localePath(`/product/${props.row._id}`))" />
 
                         <q-btn icon="delete" size="sm" class="q-ml-sm" flat dense color="red"
                             @click="productStore.deleteProduct(props.row._id, productStore.products.indexOf(props.row))" />
@@ -57,7 +52,7 @@
                         <q-card bordered :class="$q.dark.isActive ? 'hover:bg-gray-700' : 'hover:bg-gray-100'">
                             <q-img :src="props.row.images[0]" style="max-height: 200px;">
                                 <q-badge v-if="props.row?.discount" color="red" rounded floating
-                                    :label="props.row?.discount_percent + '0% Chegirma'" />
+                                    :label="props.row?.discount + '% Chegirma'" />
                             </q-img>
 
                             <q-card-section>
@@ -68,14 +63,19 @@
                             </q-card-section>
 
                             <q-card-section>
-                                <div class="text-bold">
-                                    Narxi: {{ $n(props.row.price) }} {{ $t('sum') }}
-                                </div>
+                                <p class="text-bold">
+                                    Narxi: {{ $n(props.row.sale_price) }} {{ $t('sum') }}
+                                </p>
+                                <p class="line-through text-[12px]" v-if="props.row.discount">
+                                    Narxi: {{ $n(props.row.orginal_price) }} {{ $t('sum') }}
+                                </p>
                             </q-card-section>
 
                             <q-card-actions align="right">
-                                    <q-btn type="primary" icon="edit" @click="navigateTo(localePath(`/product/${props.row._id}`))"/>
-                                    <q-btn type="primary" icon="delete" @click="productStore.deleteProduct(props.row._id, productStore.products.indexOf(props.row))" />
+                                <q-btn type="primary" icon="edit"
+                                    @click="navigateTo(localePath(`/product/${props.row._id}`))" />
+                                <q-btn type="primary" icon="delete"
+                                    @click="productStore.deleteProduct(props.row._id, productStore.products.indexOf(props.row))" />
                             </q-card-actions>
 
                         </q-card>
@@ -94,10 +94,10 @@
 definePageMeta({
     layout: "default"
 })
-
 const { get } = useLocalStorage()
 
 const localePath = useLocalePath();
+const { t } = useI18n()
 const productStore = useProductStore();
 productStore.getProducts();
 
@@ -121,7 +121,7 @@ const columns = [
         name: 'name',
         label: 'Nomi',
         align: 'left',
-        field: row => row.name,
+        field: row => textSlice(row.name, 0, 50),
         format: val => `${val}`,
         sortable: true,
         required: true
@@ -131,7 +131,27 @@ const columns = [
         name: 'price',
         label: 'Narxi',
         align: 'left',
-        field: row => row.price,
+        field: row => row.orginal_price+ t("sum"),
+        format: val => `${val}`,
+        sortable: true,
+        required: true
+    },
+
+    {
+        name: 'discount',
+        label: 'Chegirma',
+        align: 'left',
+        field: row => row.discount+"%",
+        format: val => `${val}`,
+        sortable: true,
+        required: true
+    },
+
+    {
+        name: 'countInStock',
+        label: 'Miqdori',
+        align: 'left',
+        field: row => row.countInStock,
         format: val => `${val}`,
         sortable: true,
         required: true
@@ -139,11 +159,11 @@ const columns = [
 
 
 
-    { 
-        name: 'action', 
-        label: 'Action', 
-        align: "right", 
-        field: 'action' 
+    {
+        name: 'action',
+        label: 'Action',
+        align: "right",
+        field: 'action'
     },
 
 ]

@@ -73,9 +73,16 @@
           </Uploader>
         </ElFormItem>
 
-      <p class="py-5">Mahsulot narxi</p>
-      <ElFormItem prop="price">
-        <el-input v-model="product.price"
+      <p class="py-5">Mahsulotning to'liq narxi</p>
+      <ElFormItem prop="orginal_price">
+        <el-input v-model="product.orginal_price"
+          :formatter="(value: string) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+          :parser="(value: string) => value.replace(/\$\s?|(,*)/g, '')" />
+      </ElFormItem>
+
+      <p class="py-5">Mahsulotning sotish narxi</p>
+      <ElFormItem prop="sale_price">
+        <el-input v-model="product.sale_price"
           :formatter="(value: string) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
           :parser="(value: string) => value.replace(/\$\s?|(,*)/g, '')" />
       </ElFormItem>
@@ -84,11 +91,6 @@
       <p class="py-5">Mahsulot Miqdori</p>
       <ElFormItem prop="countInStock">
         <ElInputNumber v-model="product.countInStock" :min="1" />
-      </ElFormItem>
-
-      <p class="py-5">Mahsulot Chegirmasi</p>
-      <ElFormItem prop="discount">
-        <el-slider v-model="product.discount" size="large" />
       </ElFormItem>
 
       <ElFormItem>
@@ -180,7 +182,8 @@ const rules = reactive({
   "discription.uz": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
   "dicription.ru": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
   "images": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "change" }],
-  "price": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
+  "orginal_price": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
+  "sale_price": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
   "countInStock": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }]
 
 })
