@@ -131,7 +131,7 @@ const columns = [
         name: 'price',
         label: 'Narxi',
         align: 'left',
-        field: row => row.orginal_price+ t("sum"),
+        field: row => row.sale_price+ t("sum"),
         format: val => `${val}`,
         sortable: true,
         required: true
