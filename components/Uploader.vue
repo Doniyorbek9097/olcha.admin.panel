@@ -1,14 +1,24 @@
 <template>
 <div>
-    <el-upload ref="upload" action="#" :multiple="props.multiple" :on-remove="handleRemove" :on-preview="handlePictureCardPreview"
-        @change="ImgListPush" :on-exceed="handleExceed" :limit="props.limit" :file-list="images" accept="image/*"
+    <el-switch v-model="changeImageUrl" class="ml-2" inline-prompt
+        style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949" active-text="Rasmni urlni yuklash"
+        inactive-text="Rasmni upload qilish" />
+
+    <div class="w-full flex flex-nowrap gap-2" v-if="changeImageUrl">
+        <ElInput v-model="input" @keyup.enter="ImgListPush(input)" placeholder="Rasmni Havlasi tashlang" />
+        <ElButton @click="ImgListPush(input)" color="green">Qo'shish</ElButton>
+    </div>
+
+    
+    <el-upload v-else ref="upload" action="#" :multiple="props.multiple"
+        @change="(file) => ImgListPush(file.raw)" :limit="props.limit" :file-list="images" accept="image/*"
         :auto-upload="false">
         <template #trigger>
             <slot />
         </template>
-
         <template #file>{{ }}</template>
     </el-upload>
+
         <div class="flex items-start gap-2 p-2">
         <q-card v-for="image, i in imagesList" class="w-[120px] relative">
             <q-img :src="image" />
@@ -50,12 +60,13 @@ const emits = defineEmits(['update:modelValue', 'result']);
 import { ref } from 'vue'
 import type { UploadFile, UploadInstance, UploadProps } from 'element-plus'
 import { ElMessage, genFileId } from 'element-plus'
-import { isArray } from 'element-plus/es/utils';
 
+
+const changeImageUrl = ref(false);
+const input = ref<string>("")
 const upload = ref<UploadInstance>();
 const images = ref([]);
 const imagesList = ref([]);
-const isError = ref(false);
 
 onMounted(() => {
     if(typeof props.modelValue == "object") {
@@ -68,7 +79,9 @@ onMounted(() => {
 })
 
 
-const ImgListPush = async (file: UploadFile, files: UploadFile[]) => {
+const ImgListPush = async (file: string | object) => {
+    const base64: string = await fileReander(file).catch(err => console.log(err)) as string;   
+    
     // if (props.width || props.height) {
     //     const image = new Image();
     //     image.src = file.url as string;
@@ -83,15 +96,15 @@ const ImgListPush = async (file: UploadFile, files: UploadFile[]) => {
     //     }
 // }
 
-        const base64: string = await fileReander(file.raw).catch(err => console.log(err)) as string;   
-        
 
         if(props.multiple) {
-        imagesList.value.push(base64);
+            imagesList.value.push(base64);
             emits('update:modelValue', imagesList.value);
+            input.value = "";
         } else {
-        imagesList.value = [base64];
+            imagesList.value = [base64];
             emits('update:modelValue',  imagesList.value.join());
+            input.value = "";
         }
     }
 

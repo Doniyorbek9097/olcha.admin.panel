@@ -1,46 +1,47 @@
 <template>
   <q-page class="p-5">
-    <ElForm ref="ruleFormRef" :model="product"  label-position="top" :rules="rules"
-      class="demo-ruleForm" status-icon>
+    <ElForm ref="ruleFormRef" :model="product" label-position="top" :rules="rules" class="demo-ruleForm" status-icon>
 
-              
+
       <ElFormItem prop="parentCategory" label="Asosiy Category">
         <ElCol :span="24">
-            <el-select v-model="product.parentCategory" filterable  default-first-option :reserve-keyword="false"
-              placeholder="Asosiy Category" @change="selectedParentCategory">
-              <el-option v-for="item in categories" :key="item._id" :label="(item.name)" :value="(item._id as string)" />
-            </el-select>
-          </ElCol>
+          <el-select v-model="product.parentCategory" filterable default-first-option :reserve-keyword="false"
+            placeholder="Asosiy Category" @change="selectedParentCategory">
+            <el-option v-for="item in categories" :key="item._id" :label="(item.name)" :value="(item._id as string)" />
+          </el-select>
+        </ElCol>
       </ElFormItem>
 
-      
+
       <ElFormItem prop="subCategory" v-if="sub_categories.length" label="O'rta Category">
         <ElCol :span="24">
-            <el-select v-model="product.subCategory" filterable allow-create default-first-option :reserve-keyword="false"
-              placeholder="O'rta Category" @change="selectedSubCategory">
-              <el-option v-for="item in sub_categories" :key="item._id" :label="item.name" :value="(item._id as string)" />
-            </el-select>
-          </ElCol>
+          <el-select v-model="product.subCategory" filterable allow-create default-first-option :reserve-keyword="false"
+            placeholder="O'rta Category" @change="selectedSubCategory">
+            <el-option v-for="item in sub_categories" :key="item._id" :label="item.name" :value="(item._id as string)" />
+          </el-select>
+        </ElCol>
       </ElFormItem>
 
-      
+
       <ElFormItem prop="childCategory" v-if="child_categories.length" label="Kichik Category">
         <ElCol :span="24">
-            <el-select v-model="product.childCategory" filterable allow-create default-first-option :reserve-keyword="false"
-              placeholder="Kichik Category">
-              <el-option v-for="item in child_categories" :key="item._id" :label="item.name" :value="(item._id as string)" />
-            </el-select>
-          </ElCol>
+          <el-select v-model="product.childCategory" filterable allow-create default-first-option :reserve-keyword="false"
+            placeholder="Kichik Category">
+            <el-option v-for="item in child_categories" :key="item._id" :label="item.name"
+              :value="(item._id as string)" />
+          </el-select>
+        </ElCol>
       </ElFormItem>
 
 
       <ElFormItem prop="brend" label="Mahsulot brendini tanlang">
         <ElCol :span="24">
-            <el-select v-model="product.brend" filterable allow-create default-first-option :reserve-keyword="false"
-              placeholder="Mahsulot brendini tanlang">
-              <el-option v-for="item in brendStore.brends" :key="item._id" :label="item.slug" :value="(item._id as string)" />
-            </el-select>
-          </ElCol>
+          <el-select v-model="product.brend" filterable allow-create default-first-option :reserve-keyword="false"
+            placeholder="Mahsulot brendini tanlang">
+            <el-option v-for="item in brendStore.brends" :key="item._id" :label="item.slug"
+              :value="(item._id as string)" />
+          </el-select>
+        </ElCol>
       </ElFormItem>
 
       <ElFormItem prop="name.uz" label="Nomi o'zbek tilida">
@@ -65,7 +66,7 @@
 
       <ElFormItem label="Mahsulot Xususiyatlarini qo'shish">
         <ElRow :gutter="12" v-for="property, i in product.properteis">
-          <ElCol :span="24">Xususiyat {{ i+1 }}</ElCol>
+          <ElCol :span="24">Xususiyat {{ i + 1 }}</ElCol>
           <ElCol :span="12">
             <ElInput v-model="property.uz.key" placeholder="O'zbekcha key"></ElInput>
             <ElInput v-model="property.ru.key" placeholder="Ruscha key"></ElInput>
@@ -75,17 +76,17 @@
             <ElInput v-model="property.uz.value" placeholder="O'zbekcha value"></ElInput>
             <ElInput v-model="property.ru.value" placeholder="Ruscha value"></ElInput>
           </ElCol>
-              <ElButton class="my-5" color="red" @click="product.properteis?.splice(i, 1)">Xususiyat o'chirish</ElButton>
+          <ElButton class="my-5" color="red" @click="product.properteis?.splice(i, 1)">Xususiyat o'chirish</ElButton>
         </ElRow>
-          <ElButton class="my-5" @click="AddPropery">Xususiyat qo'shish</ElButton>
+        <ElButton class="my-5" @click="AddPropery">Xususiyat qo'shish</ElButton>
       </ElFormItem>
 
-      
       <ElFormItem prop="images" label="Mahsuloting barcha rasmlarni yuklash">
-          <Uploader v-model="product.images" :limit="5" multiple>
-            <ElButton><q-icon name="upload"></q-icon>Mahsulot rasmlarni yuklash</ElButton>
-          </Uploader>
-        </ElFormItem>
+        <Uploader v-model="product.images" :limit="5" multiple>
+          <ElButton><q-icon name="upload"></q-icon>Mahsulot rasmlarni yuklash</ElButton>
+        </Uploader>
+      </ElFormItem>
+
 
       <ElFormItem prop="orginal_price" label="Mahsulotning asl narxi">
         <el-input type="tel" v-model="product.orginal_price" placeholder="Mahsulotning asl narxi"
@@ -139,18 +140,18 @@ const { categories } = categoryStore;
 const { product } = productStore;
 
 const sub_categories = ref([]);
-  const child_categories = ref([]);
+const child_categories = ref([]);
 
-  
-  const selectedParentCategory = (id) => {
-    sub_categories.value = categories.flatMap(cate => cate._id == id ? cate.children : []);
-  }
 
-  const selectedSubCategory = (id) => {
-    child_categories.value = sub_categories.value.flatMap(cate => cate._id == id ? cate.children : []);
+const selectedParentCategory = (id) => {
+  sub_categories.value = categories.flatMap(cate => cate._id == id ? cate.children : []);
+}
 
-  }
-  
+const selectedSubCategory = (id) => {
+  child_categories.value = sub_categories.value.flatMap(cate => cate._id == id ? cate.children : []);
+
+}
+
 
 const AddPropery = () => {
   product.properteis?.push({
@@ -195,8 +196,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     if (valid) {
       console.log('submit!')
       await productStore.addProduct(product);
-    } else {
-      console.log('error submit!', fields)
     }
   })
 }

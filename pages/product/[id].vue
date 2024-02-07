@@ -7,7 +7,7 @@
         <ElCol :span="24">
           <el-select v-model="product.parentCategory" filterable default-first-option :reserve-keyword="false"
             placeholder="Asosiy Category" @change="selectedParentCategory">
-            <el-option v-for="item in categories" :key="item._id" :label="(item.name)" :value="(item._id as string)" />
+            <el-option v-for="item in categories" :key="item._id" :label="item.name" :value="(item._id as string)" />
           </el-select>
         </ElCol>
       </ElFormItem>

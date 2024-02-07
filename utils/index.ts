@@ -25,7 +25,7 @@ export const fetchData = async (path:string) => {
 export const fileReander = (file:any) => {
     return new Promise((resolve, rejact) => {
         const reander = new FileReader();
-        if(file == "" || file == null || file == undefined) return;
+        if(typeof file == 'string' || file == null || file == undefined) return resolve(file);
         reander.onload = (event:any) =>  resolve(event.target.result);
         reander.onerror = (event:any) =>  rejact(`File base64 formatlashda xato yuz berdi`);
         reander.readAsDataURL(file)

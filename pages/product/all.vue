@@ -54,7 +54,6 @@
                                 <q-badge v-if="props.row?.discount" color="red" rounded floating
                                     :label="props.row?.discount + '% Chegirma'" />
                             </q-img>
-
                             <q-card-section>
                                 <div class="text-subtitle1">
                                     {{ textSlice(props.row.name, 0, 50) }}
