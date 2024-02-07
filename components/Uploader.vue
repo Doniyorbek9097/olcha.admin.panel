@@ -62,7 +62,7 @@ import type { UploadFile, UploadInstance, UploadProps } from 'element-plus'
 import { ElMessage, genFileId } from 'element-plus'
 
 
-const changeImageUrl = ref(false);
+const changeImageUrl = ref(true);
 const input = ref<string>("")
 const upload = ref<UploadInstance>();
 const images = ref([]);
