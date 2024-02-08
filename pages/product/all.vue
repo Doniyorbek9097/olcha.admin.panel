@@ -98,12 +98,16 @@ const { get } = useLocalStorage()
 const localePath = useLocalePath();
 const { t } = useI18n()
 const productStore = useProductStore();
-productStore.getProducts();
+onMounted(async() => {
+    grid.value = get("isGrid");
+    await productStore.getProducts();
+
+})
 
 const filter = ref("");
 const pagination = ref({ rowsPerPage: 100 })
 const grid = ref(false);
-onMounted(() => grid.value = get("isGrid"))
+
 
 
 const columns = [

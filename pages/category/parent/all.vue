@@ -88,9 +88,12 @@ const categoryStore = useCategoryStore();
 const grid = ref(false);
 const filter = ref("");
 const pagination = ref({ rowsPerPage: 100 })
-categoryStore.getCategory();
 
-onMounted(() => grid.value = get("isGrid"))
+onMounted(async () => {
+  grid.value = get("isGrid");
+  await categoryStore.getCategory();
+
+})
 
 
 const columns = ref([

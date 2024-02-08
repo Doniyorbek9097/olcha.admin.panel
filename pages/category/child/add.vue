@@ -60,8 +60,11 @@ definePageMeta({
 
 const categoryStore = useCategoryStore();
 const brendStore = useBrendStore();
-await categoryStore.getCategory();
-await brendStore.getBrends();
+onMounted(async () => {
+  await categoryStore.getCategory();
+  await brendStore.getBrends();
+})
+
 const { brends } = brendStore;
 const { category, subCategories } = categoryStore;
 

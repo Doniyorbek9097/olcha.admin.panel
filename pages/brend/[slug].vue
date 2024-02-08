@@ -81,7 +81,10 @@
   const { slug } = useRoute().params;
 
   const brendStore = useBrendStore();
-  await brendStore.getBrend(slug)
+  onMounted(async () => {
+    await brendStore.getBrend(slug)
+  });
+  
   const { brend } = brendStore;
   
   const ruleFormRef = ref<FormInstance>()

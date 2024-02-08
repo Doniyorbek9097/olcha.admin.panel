@@ -127,9 +127,12 @@ const id = useRoute().params.id as string;
 const categoryStore = useCategoryStore();
 const brendStore = useBrendStore();
 const productStore = useProductStore();
-await categoryStore.getCategory();
-await brendStore.getBrends();
-await productStore.getById(id);
+
+onMounted(async() => {
+  await categoryStore.getCategory();
+  await brendStore.getBrends();
+  await productStore.getById(id);
+})
 
 const { categories } = categoryStore;
 const { product } = productStore;

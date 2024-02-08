@@ -85,7 +85,13 @@
    const localePath = useLocalePath();
    
    const brendStore = useBrendStore();
-   await brendStore.getBrends();
+   
+   onMounted(async () => {
+    grid.value = get("isGrid")
+    await brendStore.getBrends();
+   });
+
+
    const grid = ref(false);
    const filter = ref("");
    const pagination = ref({ rowsPerPage: 100 })
@@ -98,7 +104,6 @@
 
 
    
-   onMounted(() => grid.value = get("isGrid"))
    
    
    const columns = ref([

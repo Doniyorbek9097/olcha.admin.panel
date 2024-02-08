@@ -99,36 +99,32 @@ export const useBrendStore = defineStore("brendStore", () => {
 
 
     const getBrend = async (slug:string) => {
-        $q.loading.show();
         const { data, status } = await useAPIFetch(`/brend/${slug}`);
         
-        status.value == "success" && (
-            await Reset(),
-            $q.loading.hide(),
+        if(status.value == "success") {
+            await Reset()
             brend.value = data.value as IBrend
-        );
+        }
 
-        status.value == "error" && (
-            $q.loading.hide(),
+        if(status.value == "error") {
+            $q.loading.hide();
             $q.notify({
                 message: "Serverda Xatolik",
                 color: "red",
                 position:"top-right"
             })
-        );
+        }
 
     }
 
 
     const updateBrend = async (id:string, brend:IBrend) => {
-        $q.loading.show();
         const { data, status } = await useAPIFetch(`/brend/${id}`, {
             method:"put",
             body: brend
         });
 
         if(status.value == "success") {
-            $q.loading.hide();
             $q.notify({
                 message: "Muoffaqqiyatli Saqlandi",
                 color: "green",
@@ -139,7 +135,6 @@ export const useBrendStore = defineStore("brendStore", () => {
         }
 
         if(status.value == "error") {
-            $q.loading.hide();
             $q.notify({
                 message: "Serverda Xatolik",
                 color: "red",
@@ -159,27 +154,25 @@ export const useBrendStore = defineStore("brendStore", () => {
             cancel: true,
             persistent: true
         }).onOk(async () => {
-            $q.loading.show({ delay: 400 });
             const { data, status } = await useAPIFetch(`/brend/${id}`, { method: "delete" });
 
-            status.value == "success" && (
-                brends.value.splice(index, 1),
+            if(status.value == "success") {
+                brends.value.splice(index, 1);
                 $q.notify({
                     message: "Muoffaqqiyatli o'chirildi",
                     color: "green",
                     position: 'top-right'
-                }),
-                $q.loading.hide()
-            );
+                })
+            }
 
-            status.value == "error" && (
-                $q.loading.hide(),
+            if(status.value == "error") {
+                $q.loading.hide();
                 $q.notify({
                     message: "Serverda Xatolik",
                     color: "red",
                     position: 'top-right'
                 })
-            );
+            }
 
         })
     }

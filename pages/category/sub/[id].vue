@@ -149,8 +149,11 @@ definePageMeta({
 const id = useRoute().params.id as string;
 
 const categoryStore = useCategoryStore();
-await categoryStore.getCategory();
-await categoryStore.getOneCategory(id);
+onMounted(async() => {
+  await categoryStore.getCategory();
+  await categoryStore.getOneCategory(id);
+}) 
+   
 const { category, categories, subCategories, childCategories } = categoryStore;
 
 

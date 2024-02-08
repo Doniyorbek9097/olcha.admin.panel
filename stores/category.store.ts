@@ -24,23 +24,19 @@ export const useCategoryStore = defineStore("categoryStore", () => {
         });
 
     const addCategory = async (category: ICategory) => {
-        $q.loading.show();
         const { data, status } = await useAPIFetch("/category", { method: "post", body: category });
 
         status.value == "success" && (
-            isLoading.value = false,
             $q.notify({
                 message: "Muoffaqqiyatli yuklandi",
                 color: "green",
                 position: 'top-right'
             }),
-            $q.loading.hide(),
             router.back()
         );
 
         status.value == "error" && (
             isLoading.value = false,
-            $q.loading.hide(),
             $q.notify({
                 message: "Serverda Xatolik",
                 color: "red",
@@ -54,7 +50,6 @@ export const useCategoryStore = defineStore("categoryStore", () => {
 
 
     const getCategory = async () => {
-        $q.loading.show({ delay: 400 });
 
         category.value = {
             name: {
@@ -72,12 +67,10 @@ export const useCategoryStore = defineStore("categoryStore", () => {
         status.value == "success" && (
             categories.value = data.value,
             subCategories.value = categories.value.flatMap(cate => cate.children),
-            childCategories.value = subCategories.value.flatMap(sub => sub.children),
-            $q.loading.hide()
+            childCategories.value = subCategories.value.flatMap(sub => sub.children)
         );
 
         status.value == "error" && (
-            $q.loading.hide(),
             $q.notify({
                 message: "Serverda Xatolik",
                 color: "red",

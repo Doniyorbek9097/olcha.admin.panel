@@ -5,8 +5,8 @@
         inactive-text="Rasmni upload qilish" />
 
     <div class="w-full flex flex-nowrap gap-2" v-if="changeImageUrl">
-        <ElInput v-model="input" @keyup.enter="ImgListPush(input)" placeholder="Rasmni Havlasi tashlang" />
-        <ElButton @click="ImgListPush(input)" color="green">Qo'shish</ElButton>
+        <ElInput v-model="input" @keyup.enter="ImgListPush(input)" placeholder="Rasmni havlasi" />
+        <ElButton @click="ImgListPush(input)" class="bg-green text-white">Qo'shish</ElButton>
     </div>
 
     

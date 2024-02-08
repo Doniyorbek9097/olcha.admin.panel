@@ -16,11 +16,9 @@ export const useCarouselStore = defineStore("carouselStore", () => {
     });
 
     const addCarousel = async (carousel: ICarousel) => {
-        $q.loading.show();
         const { data, status } = await useAPIFetch("/carousel", { method: "post", body: carousel });
 
-        status.value == "success" && (
-            $q.loading.hide(),
+        if(status.value == "success") {
             $q.notify({
                 message: "Muofaqqiyatli saqlandi",
                 color: "green",
@@ -28,38 +26,35 @@ export const useCarouselStore = defineStore("carouselStore", () => {
             }),
 
             router.back()
-        );
+        }
 
-        status.value == "error" && (
-            $q.loading.hide(),
+
+        if(status.value == "error")  {
             $q.notify({
                 message: "Serverda Xatolik",
                 color: "red",
                 position: "top-right"
             })
-        );
+        }
 
     }
 
 
     const getCarousel = async () => {
         await Reset()
-        $q.loading.show();
         const { data, status } = await useAPIFetch("/carousel");
        
-        status.value == "success" && (
-            $q.loading.hide(),
+        if(status.value == "success")  {
             carouseles.value = data.value
-        );
-
-        status.value == "error" && (
-            $q.loading.hide(),
+        }
+        
+        if(status.value == "error") {
             $q.notify({
                 message: "Serverda Xatolik",
                 color: "red",
                 position: "top-right"
             })
-        )
+        }
 
     }
 
@@ -72,27 +67,24 @@ export const useCarouselStore = defineStore("carouselStore", () => {
             cancel: true,
             persistent: true
         }).onOk(async () => {
-            $q.loading.show({ delay: 400 });
             const { data, status } = await useAPIFetch(`/carousel/${id}`, { method: "delete" });
 
-            status.value == "success" && (
-                carouseles.value.splice(index, 1),
+            if(status.value == "success")  {
+                carouseles.value.splice(index, 1)
                 $q.notify({
                     message: "Muoffaqqiyatli o'chirildi",
                     color: "green",
                     position: 'top-right'
-                }),
-                $q.loading.hide()
-            );
+                })
+            }
 
-            status.value == "error" && (
-                $q.loading.hide(),
+            if(status.value == "error") {
                 $q.notify({
                     message: "Serverda Xatolik",
                     color: "red",
                     position: 'top-right'
                 })
-            );
+            }
 
         })
 

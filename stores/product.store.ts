@@ -36,14 +36,12 @@ export const useProductStore = defineStore("productStore", () => {
 
 
     const addProduct = async (result: IProduct) => {
-        $q.loading.show();
         const { data, status } = await useAPIFetch("/product", {
             method: "post",
             body: result
         });
 
         if (status.value == "success") {
-            $q.loading.hide();
             $q.notify({
                 message: "Muoffaqqiyatli saqlandi",
                 color: "green",
@@ -55,7 +53,6 @@ export const useProductStore = defineStore("productStore", () => {
         }
 
         if (status.value == "error") {
-            $q.loading.hide();
             $q.notify({
                 message: "Serverda Xatolik",
                 color: "red",
@@ -68,75 +65,67 @@ export const useProductStore = defineStore("productStore", () => {
 
 
     const getProducts = async () => {
-        $q.loading.show();
         const { data, status, error } = await useAPIFetch<any>("/products");
 
-        status.value == "success" && (
-            products.value = data.value,
-            $q.loading.hide()
-        )
+        if(status.value == "success") {
+            products.value = data.value
+        }
 
-        status.value == "error" && (
-            $q.loading.hide(),
+        if(status.value == "error")  {
             $q.notify({
                 message: "Serverda Xatolik",
                 color: "red",
                 position: "top-right"
             })
-        )
+        }
+            
+        
     }
 
     const getOneProduct = async (slug: string) => {
-        $q.loading.show();
         const { data, status, error } = await useAPIFetch("/product-slug/" + slug);
 
-        status.value == "success" && (
-            product.value = data.value,
-            $q.loading.hide()
-        )
+        if(status.value == "success") {
+            product.value = data.value;
+            return product.value;
+        }
 
-        status.value == "error" && (
-            $q.loading.hide(),
+        if(status.value == "error") {
             $q.notify({
                 message: "Serverda Xatolik",
                 color: "red",
                 position: "top-right"
             })
-        )
+        }
     }
 
 
 
     const getById = async (id: string) => {
-        $q.loading.show();
         const { data, status, error } = await useAPIFetch("/product/" + id);
 
-        status.value == "success" && (
-            product.value = data.value,
-            $q.loading.hide()
-        )
+        if(status.value == "success") {
+            product.value = data.value;
+        }
 
-        status.value == "error" && (
-            $q.loading.hide(),
+        if(status.value == "error") {
             $q.notify({
                 message: "Serverda Xatolik",
                 color: "red",
                 position: "top-right"
             })
-        )
+        }
     }
 
 
 
     const updateProduct = async (id: string, product) => {
-        $q.loading.show();
         const { data, status, error } = await useAPIFetch("/product/" + id, {
             method: "put",
             body: product
         });
 
         if (status.value == "success") {
-            $q.loading.hide(),
                 $q.notify({
                     message: "Muoffaqqiyatli yangilandi",
                     color: "green",
@@ -148,7 +137,6 @@ export const useProductStore = defineStore("productStore", () => {
 
 
         if (status.value == "error") {
-            $q.loading.hide(),
                 $q.notify({
                     message: "Serverda Xatolik",
                     color: "red",
@@ -168,7 +156,6 @@ export const useProductStore = defineStore("productStore", () => {
             cancel: true,
             persistent: true
         }).onOk(async () => {
-            $q.loading.show({ delay: 400 });
             const { data, status } = await useAPIFetch(`/product/${id}`, { method: "delete" })
 
             if (status.value == "success") {
@@ -178,11 +165,9 @@ export const useProductStore = defineStore("productStore", () => {
                         color: "green",
                         position: 'top-right'
                     });
-                $q.loading.hide();
             };
 
             status.value == "error" && (
-                $q.loading.hide(),
                 $q.notify({
                     message: "Serverda Xatolik",
                     color: "red",
