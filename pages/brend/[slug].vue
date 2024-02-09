@@ -81,9 +81,8 @@
   const { slug } = useRoute().params;
 
   const brendStore = useBrendStore();
-  onMounted(async () => {
     await brendStore.getBrend(slug)
-  });
+  
   
   const { brend } = brendStore;
   
