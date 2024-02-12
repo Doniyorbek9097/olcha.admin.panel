@@ -58,9 +58,7 @@ definePageMeta({
 const categoryStore = useCategoryStore();
 const carouselStore = useCarouselStore();
 
-onMounted(async () => {
-    await categoryStore.getCategory();
-})
+await categoryStore.getCategory();
 
 const { categories, subCategories, childCategories } = categoryStore;
 const { carousel } = carouselStore;

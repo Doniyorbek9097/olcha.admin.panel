@@ -133,11 +133,10 @@ const categoryStore = useCategoryStore();
 const brendStore = useBrendStore();
 const productStore = useProductStore();
 
-onMounted(async() => {
   await categoryStore.getCategory();
   await brendStore.getBrends();
   await productStore.Reset();
-})
+
 
 const { categories } = categoryStore;
 const { product } = productStore;

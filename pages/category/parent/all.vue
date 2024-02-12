@@ -85,15 +85,16 @@ const { get } = useLocalStorage();
 const localePath = useLocalePath();
 
 const categoryStore = useCategoryStore();
+await categoryStore.getCategory();
+
 const grid = ref(false);
 const filter = ref("");
 const pagination = ref({ rowsPerPage: 100 })
 
-onMounted(async () => {
-  grid.value = get("isGrid");
-  await categoryStore.getCategory();
+onMounted(async() => {
+      grid.value = get("isGrid")
+}) 
 
-})
 
 
 const columns = ref([

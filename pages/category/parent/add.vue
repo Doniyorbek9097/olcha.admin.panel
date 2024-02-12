@@ -39,9 +39,7 @@ definePageMeta({
 
 
 const categoryStore = useCategoryStore();
-onMounted(async () => {
-  await categoryStore.getCategory();
-})
+await categoryStore.getCategory();
 
 const { category } = categoryStore;
 

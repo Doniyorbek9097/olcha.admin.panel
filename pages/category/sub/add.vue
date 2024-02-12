@@ -47,11 +47,10 @@ definePageMeta({
 
 
 const categoryStore = useCategoryStore();
+await categoryStore.getCategory();
+
 const { category, categories } = categoryStore;
 
-onMounted(async() => {
-      await categoryStore.getCategory();
-}) 
    
 
 const ruleFormRef = ref<FormInstance>()

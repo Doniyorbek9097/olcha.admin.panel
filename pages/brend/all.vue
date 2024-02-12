@@ -85,10 +85,10 @@
    const localePath = useLocalePath();
    
    const brendStore = useBrendStore();
+   await brendStore.getBrends();
    
    onMounted(async () => {
     grid.value = get("isGrid")
-    await brendStore.getBrends();
    });
 
 

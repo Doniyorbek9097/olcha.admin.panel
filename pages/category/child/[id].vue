@@ -161,8 +161,8 @@ const id = useRoute().params.id as string;
 const categoryStore = useCategoryStore();
 const brendStore = useBrendStore();
 
-  await categoryStore.getCategory();
-  await brendStore.getBrends();
+await categoryStore.getCategory();
+await brendStore.getBrends();
 
 
 const { brends } = brendStore;

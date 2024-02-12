@@ -85,10 +85,10 @@
    const localePath = useLocalePath();
    
    const carouselStore = useCarouselStore();
+   await carouselStore.getCarousel()
 
    onMounted(async() => {
     grid.value = get("isGrid")
-    await carouselStore.getCarousel()
    })
    
    
