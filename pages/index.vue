@@ -1,21 +1,6 @@
 <template>
   <div class="mb-200px">
-    <MegaMenu v-model="active" :nodes="categories">
-      <template #node="{ node }">
-          <b class="flex items-center">
-          <img :src="node.image" alt="" width="30px">
-            {{ node.name }}</b>  
-      </template>
-
-      <template #sub="{ sub }">
-        <b>{{ sub.name }}</b>
-      </template>
-
-      
-      <template #child="{ child }">
-        {{ child.name }}
-      </template>
-    </MegaMenu>
+    <MobileMenu v-model="active" :nodes="categories"/>
 
     <q-btn @click="active = !active">All Categories</q-btn>
   </div>
@@ -28,7 +13,7 @@ definePageMeta({
 
 const active = ref(true);
 
-const { categories, getCategory } = useCategoryStore()
+const { categories, getCategory } = useCategoryStore();
 
 getCategory()
 

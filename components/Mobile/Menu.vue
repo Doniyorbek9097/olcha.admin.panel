@@ -1,11 +1,18 @@
 
 <script setup>
 const props = defineProps({
+    modelValue: {
+        type: Boolean,
+        default: false
+    },
+
     nodes: {
         type: Array,
         default: []
     }
 })
+
+const emits = defineEmits(['update:modelValue'])
 
 
 const { countNestedChildren } = useHelpers();
@@ -19,63 +26,94 @@ const OpenMenu = (label) => {
     isOpenMenu.value ? title.value = label : title.value = "Asosiy Menu";
 }
 
-const children = ref([]);
-
-
+const step = ref(2);
 
 </script>
 
 <template>
-    <aside v-bind="$attrs">
-        <div class="header">
-            <div class="back" @click="() => isOpenMenu = true ? isOpenMenu = false : title.value = 'Asosiy Menu'">
-                <i class="fa fa-angle-left"></i>
-            </div>
-            <div class="title">
-                {{ title }}
-            </div>
-            <div class="close">
-                <q-icon name="close" />
-            </div>
-        </div>
+    <Transition name="slide-fade">
+        <aside v-bind="$attrs" v-if="props.modelValue" class=" min-w-[300px] h-screen fixed top-0 left-0 z-[9999] bg-white">
 
-        <div class="menu" v-for="node, index in props.nodes">
-            <MobileMenuItem :node="node">
-                <template #node="{ node }">
-                    <div class=" flex justify-between items-center text-bold" style="padding: 10px" @click="openMenuList()">
-                        <span>{{ node.label }}</span>
-                        <i class="fa-solid fa-angle-right"></i>
-                    </div>
+            <div class="flex items-center flex-nowrap justify-between  border-b-2" style="padding:10px;">
+                <div class=" text-2xl text-red">OLcha.uz</div>
 
-                    <div class="w-full" v-for="child in node.children">
-                        <MobileMenuItem :node="child">
-                            <template #node="{ node }">
-                                <div class=" flex justify-between items-center" style="padding: 10px">
-                                    <span>{{ node.label }}</span>
-                                    <i class="fa-solid fa-angle-right"></i>
+                <div @click="emits('update:modelValue', false)" class="!p-2 text-lg text-red absolute top-0 right-0">
+                    <i class="fa fa-close"></i>
+                </div>
+            </div>
+
+            <div class="menu absolute w-full h-full bg-white">
+                <div class="menu-item" v-for="parent, index in  props.nodes ">
+                    <MobileMenuItem :node="parent">
+                        <template #node="{ node: parent, active, show: showMenu1 }">
+                            <div class="btn w-full flex items-center justify-between flex-nowrap" @click="showMenu1(true)">
+                                <b class="flex items-center">
+                                    <img :src="parent.image" alt="" width="30px">
+                                    {{ parent.name }}
+                                </b>
+                                <i class="fa-solid fa-angle-right"></i>
+                            </div>
+
+                            <div :class="[active ? 'left-0 transition-all duration-[.5s]' : 'transition-all duration-[.5s] -left-[100%]']"
+                                class="sub-menu absolute top-0  w-full h-full bg-white">
+                                <div class="!p-2 border-b-2 flex gap-1 items-center" @click="showMenu1(false)">
+                                    <i class="fa fa-angle-left"></i>
+                                    <b>Orqaga qaytish</b>
+                                </div>
+                                <div class="!p-2 border-b-2 flex gap-2 items-center">
+                                    <b>Barcha {{ parent.name }}</b>
+                                </div>
+                                <div class="sub-menu-item" v-for=" sub in parent.children">
+                                    <MobileMenuItem :node="sub" :title="parent.name">
+                                        <template #node="{ node: sub, active, show: showMenu2 }">
+                                            <div class="btn w-full flex items-center justify-between flex-nowrap"
+                                                @click="showMenu2(true)">
+                                                <b class="flex items-center">
+                                                    {{ sub.name }}
+                                                </b>
+                                                <i class="fa-solid fa-angle-right"></i>
+                                            </div>
+
+                                            <div :class="[active ? 'left-0 transition-all duration-[.5s]' : 'transition-all duration-[.5s] -left-[100%]']"
+                                                class="child-menu top-0 absolute w-full h-full bg-white">
+
+                                                <div class="!p-2 border-b-2 flex gap-1 items-center"
+                                                    @click="showMenu2(false)">
+                                                    <i class="fa fa-angle-left"></i>
+                                                    <b>Orqaga qaytish</b>
+                                                </div>
+                                                <div class="!p-2 border-b-2 flex gap-2 items-center">
+                                                    <b>Barcha {{ sub.name }}</b>
+                                                </div>
+
+                                                <div class="child-menu-item" v-for=" child  in  sub.children ">
+                                                    <MobileMenuItem :node="child">
+                                                        <template #node="{ node: child, active, show: showMenu3 }">
+                                                            <b class="flex items-center">
+                                                                {{ child.name }}
+                                                            </b>
+                                                        </template>
+                                                    </MobileMenuItem>
+                                                </div>
+                                            </div>
+
+
+                                        </template>
+                                    </MobileMenuItem>
+
+
                                 </div>
 
-                            </template>
-                        </MobileMenuItem>
-                    </div>
-                </template>
-            </MobileMenuItem>
-            <!-- <div class="subMenu" :class="{'active':isOpenMenu}">
-        {{ index }}
-        {{ node.children[0].label }}
-        <div class="label">
-            <slot name="subnode" :subnode="node.children[index]"/>
-        </div>
+                            </div>
+                        </template>
+                    </MobileMenuItem>
 
-        <div class="childMenu" v-for="childNode in node.children[index].children">
-            <div class="label">
-                <slot name="childnode" :childnode="childNode"/>
+                </div>
             </div>
-        </div>
-
-    </div> -->
-        </div>
-    </aside>
+        </aside>
+    </Transition>
+    <main v-if="props.modelValue" @click="emits('update:modelValue', false)"
+        class=" bg-[#0000003e] w-full h-full absolute top-0 left-0 z-[9998]"></main>
 </template>
 
 <style scoped>
@@ -85,83 +123,17 @@ const children = ref([]);
     box-sizing: border-box;
 }
 
-aside {
-    width: 100%;
-    min-height: 100vh;
-    max-width: 300px;
-    background-color: white;
-    overflow: hidden;
-    border: 1px solid;
+.slide-fade-enter-active {
+    transition: all 0.3s ease-out;
 }
 
-aside .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid;
+.slide-fade-leave-active {
+    transition: all 0.3s ease-out;
 }
 
-
-aside .header .back {
-    height: 40px;
-    width: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-right: 1px solid;
-}
-
-aside .header .title {
-    font-weight: bolder;
-}
-
-aside .header .close {
-    height: 40px;
-    width: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-left: 1px solid;
-}
-
-
-
-aside .menu {
-    position: relative;
-}
-
-aside .menu>.label {
-    padding: 10px;
-    font-weight: bold;
-    border-bottom: 1px solid;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-aside .subMenu {
-    background: white;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    right: -100%;
-    transition: .5s;
-}
-
-aside .subMenu>.label {
-    font-weight: bold;
-    display: block;
-    margin: 10px 0;
-    padding: 0 10px;
-}
-
-
-aside .subMenu.active {
-    right: 0;
-}
-
-aside .childMenu>.label {
-    padding: 0 10px;
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+    transform: translateX(-100%);
+    opacity: 0;
 }
 </style>
