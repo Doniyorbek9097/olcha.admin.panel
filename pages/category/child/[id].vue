@@ -4,18 +4,9 @@
       class="demo-ruleForm" :size="$q.screen.md ? 'large': 'default'" status-icon>
       <ElFormItem prop="parentId">
         <ElCol :span="24">
-            <el-select v-model="category.parentId" filterable allow-create default-first-option :reserve-keyword="false"
+            <el-select v-model="category.parent" filterable allow-create default-first-option :reserve-keyword="false"
               placeholder="* Parent Category tanlang">
-              <el-option v-for="item in subCategories" :key="item._id" :label="item.slug" :value="(item._id as string)" />
-            </el-select>
-          </ElCol>
-      </ElFormItem>
-
-      <ElFormItem>
-        <ElCol :span="24">
-            <el-select v-model="category.brendId" filterable allow-create default-first-option :reserve-keyword="false"
-              placeholder="Brend mavjud bo'lsa tanlang">
-              <el-option v-for="item in brends" :key="item._id" :label="item.slug" :value="(item._id as string)" />
+              <el-option v-for="item in categories" :key="item._id" :label="item.slug" :value="(item._id as string)" />
             </el-select>
           </ElCol>
       </ElFormItem>
@@ -28,8 +19,18 @@
         <ElInput v-model="category.name.ru" placeholder="* Category rus tilida" />
       </ElFormItem>
 
+      <p class=" text-xl">Categoryga iconka qo'shish</p>
+      <ElFormItem>
+        <Uploader v-model="category.icon" :limit="1" list-type="picture" :width="128" :height="128">
+          <ElButton>
+            <q-icon name="add" size="20px" />
+            Category rasm yuklash
+          </ElButton>
+        </Uploader>
+      </ElFormItem>
+
       <p class=" text-xl">Categoryga rasm qo'shish</p>
-      <ElFormItem prop="image">
+      <ElFormItem >
         <Uploader v-model="category.image" :limit="1" list-type="picture" :width="128" :height="128">
           <ElButton>
             <q-icon name="add" size="20px" />
@@ -69,14 +70,14 @@
             <ElFormItem prop="left_banner.0.slug">
               <el-select v-model="banner.slug" size="large" filterable allow-create default-first-option
                 :reserve-keyword="false" placeholder="Bannerga havola yo'lini ko'rsating">
-                <el-option v-for="item in subCategories.concat(childCategories)" :key="item._id" :label="item.slug"
+                <el-option v-for="item in categories" :key="item._id" :label="item.slug"
                   :value="(item.slug as string)" />
               </el-select>
             </ElFormItem>
           </ElCol>
         </ElRow>
 
-        <ElButton v-if="!category.left_banner?.length" @click="addToLeftBanner">
+        <ElButton @click="addToLeftBanner">
           <q-icon name="add" size="20px" />
           Yonga banner qo'shish
         </ElButton>
@@ -114,7 +115,7 @@
             <ElFormItem prop="top_banner.0.slug">
               <el-select v-model="banner.slug" filterable allow-create default-first-option :reserve-keyword="false"
                 placeholder="Bannerga havola yo'lini ko'rsating">
-                <el-option v-for="item in subCategories.concat(childCategories)" :key="item._id" :label="item.slug"
+                <el-option v-for="item in categories" :key="item._id" :label="item.slug"
                   :value="(item.slug as string)" />
               </el-select>
             </ElFormItem>
@@ -122,7 +123,7 @@
         </ElRow>
 
         <ElCol :span="24">
-          <ElButton v-if="category.top_banner!.length < 3" @click="addToTopBanner">
+          <ElButton @click="addToTopBanner">
             <q-icon name="add" size="20px" />
             Yuqoriga bannerlar qo'shish
           </ElButton>
@@ -157,16 +158,12 @@ definePageMeta({
 
 const id = useRoute().params.id as string;
 
-
 const categoryStore = useCategoryStore();
-const brendStore = useBrendStore();
+  await categoryStore.getCategory();
+  await categoryStore.getOneCategory(id);
 
-await categoryStore.getCategory();
-await brendStore.getBrends();
-
-
-const { brends } = brendStore;
-const { category, subCategories } = categoryStore;
+   
+const { category, categories } = categoryStore;
 
 
 const ruleFormRef = ref<FormInstance>();

@@ -4,10 +4,7 @@ import { useRouter } from "#vue-router";
 import { useQuasar } from "quasar";
 
 export const useCategoryStore = defineStore("categoryStore", () => {
-    const router = useRouter();
-    const $q = useQuasar(),
-        isActive = ref(false),
-        isLoading = ref(false),
+    const 
         categories = ref<ICategory[]>([]),
         subCategories = ref<ICategory[]>([]),
         childCategories = ref<ICategory[]>([]),
@@ -24,151 +21,52 @@ export const useCategoryStore = defineStore("categoryStore", () => {
         });
 
     const addCategory = async (category: ICategory) => {
-        const { data, status } = await useAPIFetch("/category", { method: "post", body: category });
-
-        status.value == "success" && (
-            $q.notify({
-                message: "Muoffaqqiyatli yuklandi",
-                color: "green",
-                position: 'top-right'
-            }),
-            router.back()
-        );
-
-        status.value == "error" && (
-            isLoading.value = false,
-            $q.notify({
-                message: "Serverda Xatolik",
-                color: "red",
-                position: 'top-right'
-            })
-
-        );
-
-
+        const data = await useAPIFetch("/category", { method: "post", body: category });
+        return data;
     };
 
 
     const getCategory = async () => {
-
-        category.value = {
-            name: {
-                uz: "",
-                ru: "",
-            },
-
-            image: "",
-            left_banner: [],
-            top_banner: []
-        }
-
-        const { data, status } = await useAPIFetch("/category");
-
-        status.value == "success" && (
-            categories.value = data.value,
-            subCategories.value = categories.value.flatMap(cate => cate.children),
-            childCategories.value = subCategories.value.flatMap(sub => sub.children)
-        );
-
-        status.value == "error" && (
-            $q.notify({
-                message: "Serverda Xatolik",
-                color: "red",
-                position: 'top-right'
-            })
-
-        )
-
-
-
+        await Reset();
+        const data =  await useAPIFetch("/categories");
+        categories.value = data as ICategory[];
+        subCategories.value = categories.value.flatMap((cate: ICategory) => cate.children) as ICategory[];
+        childCategories.value = subCategories.value.flatMap((cate: ICategory) => cate.children) as ICategory[];
+        return data;
     }
 
     const getOneCategory = async (id: string) => {
-        $q.loading.show({ delay: 400 });
-        const { data, status } = await useAPIFetch(`/category/${id}`);
-        
-        status.value == "success" && (
-            category.value = data.value,
-            $q.loading.hide()
-        );
-
-        status.value == "error" && (
-            $q.loading.hide(),
-            $q.notify({
-                message: "Serverda Xatolik",
-                color: "red",
-                position: 'top-right'
-            })
-        )
-
+        const data = await useAPIFetch(`/category/${id}`);
+        category.value = data as ICategory;
+        return data;
     }
 
     const updateCategory = async (id: string, category: ICategory) => {
-        $q.loading.show();
-        const { data, status } = await useAPIFetch(`/category/${id}`, { method: "put", body: category });
-        status.value == "success" && (
-            $q.loading.hide(),
-            $q.notify({
-                message: "Muoffaqqiyatli yangilandi",
-                color: "green",
-                position: 'top-right'
-            }),
-            router.back()
-        );
-
-        status.value == "error" && (
-            $q.loading.hide(),
-            $q.notify({
-                message: "Serverda Xatolik",
-                color: "red",
-                position: 'top-right'
-            })
-        )
+        const data = await useAPIFetch(`/category/${id}`, { method: "put", body: category });
+        return data;
     }
 
     const deleteCategory = async (id: string, index: number) => {
-        $q.dialog({
-            dark: true,
-            title: "Mahsulot o'chirish",
-            message: "Rostan ham o'chirmoqchimisiz?",
-            cancel: true,
-            persistent: true
-        }).onOk(async () => {
-            $q.loading.show({ delay: 400 });
-            const { data, status } = await useAPIFetch(`/category/${id}`, { method: "delete" });
-
-            if (status.value == "success") {
-                categories.value.splice(index, 1);
-                subCategories.value.splice(index, 1);
-                childCategories.value.splice(index, 1);
-
-                $q.notify({
-                    message: "Muoffaqqiyatli o'chirildi",
-                    color: "green",
-                    position: 'top-right'
-                });
-                $q.loading.hide();
-                return true
-            };
-
-            status.value == "error" && (
-                $q.loading.hide(),
-                $q.notify({
-                    message: "Serverda Xatolik",
-                    color: "red",
-                    position: 'top-right'
-                })
-            );
-
-        })
-
-
+        const data = await useAPIFetch(`/category/${id}`, { method: "delete" });
+        return data;
     }
 
 
+const Reset = async () => {
+    category.value = {
+        name: {
+            uz: "",
+            ru: "",
+        },
+
+        image: "",
+        left_banner: [],
+        top_banner: []
+    }
+}
+
+
     return {
-        isActive,
-        isLoading,
         categories,
         subCategories,
         childCategories,

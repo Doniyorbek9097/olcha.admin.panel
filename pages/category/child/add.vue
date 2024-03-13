@@ -2,20 +2,11 @@
   <q-page class="p-5">
     <ElForm ref="ruleFormRef" :model="category" :rules="rules" label-width="120px" label-position="top"
       class="demo-ruleForm" :size="$q.screen.md ? 'large': 'default'" status-icon>
-      <ElFormItem prop="parentId">
+      <ElFormItem v-if="categories.length">
         <ElCol :span="24">
-            <el-select v-model="category.parentId" filterable allow-create default-first-option :reserve-keyword="false"
-              placeholder="* Parent Category tanlang">
-              <el-option v-for="item in subCategories" :key="item._id" :label="item.slug" :value="(item._id as string)" />
-            </el-select>
-          </ElCol>
-      </ElFormItem>
-
-      <ElFormItem>
-        <ElCol :span="24">
-            <el-select v-model="category.brendId" filterable allow-create default-first-option :reserve-keyword="false"
-              placeholder="Brend mavjud bo'lsa tanlang">
-              <el-option v-for="item in brends" :key="item._id" :label="item.slug" :value="(item._id as string)" />
+            <el-select v-model="category.parent" filterable  default-first-option :reserve-keyword="false"
+              placeholder="Parent Category tanlang">
+              <el-option v-for="item in categories" :key="item._id" :label="item.slug" :value="(item._id as string)" />
             </el-select>
           </ElCol>
       </ElFormItem>
@@ -27,9 +18,6 @@
       <ElFormItem prop="name.ru">
         <ElInput v-model="category.name.ru" placeholder="* Category rus tilida"/>
       </ElFormItem>
-
-   
-
 
 
       <ElFormItem>
@@ -59,24 +47,19 @@ definePageMeta({
 
 
 const categoryStore = useCategoryStore();
-const brendStore = useBrendStore();
 await categoryStore.getCategory();
-await brendStore.getBrends();
 
-const { brends } = brendStore;
-const { category, subCategories } = categoryStore;
+const { category, categories } = categoryStore;
+
+   
 
 const ruleFormRef = ref<FormInstance>()
 
 const rules = reactive({
-  "parentId": [{ required: true, message: "Iltimos parent category tanlang", trigger: "change" }],
   "name.uz": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-  "name.ru": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }]
+  "name.ru": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
 
 })
-
-
-
 
 
 

@@ -23,7 +23,7 @@
         <q-item :inset-level=".5" active-class="q-item-no-link-highlighting" :to="localePath('/category/parent/all')">
           <q-item-section avatar><q-icon name="arrow_outward"></q-icon></q-item-section>
           <q-item-section>
-            <q-item-label>Category</q-item-label>
+            <q-item-label>Parent Category</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -40,6 +40,7 @@
             <q-item-label>Child Category</q-item-label>
           </q-item-section>
         </q-item>
+
 
       </q-list>
     </q-expansion-item>

@@ -68,13 +68,13 @@
         <ElRow :gutter="12" v-for="property, i in product.properteis">
           <ElCol :span="24">Xususiyat {{ i + 1 }}</ElCol>
           <ElCol :span="12">
-            <ElInput v-model="property.uz.key" placeholder="O'zbekcha key"></ElInput>
-            <ElInput v-model="property.ru.key" placeholder="Ruscha key"></ElInput>
+            <ElInput v-model="property.key.uz" placeholder="O'zbekcha key"></ElInput>
+            <ElInput v-model="property.key.ru" placeholder="Ruscha key"></ElInput>
           </ElCol>
           <ElSpace direction="horizontal" size="large"></ElSpace>
           <ElCol :span="12">
-            <ElInput v-model="property.uz.value" placeholder="O'zbekcha value"></ElInput>
-            <ElInput v-model="property.ru.value" placeholder="Ruscha value"></ElInput>
+            <ElInput v-model="property.value.uz" placeholder="O'zbekcha value"></ElInput>
+            <ElInput v-model="property.value.ru" placeholder="Ruscha value"></ElInput>
           </ElCol>
           <ElButton class="my-5" color="red" @click="product.properteis?.splice(i, 1)">Xususiyat o'chirish</ElButton>
         </ElRow>
@@ -152,13 +152,13 @@ const selectedSubCategory = (id) => {
 
 const AddPropery = () => {
   product.properteis?.push({
-    uz: {
-      key: "",
-      value: ""
+    key: {
+      uz: "",
+      ru: ""
     },
-    ru: {
-      key: "",
-      value: ""
+    value: {
+      uz: "",
+      ru: ""
     }
   });
 

@@ -24,10 +24,19 @@
             </ElFormItem>
 
             <ElFormItem prop="slug">
-                <el-select v-model="carousel.slug" size="large" filterable allow-create default-first-option
+                <el-select v-model="carousel.slug" @change="getCategory"  size="large" filterable allow-create default-first-option
                     :reserve-keyword="false" placeholder="Bannerga havola yo'lini ko'rsating">
-                    <el-option v-for="item in subCategories.concat(childCategories, categories)" :key="item._id" :label="item.slug"
-                        :value="(item.slug as string)" />
+                    <el-option v-for="item in categories" :key="item._id" :label="item.slug"
+                        :value="(item)" />
+                </el-select>
+            </ElFormItem>
+
+            
+            <ElFormItem prop="slug">
+                <el-select v-model="carousel.slug" @change="getBrend"  size="large" filterable allow-create default-first-option
+                    :reserve-keyword="false" placeholder="Bannerga havola yo'lini ko'rsating">
+                    <el-option v-for="item in brendStore.brends" :key="item._id" :label="item.slug"
+                        :value="(item)" />
                 </el-select>
             </ElFormItem>
 
@@ -57,10 +66,12 @@ definePageMeta({
 
 const categoryStore = useCategoryStore();
 const carouselStore = useCarouselStore();
+const brendStore = useBrendStore();
 
 await categoryStore.getCategory();
+await brendStore.getBrends();
 
-const { categories, subCategories, childCategories } = categoryStore;
+const { categories } = categoryStore;
 const { carousel } = carouselStore;
 
 const ruleFormRef = ref<FormInstance>()
@@ -73,6 +84,17 @@ const rules = reactive({
 })
 
 
+
+const getCategory = (cate) => {
+    carousel.slug = cate.slug;
+    carousel.categories = cate._id;
+}
+
+
+const getBrend = (cate) => {
+    carousel.slug = cate.slug;
+    carousel.brends = cate._id;
+}
 
 const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return

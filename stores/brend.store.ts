@@ -98,8 +98,8 @@ export const useBrendStore = defineStore("brendStore", () => {
     }
 
 
-    const getBrend = async (slug:string) => {
-        const { data, status } = await useAPIFetch(`/brend/${slug}`);
+    const getBrend = async (id:string) => {
+        const { data, status } = await useAPIFetch(`/brend/${id}`);
         
         if(status.value == "success") {
             await Reset()

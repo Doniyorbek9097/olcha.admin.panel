@@ -78,10 +78,10 @@
     layout: "default"
   });
 
-  const { slug } = useRoute().params;
+  const { id } = useRoute().params;
 
   const brendStore = useBrendStore();
-    await brendStore.getBrend(slug)
+    await brendStore.getBrend(id)
   
   
   const { brend } = brendStore;
@@ -99,7 +99,7 @@
     await formEl.validate(async (valid, fields) => {
       if (valid) {
         console.log('submit!')
-        await brendStore.updateBrend(slug, brend);
+        await brendStore.updateBrend(id, brend);
       } else {
         console.log('error submit!', fields)
       }

@@ -20,6 +20,7 @@ export interface ICategory {
         uz: string,
         ru: string
     },
+    icon?: string,
     image?: string,
     slug?: string,
     left_banner?: ICategoryLeftBanner[],
@@ -51,13 +52,13 @@ export interface IProduct {
     },
     properteis?: [
         {
-            uz: {
-                key: string,
-                value: string
+            key: {
+                uz: string,
+                ru: string
             },
-            ru: {
-                key: string,
-                value: string
+            value: {
+                uz: string,
+                ru: string
             }
         }
     ],
@@ -72,7 +73,8 @@ export interface IProduct {
     brend?: string,
     colors?: IColors[],
     size?: string[],
-    country?: string
+    country?: string,
+    parent?: string
 
 };
 

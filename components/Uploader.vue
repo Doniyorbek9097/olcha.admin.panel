@@ -5,7 +5,7 @@
         inactive-text="Rasmni upload qilish" />
 
     <div class="w-full flex flex-nowrap gap-2" v-if="changeImageUrl">
-        <ElInput v-model="input" @keyup.enter="ImgListPush(input)" placeholder="Rasmni havlasi" />
+        <ElInput v-model="input" @keyup.enter="ImgListPush(input)" :placeholder="props.label" />
         <ElButton @click="ImgListPush(input)" class="bg-green text-white">Qo'shish</ElButton>
     </div>
 
@@ -48,6 +48,11 @@ const props = defineProps({
     listType: {
         type: String,
         default: "picture"
+    },
+
+    label: {
+        type: String,
+        default: "Rasmni havlasi"
     },
 
     width: Number,
