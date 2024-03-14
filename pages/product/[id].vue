@@ -17,7 +17,8 @@
         <ElCol :span="24">
           <el-select v-model="product.subCategory" filterable allow-create default-first-option :reserve-keyword="false"
             placeholder="O'rta Category" @change="selectedSubCategory">
-            <el-option v-for="item in sub_categories" :key="item._id" :label="item.name" :value="(item._id as string)" />
+            <el-option v-for="item in sub_categories" :key="item._id" :label="item.name"
+              :value="(item._id as string)" />
           </el-select>
         </ElCol>
       </ElFormItem>
@@ -25,8 +26,8 @@
 
       <ElFormItem prop="childCategory" v-if="child_categories.length" label="Kichik Category">
         <ElCol :span="24">
-          <el-select v-model="product.childCategory" filterable allow-create default-first-option :reserve-keyword="false"
-            placeholder="Kichik Category">
+          <el-select v-model="product.childCategory" filterable allow-create default-first-option
+            :reserve-keyword="false" placeholder="Kichik Category">
             <el-option v-for="item in child_categories" :key="item._id" :label="item.name"
               :value="(item._id as string)" />
           </el-select>
@@ -114,7 +115,7 @@
     </ElForm>
   </q-page>
 </template>
-  
+
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
 import type { ICategory, IProduct } from '~/types';
@@ -128,9 +129,18 @@ const categoryStore = useCategoryStore();
 const brendStore = useBrendStore();
 const productStore = useProductStore();
 
-  await categoryStore.getCategory();
-  await brendStore.getBrends();
-  await productStore.getById(id);
+const { data, pending, error } = await useAsyncData("product-edit", async () => {
+  const [categories, brends] = await Promise.all([
+      await categoryStore.getCategory(),
+      await brendStore.getBrends(),
+      await productStore.getById(id)
+   ]);
+
+return {
+  categories,
+  brends
+}
+});
 
 const { categories } = categoryStore;
 const { product } = productStore;
@@ -216,7 +226,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
 
 </script>
-  
+
 <style>
 /* Mobil uchun moslashgan stil (style) */
 

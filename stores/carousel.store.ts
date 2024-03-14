@@ -6,7 +6,7 @@ import { useQuasar } from "quasar";
 export const useCarouselStore = defineStore("carouselStore", () => {
     const router = useRouter();
     const $q = useQuasar();
-    const carouseles = ref<[]>([]);
+    const carouseles = ref<ICarousel[]>([]);
     const carousel = ref<ICarousel>({
         image: {
             uz: "",
@@ -16,78 +16,23 @@ export const useCarouselStore = defineStore("carouselStore", () => {
     });
 
     const addCarousel = async (carousel: ICarousel) => {
-        const { data, status } = await useAPIFetch("/carousel", { method: "post", body: carousel });
-
-        if(status.value == "success") {
-            $q.notify({
-                message: "Muofaqqiyatli saqlandi",
-                color: "green",
-                position: "top-right"
-            }),
-
-            router.back()
-        }
-
-
-        if(status.value == "error")  {
-            $q.notify({
-                message: "Serverda Xatolik",
-                color: "red",
-                position: "top-right"
-            })
-        }
-
+        const  data = await useAPIFetch("/carousel", { method: "post", body: carousel });
+        carouseles.value = data as ICarousel[]
+        return data;
     }
 
 
     const getCarousel = async () => {
         await Reset()
-        const { data, status } = await useAPIFetch("/carousel");
-       
-        if(status.value == "success")  {
-            carouseles.value = data.value
-        }
-        
-        if(status.value == "error") {
-            $q.notify({
-                message: "Serverda Xatolik",
-                color: "red",
-                position: "top-right"
-            })
-        }
-
+        const data = await useAPIFetch("/carousel");
+        carousel.value = data as ICarousel;
+        return data;
     }
 
 
-    const deleteCarousel = (id: string, index: number) => {
-        $q.dialog({
-            dark: true,
-            title: "Carousel o'chirish",
-            message: "Rostan ham o'chirmoqchimisiz?",
-            cancel: true,
-            persistent: true
-        }).onOk(async () => {
-            const { data, status } = await useAPIFetch(`/carousel/${id}`, { method: "delete" });
-
-            if(status.value == "success")  {
-                carouseles.value.splice(index, 1)
-                $q.notify({
-                    message: "Muoffaqqiyatli o'chirildi",
-                    color: "green",
-                    position: 'top-right'
-                })
-            }
-
-            if(status.value == "error") {
-                $q.notify({
-                    message: "Serverda Xatolik",
-                    color: "red",
-                    position: 'top-right'
-                })
-            }
-
-        })
-
+    const deleteCarousel = async (id: string, index: number) => {
+        const data = await useAPIFetch(`/carousel/${id}`, { method: "delete" });
+        return data;
     }
 
     const Reset = async () => {

@@ -1,7 +1,6 @@
 <template>
   <q-page class="p-5">
-    <ElForm ref="ruleFormRef" :model="product" label-position="top" :rules="rules" class="demo-ruleForm" status-icon>
-
+    <ElForm v-if="!pending" ref="ruleFormRef" :model="product" label-position="top" :rules="rules" class="demo-ruleForm" status-icon>
 
       <ElFormItem prop="parentCategory" label="Asosiy Category">
         <ElCol :span="24">
@@ -17,7 +16,8 @@
         <ElCol :span="24">
           <el-select v-model="product.subCategory" filterable allow-create default-first-option :reserve-keyword="false"
             placeholder="O'rta Category" @change="selectedSubCategory">
-            <el-option v-for="item in sub_categories" :key="item._id" :label="item.name" :value="(item._id as string)" />
+            <el-option v-for="item in sub_categories" :key="item._id" :label="item.name"
+              :value="(item._id as string)" />
           </el-select>
         </ElCol>
       </ElFormItem>
@@ -25,20 +25,19 @@
 
       <ElFormItem prop="childCategory" v-if="child_categories.length" label="Kichik Category">
         <ElCol :span="24">
-          <el-select v-model="product.childCategory" filterable allow-create default-first-option :reserve-keyword="false"
-            placeholder="Kichik Category">
+          <el-select v-model="product.childCategory" filterable allow-create default-first-option
+            :reserve-keyword="false" placeholder="Kichik Category">
             <el-option v-for="item in child_categories" :key="item._id" :label="item.name"
               :value="(item._id as string)" />
           </el-select>
         </ElCol>
       </ElFormItem>
 
-
       <ElFormItem prop="brend" label="Mahsulot brendini tanlang">
         <ElCol :span="24">
           <el-select v-model="product.brend" filterable allow-create default-first-option :reserve-keyword="false"
             placeholder="Mahsulot brendini tanlang">
-            <el-option v-for="item in brendStore.brends" :key="item._id" :label="item.slug"
+            <el-option v-for="item in brends" :key="item._id" :label="item.slug"
               :value="(item._id as string)" />
           </el-select>
         </ElCol>
@@ -68,13 +67,13 @@
         <ElRow :gutter="12" v-for="property, i in product.properteis">
           <ElCol :span="24">Xususiyat {{ i + 1 }}</ElCol>
           <ElCol :span="12">
-            <ElInput v-model="property.key.uz" placeholder="O'zbekcha key"></ElInput>
-            <ElInput v-model="property.key.ru" placeholder="Ruscha key"></ElInput>
+            <ElInput v-model="property.uz.key" placeholder="O'zbekcha key"></ElInput>
+            <ElInput v-model="property.ru.key" placeholder="Ruscha key"></ElInput>
           </ElCol>
           <ElSpace direction="horizontal" size="large"></ElSpace>
           <ElCol :span="12">
-            <ElInput v-model="property.value.uz" placeholder="O'zbekcha value"></ElInput>
-            <ElInput v-model="property.value.ru" placeholder="Ruscha value"></ElInput>
+            <ElInput v-model="property.uz.value" placeholder="O'zbekcha value"></ElInput>
+            <ElInput v-model="property.ru.value" placeholder="Ruscha value"></ElInput>
           </ElCol>
           <ElButton class="my-5" color="red" @click="product.properteis?.splice(i, 1)">Xususiyat o'chirish</ElButton>
         </ElRow>
@@ -132,38 +131,49 @@ definePageMeta({
 const categoryStore = useCategoryStore();
 const brendStore = useBrendStore();
 const productStore = useProductStore();
+await productStore.Reset();
 
-  await categoryStore.getCategory();
-  await brendStore.getBrends();
-  await productStore.Reset();
+const { data, pending, error } = await useAsyncData("product-add", async () => {
+  const [categories, brends] = await Promise.all([
+      await categoryStore.getCategory(),
+      await brendStore.getBrends()
+   ]);
+
+   return {
+     categories,
+     brends
+   }
+});
 
 
 const { categories } = categoryStore;
+const { brends } = brendStore;
 const { product } = productStore;
 
-const sub_categories = ref([]);
-const child_categories = ref([]);
+const sub_categories = ref<ICategory[]>([]);
+const child_categories = ref<ICategory[]>([]);
 
 
-const selectedParentCategory = (id) => {
-  sub_categories.value = categories.flatMap(cate => cate._id == id ? cate.children : []);
+const selectedParentCategory = (id: string) => {
+  sub_categories.value = categories.flatMap(cate => cate._id == id ? cate.children : []) as ICategory[];
+  child_categories.value = [];
 }
 
-const selectedSubCategory = (id) => {
-  child_categories.value = sub_categories.value.flatMap(cate => cate._id == id ? cate.children : []);
+const selectedSubCategory = (id: string) => {
+  child_categories.value = sub_categories.value.flatMap(cate => cate._id == id ? cate.children : []) as ICategory[];
 
 }
 
 
 const AddPropery = () => {
   product.properteis?.push({
-    key: {
-      uz: "",
-      ru: ""
+    uz: {
+      key: "",
+      value: ""
     },
-    value: {
-      uz: "",
-      ru: ""
+    ru: {
+      key: "",
+      value: ""
     }
   });
 

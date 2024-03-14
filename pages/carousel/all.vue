@@ -2,7 +2,7 @@
     <q-page class="q-pa-sm">
        <q-card flat>
          <q-table :grid="grid"  :filter="filter" flat bordered title="Category" :rows="carouselStore.carouseles"
-           :columns="columns" virtual-scroll v-model:pagination="pagination">
+           :columns="columns" :virtual-scroll="pending" v-model:pagination="pagination">
            <template #top>
              <q-toolbar style="padding:0 !important;">
                <q-btn flat round dense icon="category" />
@@ -85,7 +85,10 @@
    const localePath = useLocalePath();
    
    const carouselStore = useCarouselStore();
-   await carouselStore.getCarousel()
+
+  const { data, pending, error } = await useAsyncData("carousel", async () => {
+    return await carouselStore.getCarousel();
+  }) 
 
    onMounted(async() => {
     grid.value = get("isGrid")

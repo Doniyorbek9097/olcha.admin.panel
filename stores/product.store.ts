@@ -36,147 +36,52 @@ export const useProductStore = defineStore("productStore", () => {
 
 
     const addProduct = async (result: IProduct) => {
-        const { data, status } = await useAPIFetch("/product", {
+        const data = await useAPIFetch("/product", {
             method: "post",
             body: result
         });
 
-        if (status.value == "success") {
-            $q.notify({
-                message: "Muoffaqqiyatli saqlandi",
-                color: "green",
-                position: "top-right"
-            });
-            router.back();
-            await Reset();
-
-        }
-
-        if (status.value == "error") {
-            $q.notify({
-                message: "Serverda Xatolik",
-                color: "red",
-                position: "top-right"
-            })
-        }
+        return data;
 
     }
 
 
 
     const getProducts = async () => {
-        const { data, status, error } = await useAPIFetch<any>("/products");
-
-        if(status.value == "success") {
-            products.value = data.value
-        }
-
-        if(status.value == "error")  {
-            $q.notify({
-                message: "Serverda Xatolik",
-                color: "red",
-                position: "top-right"
-            })
-        }
-            
-        
+        const data = await useAPIFetch("/products");
+        products.value = data as IProduct[];
+        return data;
     }
 
     const getOneProduct = async (slug: string) => {
-        const { data, status, error } = await useAPIFetch("/product-slug/" + slug);
-
-        if(status.value == "success") {
-            product.value = data.value;
-            return product.value;
-        }
-
-        if(status.value == "error") {
-            $q.notify({
-                message: "Serverda Xatolik",
-                color: "red",
-                position: "top-right"
-            })
-        }
+        const data = await useAPIFetch("/product-slug/" + slug);
+        product.value = data as IProduct;
+        return data;
     }
 
 
 
     const getById = async (id: string) => {
-        const { data, status, error } = await useAPIFetch("/product/" + id);
-
-        if(status.value == "success") {
-            product.value = data.value;
-        }
-
-        if(status.value == "error") {
-            $q.notify({
-                message: "Serverda Xatolik",
-                color: "red",
-                position: "top-right"
-            })
-        }
+        const data = await useAPIFetch("/product/" + id);
+        product.value = data as IProduct;
+        return data;
     }
 
 
 
-    const updateProduct = async (id: string, product) => {
-        const { data, status, error } = await useAPIFetch("/product/" + id, {
+    const updateProduct = async (id: string, product: IProduct) => {
+        const data = await useAPIFetch("/product/" + id, {
             method: "put",
             body: product
         });
 
-        if (status.value == "success") {
-                $q.notify({
-                    message: "Muoffaqqiyatli yangilandi",
-                    color: "green",
-                    position: "top-right"
-                })
-            router.back();
-            await Reset()
-        }
-
-
-        if (status.value == "error") {
-                $q.notify({
-                    message: "Serverda Xatolik",
-                    color: "red",
-                    position: "top-right"
-                })
-            router.back();
-        }
-
+        return data;
     }
 
 
     const deleteProduct = async (id: string, index: number) => {
-        $q.dialog({
-            dark: true,
-            title: "Mahsulot o'chirish",
-            message: "Rostan ham o'chirmoqchimisiz?",
-            cancel: true,
-            persistent: true
-        }).onOk(async () => {
-            const { data, status } = await useAPIFetch(`/product/${id}`, { method: "delete" })
-
-            if (status.value == "success") {
-                products.value.splice(index, 1),
-                    $q.notify({
-                        message: "Muoffaqqiyatli o'chirildi",
-                        color: "green",
-                        position: 'top-right'
-                    });
-            };
-
-            status.value == "error" && (
-                $q.notify({
-                    message: "Serverda Xatolik",
-                    color: "red",
-                    position: 'top-right'
-                })
-            );
-
-        })
-
+        const data = await useAPIFetch(`/product/${id}`, { method: "delete" })
+        return data;
     }
 
 
