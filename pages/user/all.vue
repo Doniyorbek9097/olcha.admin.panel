@@ -2,10 +2,10 @@
     <q-page class="q-pa-sm">
        <q-card flat>
          <q-table :grid="grid"  :filter="filter" flat bordered title="Category" :rows="userStore.users"
-           :columns="columns" virtual-scroll v-model:pagination="pagination">
+           :columns="columns" :virtual-scroll="pending" v-model:pagination="pagination">
            <template #top>
              <q-toolbar style="padding:0 !important;">
-               <q-btn flat round dense icon="user" />
+               <q-btn flat round dense icon="fa fa-user" />
                <q-toolbar-title>
                  Users
                </q-toolbar-title>
@@ -112,7 +112,10 @@
    const pagination = ref({ rowsPerPage: 100 })
    
    const userStore = useUserStore();
-   await userStore.GetUsers()
+
+   const { data, pending, error } = await useLazyAsyncData("users", async () => {
+    return  await userStore.GetUsers()
+  }) 
 
 
    

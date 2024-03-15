@@ -2,7 +2,7 @@
     <q-page class="q-pa-sm">
         <q-card flat>
             <q-table :grid="grid" :filter="filter" flat bordered title="Products" :rows="productStore.products"
-                :columns="columns" virtual-scroll v-model:pagination="pagination">
+                :columns="columns" :virtual-scroll="pending" v-model:pagination="pagination">
                 <template #top>
                     <q-toolbar style="padding:0 !important;">
                         <q-btn flat round dense icon="category" />
@@ -98,13 +98,15 @@ const { get } = useLocalStorage()
 const localePath = useLocalePath();
 const { t } = useI18n()
 const productStore = useProductStore();
-await productStore.getProducts();
-
 const filter = ref("");
 const pagination = ref({ rowsPerPage: 100 })
 const grid = ref(false);
 onMounted(async() => grid.value = get("isGrid")) 
 
+
+const { data, pending, error } = await useLazyAsyncData("products", async () =>  {
+    return await productStore.getProducts();
+})
 
 
 const columns = [

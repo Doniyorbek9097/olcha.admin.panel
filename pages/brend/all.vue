@@ -1,8 +1,8 @@
 <template>
     <q-page class="q-pa-sm">
        <q-card flat>
-         <q-table :grid="grid"  :filter="filter" flat bordered title="Category" :rows="brendStore.brends"
-           :columns="columns" virtual-scroll v-model:pagination="pagination">
+         <q-table :virtual-scroll="pending" :grid="grid" :filter="filter" flat bordered title="Category" :rows="brendStore.brends"
+           :columns="columns" v-model:pagination="pagination">
            <template #top>
              <q-toolbar style="padding:0 !important;">
                <q-btn flat round dense icon="category" />
@@ -85,19 +85,19 @@
    const localePath = useLocalePath();
    
    const brendStore = useBrendStore();
-   await brendStore.getBrends();
    
    onMounted(async () => {
     grid.value = get("isGrid")
    });
-
 
    const grid = ref(false);
    const filter = ref("");
    const pagination = ref({ rowsPerPage: 100 })
 
 
-
+const {data, pending, error} = await useLazyAsyncData("brends", async () => {
+   return await brendStore.getBrends();
+})
 
 
 

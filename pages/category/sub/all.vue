@@ -105,7 +105,7 @@
     grid.value = get("isGrid")
  }) 
  
- const { data, pending, error } = await useLazyAsyncData("parent", async () => {
+ const { data, pending, error } = await useLazyAsyncData("sub", async () => {
   return await categoryStore.getCategory();
 })
 

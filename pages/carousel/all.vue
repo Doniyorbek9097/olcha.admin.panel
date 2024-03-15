@@ -86,7 +86,7 @@
    
    const carouselStore = useCarouselStore();
 
-  const { data, pending, error } = await useAsyncData("carousel", async () => {
+  const { data, pending, error } = await useLazyAsyncData("carousel", async () => {
     return await carouselStore.getCarousel();
   }) 
 

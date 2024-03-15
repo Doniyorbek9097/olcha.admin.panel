@@ -39,7 +39,7 @@
                </q-card-section>
  
                <q-card-actions align="right">
-                 <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/category/${props.row._id}`"/>
+                 <q-btn icon="edit" size="sm" flat dense color="blue" :to="localePath(`/category/child/${props.row._id}`)"/>
                <q-btn size="sm" flat icon="delete" color="red"
                  @click="deleteCategory(props.row._id, categoryStore.categories.indexOf(props.row))" />
              </q-card-actions>
@@ -75,7 +75,7 @@
  
          <template #body-cell-action="props">
            <q-td :props="props">
-             <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/category/${props.row._id}`"/>
+             <q-btn icon="edit" size="sm" flat dense color="blue" :to="localePath(`/category/child/${props.row._id}`)"/>
              <q-btn icon="delete" size="sm" class="q-ml-sm" flat dense color="red"
                @click="deleteCategory(props.row._id, categoryStore.categories.indexOf(props.row))" />
            </q-td>
@@ -105,7 +105,7 @@
  }) 
 
 
- const { data, pending, error } = await useLazyAsyncData("parent", async () => {
+ const { data, pending, error } = await useLazyAsyncData("child", async () => {
   return await categoryStore.getCategory();
 })
 

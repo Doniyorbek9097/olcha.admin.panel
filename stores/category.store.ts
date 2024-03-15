@@ -26,6 +26,8 @@ export const useCategoryStore = defineStore("categoryStore", () => {
     };
 
 
+    
+
     const getCategory = async () => {
         await Reset();
         const data =  await useAPIFetch("/categories");

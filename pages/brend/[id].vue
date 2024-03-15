@@ -1,6 +1,6 @@
 <template>
     <q-page class="p-5">
-      <ElForm ref="ruleFormRef" :model="brend" :rules="rules" label-width="120px" label-position="top" class="demo-ruleForm"
+      <ElForm ref="ruleFormRef" :loading="pending" :model="brend" :rules="rules" label-width="120px" label-position="top" class="demo-ruleForm"
         :size="$q.screen.md ? 'large' : 'default'" status-icon>
   
         <ElFormItem prop="title.uz">
@@ -81,9 +81,12 @@
   const { id } = useRoute().params;
 
   const brendStore = useBrendStore();
-    await brendStore.getBrend(id)
   
-  
+    const {data, pending, error} = await useLazyAsyncData("brend", async () => {
+   return await brendStore.getBrend(id)
+
+})
+
   const { brend } = brendStore;
   
   const ruleFormRef = ref<FormInstance>()

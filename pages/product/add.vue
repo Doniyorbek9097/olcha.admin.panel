@@ -1,10 +1,10 @@
 <template>
   <q-page class="p-5">
-    <ElForm v-if="!pending" ref="ruleFormRef" :model="product" label-position="top" :rules="rules" class="demo-ruleForm" status-icon>
+    <ElForm ref="ruleFormRef" :model="product" label-position="top" :rules="rules" class="demo-ruleForm" status-icon>
 
       <ElFormItem prop="parentCategory" label="Asosiy Category">
         <ElCol :span="24">
-          <el-select v-model="product.parentCategory" filterable default-first-option :reserve-keyword="false"
+          <el-select :loading="pending" v-model="product.parentCategory" filterable default-first-option :reserve-keyword="false"
             placeholder="Asosiy Category" @change="selectedParentCategory">
             <el-option v-for="item in categories" :key="item._id" :label="(item.name)" :value="(item._id as string)" />
           </el-select>
@@ -35,7 +35,7 @@
 
       <ElFormItem prop="brend" label="Mahsulot brendini tanlang">
         <ElCol :span="24">
-          <el-select v-model="product.brend" filterable allow-create default-first-option :reserve-keyword="false"
+          <el-select v-model="product.brend" :loading="pending" filterable allow-create default-first-option :reserve-keyword="false"
             placeholder="Mahsulot brendini tanlang">
             <el-option v-for="item in brends" :key="item._id" :label="item.slug"
               :value="(item._id as string)" />
@@ -133,7 +133,7 @@ const brendStore = useBrendStore();
 const productStore = useProductStore();
 await productStore.Reset();
 
-const { data, pending, error } = await useAsyncData("product-add", async () => {
+const { data, pending, error } = await useLazyAsyncData("product-add", async () => {
   const [categories, brends] = await Promise.all([
       await categoryStore.getCategory(),
       await brendStore.getBrends()

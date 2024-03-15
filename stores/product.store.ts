@@ -48,6 +48,7 @@ export const useProductStore = defineStore("productStore", () => {
 
 
     const getProducts = async () => {
+        await Reset();
         const data = await useAPIFetch("/products");
         products.value = data as IProduct[];
         return data;
