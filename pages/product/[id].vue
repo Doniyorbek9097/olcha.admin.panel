@@ -1,120 +1,95 @@
 <template>
   <q-page class="p-5">
-    <ElForm ref="ruleFormRef" :model="product" label-position="top" :rules="rules" class="demo-ruleForm" status-icon>
+    <QForm class="row" @submit="submitForm">
+      <div class="col-12">
+        <QSelect v-model="product.parentCategory" label="Asosiy Category" @update:model-value="selectedParentCategory" :options="parentCategories" emit-value map-options clearable outlined dense :rules="[rules]"/>
+      </div>
+      <div class="col-12" v-if="subCategories.length">
+        <QSelect v-model="product.subCategory" label="O'rta Category" @update:model-value="selectedSubCategory" :options="subCategories" emit-value map-options clearable outlined dense :rules="[rules]" />
+      </div>
+      <div class="col-12" v-if="childCategories.length">
+        <QSelect v-model="product.childCategory" label="Kichik Category" :options="childCategories" emit-value map-options clearable outlined dense :rules="[rules]"/>
+      </div>
 
+      <div class="col-6 p-1">
+        <QInput v-model="product.name.uz" label="Mahsulotni nomi uzbek tilida" outlined dense  :rules="[rules]"/>
+      </div>
 
-      <ElFormItem prop="parentCategory" label="Asosiy Category">
-        <ElCol :span="24">
-          <el-select v-model="product.parentCategory" filterable default-first-option :reserve-keyword="false"
-            placeholder="Asosiy Category" @change="selectedParentCategory">
-            <el-option v-for="item in categories" :key="item._id" :label="item.name" :value="(item._id as string)" />
-          </el-select>
-        </ElCol>
-      </ElFormItem>
+      <div class="col-6 p-1">
+        <QInput v-model="product.name.ru" label="Mahsulotni nomi rus tilida" outlined dense  :rules="[rules]"/>
+      </div>
 
+      <div class="col-12">
+        <p>Product tafsif o'zbek tilida</p>
+        <CreatePost v-model="product.discription.uz" isEmpty="Iltimos maydoni to'ldiring"/>
+      </div>
 
-      <ElFormItem prop="subCategory" v-if="sub_categories.length" label="O'rta Category">
-        <ElCol :span="24">
-          <el-select v-model="product.subCategory" filterable allow-create default-first-option :reserve-keyword="false"
-            placeholder="O'rta Category" @change="selectedSubCategory">
-            <el-option v-for="item in sub_categories" :key="item._id" :label="item.name" :value="(item._id as string)" />
-          </el-select>
-        </ElCol>
-      </ElFormItem>
+      <div class="col-12">
+        <p>Product tafsif rus tilida</p>
+        <CreatePost v-model="product.discription.ru" isEmpty="Iltimos maydoni to'ldiring"/>
+      </div>
 
+      <div class="col-12">
+        <p>Product Xususiyatlari</p>
+        <div class="row" v-for="property, index in product.properteis">
+          <div class="col-6 p-1">
+            <q-input v-model="property.key.uz" label="Key uzbek tilida" outlined dense required :rules="[rules]"/>
+          </div>
+          <div class="col-6 p-1">
+            <q-input v-model="property.value.uz" label="Value uzbek tilida" outlined dense required :rules="[rules]"/>
+          </div>
+          
+          <div class="col-6 p-1">
+            <q-input v-model="property.key.ru" label="Key Rus tilida" outlined dense required :rules="[rules]"/>
+          </div>
+          <div class="col-6 p-1">
+            <q-input v-model="property.value.ru" label="Value Rus tilida" outlined dense required :rules="[rules]"/>
+          </div>
 
-      <ElFormItem prop="childCategory" v-if="child_categories.length" label="Kichik Category">
-        <ElCol :span="24">
-          <el-select v-model="product.childCategory" filterable allow-create default-first-option :reserve-keyword="false"
-            placeholder="Kichik Category">
-            <el-option v-for="item in child_categories" :key="item._id" :label="item.name"
-              :value="(item._id as string)" />
-          </el-select>
-        </ElCol>
-      </ElFormItem>
+          <div class="col-12 py-1">
+            <QBtn @click="product.properteis.splice(index, 1)" :label="`${index+1} - Xususiyatni o'chirish`" color="red"/>
+          </div>
+        </div>
+        <QBtn @click="AddPropery" :label="`Xususiyat Qo'shish`" color="blue"/>
+      </div>
 
+      <div class="col-12 py-5">
+        <p>Product Rasmlari</p>
+        <Uploader v-model="product.images" isEmpty="Iltimos maydoni to'ldiring" multiple @delete-image="(path, index) => deleteImage(product._id, path, index)"/>
+      </div>
 
-      <ElFormItem prop="brend" label="Mahsulot brendini tanlang">
-        <ElCol :span="24">
-          <el-select v-model="product.brend" filterable allow-create default-first-option :reserve-keyword="false"
-            placeholder="Mahsulot brendini tanlang">
-            <el-option v-for="item in brendStore.brends" :key="item._id" :label="item.slug"
-              :value="(item._id as string)" />
-          </el-select>
-        </ElCol>
-      </ElFormItem>
+      <div class="col-12">
+        <p>Product miqdori</p>
+        <QInput type="number" v-model="product.countInStock" outlined dense/>
+      </div>
 
-      <ElFormItem prop="name.uz" label="Nomi o'zbek tilida">
-        <ElInput v-model="product.name.uz" placeholder="Nomi o'zbek tilida" />
-      </ElFormItem>
+      <div class="col-6 p-1">
+        <p>Product asl narxi</p>
+        <QInput type="number" v-model="product.orginal_price" outlined dense/>
+      </div>
 
-      <ElFormItem prop="name.ru" label="Nomi rus tilida">
-        <ElInput v-model="product.name.ru" placeholder="Nomi rus tilida" />
-      </ElFormItem>
+      <div class="col-6 p-1">
+        <p>Product sotish narxi</p>
+        <QInput type="number" v-model="product.sale_price" outlined dense/>
+      </div>
 
-      <ElFormItem prop="discription.uz" label="Tafsif o'zbek tilda">
-        <ElCol :span="24">
-          <CreatePost v-model="product.discription.uz"></CreatePost>
-        </ElCol>
-      </ElFormItem>
-
-      <ElFormItem prop="discription.ru" label="Tafsif rus tilida">
-        <ElCol :span="24">
-          <CreatePost v-model="product.discription.ru"></CreatePost>
-        </ElCol>
-      </ElFormItem>
-
-      <ElFormItem label="Mahsulot Xususiyatlarini qo'shish">
-        <ElRow :gutter="12" v-for="property, i in product.properteis">
-          <ElCol :span="24">Xususiyat {{ i + 1 }}</ElCol>
-          <ElCol :span="12">
-            <ElInput v-model="property.key.uz" placeholder="O'zbekcha key"></ElInput>
-            <ElInput v-model="property.key.ru" placeholder="Ruscha key"></ElInput>
-          </ElCol>
-          <ElSpace direction="horizontal" size="large"></ElSpace>
-          <ElCol :span="12">
-            <ElInput v-model="property.value.uz" placeholder="O'zbekcha value"></ElInput>
-            <ElInput v-model="property.value.ru" placeholder="Ruscha value"></ElInput>
-          </ElCol>
-          <ElButton class="my-5" color="red" @click="product.properteis?.splice(i, 1)">Xususiyat o'chirish</ElButton>
-        </ElRow>
-        <ElButton class="my-5" @click="AddPropery">Xususiyat qo'shish</ElButton>
-      </ElFormItem>
-
-
-      <ElFormItem prop="orginal_price" label="Mahsulotning asl narxi">
-        <el-input type="tel" v-model="product.orginal_price" placeholder="Mahsulotning asl narxi"
-          :formatter="(value: string) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-          :parser="(value: string) => value.replace(/\$\s?|(,*)/g, '')" />
-      </ElFormItem>
-
-      <ElFormItem prop="sale_price" label="Mahsulotning sotish narxi">
-        <el-input type="tel" v-model="product.sale_price" placeholder="Mahsulotning sotish narxi"
-          :formatter="(value: string) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-          :parser="(value: string) => value.replace(/\$\s?|(,*)/g, '')" />
-      </ElFormItem>
-
-
-      <ElFormItem prop="countInStock" label="Mahsulot Miqdori">
-        <ElInputNumber v-model="product.countInStock" :min="1" />
-      </ElFormItem>
-
-      <ElFormItem>
-        <ElButton @click="submitForm(ruleFormRef)" color="teal">
-          <q-icon name="save" size="20px" />
+    
+      <div class="flex p-2 row gap-2">
+        <QBtn type="submit" color="teal" :loading="loading" glossy>
+          <q-icon name="save"/>
           Saqlash
-        </ElButton>
-        <ElButton @click="$router.back()" color="red">
-          <q-icon name="close" size="20px" />
+        </QBtn>
+        <QBtn @click="$router.back()" color="red" glossy>
+          <q-icon name="close" />
           Bekor qilish
-        </ElButton>
-      </ElFormItem>
+        </QBtn>
+      </div>
 
-
-    </ElForm>
+    </QForm>
+   
   </q-page>
 </template>
-  
+
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
 import type { ICategory, IProduct } from '~/types';
@@ -123,44 +98,89 @@ definePageMeta({
 });
 
 const id = useRoute().params.id as string;
+const router = useRouter();
 
 const categoryStore = useCategoryStore();
 const brendStore = useBrendStore();
 const productStore = useProductStore();
 
-  await categoryStore.getCategory();
-  await brendStore.getBrends();
-  await productStore.getById(id);
-
-  const { data, pending, error } = await useAsyncData("product-edit", async () => {
-  const [categories, brends] = await Promise.all([
+const { data, pending, error } = await useAsyncData("product-edit", async () => {
+  const [categories, brends, product] = await Promise.all([
       await categoryStore.getCategory(),
-      await brendStore.getBrends()
+      await brendStore.getBrends(),
+      await productStore.getById(id)
    ]);
 
    return {
      categories,
-     brends
+     brends,
+     product
    }
 });
 
+const rules = val => val && val.length > 0 || "Iltimos maydoni to'ldiring"; 
+
+
 const { categories } = categoryStore;
+const { brends } = brendStore;
 const { product } = productStore;
 
-const sub_categories = computed(() => categories.flatMap(cate => cate.children));
-const child_categories = computed(() => categories.flatMap(cate => cate.children?.flatMap(cat => cat.children)))
+const parentCategories = ref([]);
+const subCategories = ref([]);
+const childCategories = ref([]);
+
+parentCategories.value = categories.flatMap(cate => ({
+  label: cate.name,
+  value: cate._id,
+  children:cate.children
+}));
 
 
-const selectedParentCategory = (id) => {
-  sub_categories.value = categories.flatMap(cate => cate._id == id ? cate.children : []);
+
+const selectedParentCategory = (id: string) => {
+  subCategories.value = [];
+  childCategories.value = [];
+  product.subCategory = null;
+  product.childCategory = null;
+  subCategories.value = parentCategories.value.flatMap(cate => 
+  cate.value == id 
+  ? 
+  cate.children.flatMap(cate => ({
+    label: cate.name,
+    value: cate._id,
+    children: cate.children
+  })) 
+  : 
+  []);
+
 }
 
-const selectedSubCategory = (id) => {
-  child_categories.value = sub_categories.value.flatMap(cate => cate._id == id ? cate.children : []);
-
+const selectedSubCategory = (id: string) => {
+  product.childCategory = null;
+  childCategories.value = [];
+  childCategories.value = subCategories.value.flatMap(cate => 
+  cate.value == id 
+  ? 
+  cate.children.flatMap(cate => ({
+    label: cate.name,
+    value: cate._id,
+    children: cate.children
+  })) 
+  : 
+  []);
 }
 
 
+const deleteImage  = async (product_id, image_path, index) => {
+   const del = await useAPIFetch("/product-image-delete", {
+    method:"put",
+    body: {
+       product_id,
+       image_path
+    }
+   });
+   
+}
 
 const AddPropery = () => {
   product.properteis?.push({
@@ -177,44 +197,10 @@ const AddPropery = () => {
 }
 
 
-const ProductImagesUpload = async (file: any) => {
-  const data = await fileReander(file.raw).catch((err: string) => console.log(err)) as string;
-  product.images.push(data);
 
-}
-
-
-
-const ruleFormRef = ref<FormInstance>()
-
-const rules = reactive({
-  "parentCategory": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "change" }],
-  "subCategory": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "change" }],
-  "childCategory": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "change" }],
-  "name.uz": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-  "name.ru": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-  "discription.uz": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-  "discription.ru": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-  "images": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "change" }],
-  "original_price": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-  "sale_price": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-  "countInStock": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }]
-
-})
-
-
-
-
-const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  await formEl.validate(async (valid, fields) => {
-    if (valid) {
-      console.log('submit!')
-      await productStore.updateProduct(id, product);
-    } else {
-      console.log('error submit!', fields)
-    }
-  })
+const submitForm = async () => {
+    await productStore.updateProduct(id, product);
+    router.back();
 }
 
 
@@ -228,7 +214,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
 
 </script>
-  
+
 <style>
 /* Mobil uchun moslashgan stil (style) */
 

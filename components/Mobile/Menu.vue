@@ -46,7 +46,7 @@ const step = ref(2);
                 <div class="menu-item" v-for="parent, index in  props.nodes ">
                     <MobileMenuItem :node="parent">
                         <template #node="{ node: parent, active, show: showMenu1 }">
-                            <div class="btn w-full flex items-center justify-between flex-nowrap" @click="showMenu1(true)">
+                            <div class="btn w-full items-center justify-between flex-nowrap" @click="showMenu1(true)">
                                 <b class="flex items-center">
                                     <img :src="parent.image" alt="" width="30px">
                                     {{ parent.name }}

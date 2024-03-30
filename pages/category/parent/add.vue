@@ -1,78 +1,51 @@
 <template>
   <q-page class="p-5">
-    <ElForm ref="ruleFormRef" :model="category" :rules="rules" label-width="120px" label-position="top"
-      class="demo-ruleForm" :size="$q.screen.md ? 'large': 'default'" status-icon>
-      
-      <ElFormItem prop="name.uz">
-        <ElInput v-model="category.name.uz" placeholder="* Category o'zbek tilida"/>
-      </ElFormItem>
+    <QForm class="row" @submit="submitForm">
+      <div class="col-6 p-2">
+          <QInput v-model="category.name.uz" label="Category o'zbek tilida" outlined dense required autofocus :rules="[rules]"/>
+      </div>
+      <div class="col-6 p-2">
+          <QInput v-model="category.name.ru" label="Category rus tilida" outlined dense required :rules="[rules]"/>
+      </div>
 
-      <ElFormItem prop="name.ru">
-        <ElInput v-model="category.name.ru" placeholder="* Category rus tilida"/>
-      </ElFormItem>
-
-
-      <ElFormItem>
-        <ElButton @click="submitForm(ruleFormRef)" color="teal">
-          <q-icon name="save" size="20px" />
+      <div class="col-6 p-2 row gap-2">
+        <QBtn type="submit" color="teal" :loading="loading" glossy>
+          <q-icon name="save"/>
           Saqlash
-        </ElButton>
-        <ElButton @click="$router.back()" color="red">
-          <q-icon name="close" size="20px" />
+        </QBtn>
+        <QBtn @click="$router.back()" color="red" glossy>
+          <q-icon name="close" />
           Bekor qilish
-        </ElButton>
-      </ElFormItem>
+        </QBtn>
+      </div>
 
-
-    </ElForm>
+    </QForm>
   </q-page>
 </template>
 
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
 import type { ICategory } from '~/types';
-
 definePageMeta({
   layout: "default"
 });
 
 
-
 const categoryStore = useCategoryStore();
-await categoryStore.getCategory();
+const router = useRouter();
 
-const { category, categories } = categoryStore;
+const { category, loading } = storeToRefs(categoryStore);
 
-   
-
-const ruleFormRef = ref<FormInstance>()
-
-const rules = reactive({
-  "name.uz": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-  "name.ru": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-
-})
+const rules = val => val && val.length > 0 || "Iltimos maydoni to'ldiring"; 
 
 
-
-
-const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  await formEl.validate(async (valid, fields) => {
-    if (valid) {
-      console.log('submit!')
-      await categoryStore.addCategory(category);
-    } else {
-      console.log('error submit!', fields)
-    }
-  })
+const submitForm = async () => {
+  const newCatgory = await categoryStore.addCategory(category.value) as ICategory;
+      categoryStore.categories.push(newCatgory);
+      router.back();
 }
 
 
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
-}
 
 
 

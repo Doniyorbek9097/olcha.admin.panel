@@ -17,7 +17,7 @@ export const useCarouselStore = defineStore("carouselStore", () => {
 
     const addCarousel = async (carousel: ICarousel) => {
         const  data = await useAPIFetch("/carousel", { method: "post", body: carousel });
-        carouseles.value = data as ICarousel[]
+        carousel.value = data as ICarousel;
         return data;
     }
 
@@ -25,7 +25,7 @@ export const useCarouselStore = defineStore("carouselStore", () => {
     const getCarousel = async () => {
         await Reset()
         const data = await useAPIFetch("/carousel");
-        carousel.value = data as ICarousel;
+        carouseles.value = data as ICarousel[];
         return data;
     }
 

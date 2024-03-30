@@ -1,105 +1,72 @@
 <template>
   <q-page class="p-5">
-    <ElForm ref="ruleFormRef" :model="brend" :rules="rules" label-width="120px" label-position="top" class="demo-ruleForm"
-      :size="$q.screen.md ? 'large' : 'default'" status-icon>
+    <QForm class="row" @submit="submitForm">
+      <div class="col-12 p-2">
+          <QInput v-model="brend.name" placeholder="Brend nomi" outlined dense required :rules="[rules]"/>
+      </div>
+      <div class="col-6 p-2">
+          <QInput v-model="brend.title.uz" label="Brend Sarlavhasi o'zbek tilida" outlined dense required :rules="[rules]"/>
+      </div>
+      <div class="col-6 p-2">
+          <QInput v-model="brend.title.ru" label="Brend Sarlavhasi rus tilida" outlined dense required :rules="[rules]"/>
+      </div>
 
-      <ElFormItem prop="title.uz">
-        <ElInput v-model="brend.name" placeholder="Brend nomi" />
-      </ElFormItem>
-
-      <ElFormItem prop="title.uz">
-        <ElInput v-model="brend.title.uz" placeholder="Brend sarlavhasi o'zbekcha" />
-      </ElFormItem>
-
-      <ElFormItem prop="title.ru">
-        <ElInput v-model="brend.title.ru" placeholder="Brend sarlavhasi ruscha" />
-      </ElFormItem>
-
-      <p class="text-[20px] text-bold">Discription uz</p>
-      <ElFormItem prop="discription.uz">
+      <div class="col-12 p-2">
+        <p>Brend discription o'zbek tilida</p>
         <CreatePost v-model="brend.discription.uz"/>
-      </ElFormItem>
+      </div>
 
-      <p class="text-[20px] text-bold">Discription ru</p>
-      <ElFormItem prop="discription.ru">
+      <div class="col-12 p-2">
+        <p>Brend discription rus tilida</p>
         <CreatePost v-model="brend.discription.ru"/>
-      </ElFormItem>
+      </div>
 
-      <p class="text-[20px] text-bold">Brend Logo</p>
-      <ElFormItem prop="logo">
-        <Uploader v-model="brend.logo">
-          <ElButton class="my-2">
-            <QIcon name="upload" size="20px"></QIcon>
-            Brend logotipini yuklash
-          </ElButton>
-        </Uploader>
-      </ElFormItem>
+      <div class="col-12 p-2">
+        <p>Brend Logosi</p>
+        <Uploader v-model="brend.logo"/>          
+      </div>
 
-      <p class="text-[20px] text-bold">Brend Banner uzbekcha</p>
-      <ElFormItem prop="image.uz">
-        <Uploader v-model="brend.image.uz">
-          <ElButton class="my-2">
-            <QIcon name="upload" size="20px"></QIcon>
-            Brend Banneri uzbekcha yuklash
-          </ElButton>
-        </Uploader>
-      </ElFormItem>
+      <div class="col-12 p-2">
+        <p>Brend Image o'zbek tilida</p>
+        <Uploader v-model="brend.image.uz"/>
+      </div>
 
-      <p class="text-[20px] text-bold">Brend Banner ruscha</p>
-      <ElFormItem prop="image.ru">
-        <Uploader v-model="brend.image.ru">
-          <ElButton class="my-2">
-            <QIcon name="upload" size="20px"></QIcon>
-            Brend Banneri ruscha yuklash
-          </ElButton>
-        </Uploader>
-      </ElFormItem>
-
-
-      <ElFormItem>
-        <ElButton @click="submitForm(ruleFormRef)" color="teal">
-          <q-icon name="save" size="20px" />
+      <div class="col-12 p-2">
+        <p>Brend Image rus tilida</p>
+        <Uploader v-model="brend.image.ru"/>
+      </div>
+      
+      <div class="col-6 p-2 row gap-2">
+        <QBtn type="submit" color="teal" :loading="loading" glossy>
+          <q-icon name="save"/>
           Saqlash
-        </ElButton>
-        <ElButton @click="$router.back()" color="red">
-          <q-icon name="close" size="20px" />
+        </QBtn>
+
+        <QBtn type="button" @click="$router.back()" color="red" glossy>
+          <q-icon name="close" />
           Bekor qilish
-        </ElButton>
-      </ElFormItem>
+        </QBtn>
+      </div>
 
-
-    </ElForm>
+    </QForm>
   </q-page>
 </template>
   
 <script setup lang="ts">
-import type { FormInstance, FormRules } from 'element-plus'
 definePageMeta({
   layout: "default"
 });
 
-
+const router = useRouter();
 const brendStore = useBrendStore();
 const { brend } = brendStore;
 
-const ruleFormRef = ref<FormInstance>()
-
-const rules = reactive({
-  "name": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-  "logo": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }]
-})
+const rules = val => val && val.length > 0 || "Iltimos maydoni to'ldiring"; 
 
 
-const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  await formEl.validate(async (valid, fields) => {
-    if (valid) {
-      console.log('submit!')
-      await brendStore.addBrend(brend);
-    } else {
-      console.log('error submit!', fields)
-    }
-  })
+const submitForm = async () => {
+    await brendStore.addBrend(brend);
+    router.back();
 }
 
 

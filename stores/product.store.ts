@@ -17,7 +17,6 @@ export const useProductStore = defineStore("productStore", () => {
             ru: ""
         },
         properteis: [],
-        isPropery: false,
         orginal_price: null,
         sale_price: null,
         countInStock: 1,
@@ -36,7 +35,7 @@ export const useProductStore = defineStore("productStore", () => {
 
 
     const addProduct = async (result: IProduct) => {
-        const data = await useAPIFetch("/product", {
+        const data = await useAPIFetch("/product-add", {
             method: "post",
             body: result
         });
@@ -49,7 +48,7 @@ export const useProductStore = defineStore("productStore", () => {
 
     const getProducts = async () => {
         await Reset();
-        const data = await useAPIFetch("/products");
+        const data = await useAPIFetch("/product-all");
         products.value = data as IProduct[];
         return data;
     }
@@ -63,7 +62,7 @@ export const useProductStore = defineStore("productStore", () => {
 
 
     const getById = async (id: string) => {
-        const data = await useAPIFetch("/product/" + id);
+        const data = await useAPIFetch("/product-one/" + id);
         product.value = data as IProduct;
         return data;
     }
@@ -71,7 +70,7 @@ export const useProductStore = defineStore("productStore", () => {
 
 
     const updateProduct = async (id: string, product: IProduct) => {
-        const data = await useAPIFetch("/product/" + id, {
+        const data = await useAPIFetch("/product-edit/" + id, {
             method: "put",
             body: product
         });
@@ -81,7 +80,7 @@ export const useProductStore = defineStore("productStore", () => {
 
 
     const deleteProduct = async (id: string, index: number) => {
-        const data = await useAPIFetch(`/product/${id}`, { method: "delete" })
+        const data = await useAPIFetch(`/product-delete/${id}`, { method: "delete" })
         return data;
     }
 
@@ -98,7 +97,6 @@ export const useProductStore = defineStore("productStore", () => {
                 ru: ""
             },
             properteis: [],
-            isPropery: false,
             orginal_price: null,
             sale_price: null,
             countInStock: 1,

@@ -108,7 +108,9 @@ const props = defineProps({
   isEmpty: {
     type: String,
     default: ""
-  }
+  },
+
+  required: Boolean
 
 });
 

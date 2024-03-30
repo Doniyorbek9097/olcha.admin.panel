@@ -41,7 +41,7 @@
                <q-card-actions align="right">
                  <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/category/sub/${props.row._id}`"/>
                <q-btn size="sm" flat icon="delete" color="red"
-                 @click="deleteCategory(props.row._id, categoryStore.categories.indexOf(props.row))" />
+                 @click="deleteCategory(props.row, categoryStore.categories.indexOf(props.row))" />
              </q-card-actions>
  
              </q-card>
@@ -77,7 +77,7 @@
            <q-td :props="props">
              <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/category/sub/${props.row._id}`"/>
              <q-btn icon="delete" size="sm" class="q-ml-sm" flat dense color="red"
-               @click="deleteCategory(props.row._id, categoryStore.categories.indexOf(props.row))" />
+               @click="deleteCategory(props.row, categoryStore.categories.indexOf(props.row))" />
            </q-td>
          </template>
        </q-table>
@@ -92,6 +92,7 @@
  
  });
  
+ const $q = useQuasar();
  const { get } = useLocalStorage();
  const localePath = useLocalePath();
  const categoryStore = useCategoryStore();
@@ -151,7 +152,25 @@
  ]);
  
  
- const deleteCategory = async (id, index) => categoryStore.deleteCategory(id, index);
+ const deleteCategory = async (category, index) => {
+  $q.dialog({
+        title: `${category.name} toifasini o'chirish`,
+        message: 'Rostan ham ochirilsinmi ?',
+        ok: {
+          push: true,
+          color: "green",
+        },
+        cancel: {
+          push: true,
+          color:"red"
+        },
+        persistent: true
+      }).onOk(async() => {
+        categoryStore.subCategories.splice(index, 1);
+        await categoryStore.deleteCategory(category._id, index);
+      })
+}
+ 
  
  
  

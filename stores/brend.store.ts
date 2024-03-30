@@ -66,6 +66,7 @@ export const useBrendStore = defineStore("brendStore", () => {
 
     const getBrend = async (id: string) => {
         const data = await useAPIFetch(`/brend/${id}`);
+        brend.value = data as IBrend;
         return data;
     }
 

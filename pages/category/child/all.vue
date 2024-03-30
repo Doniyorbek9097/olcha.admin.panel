@@ -2,12 +2,12 @@
   <q-page class="q-pa-sm">
      <q-card flat>
        <q-table :grid="grid"  :filter="filter" flat bordered title="Category" :rows="categoryStore.childCategories"
-        :columns="columns" virtual-scroll v-model:pagination="pagination">
+        :columns="columns" :virtual-scroll="pending" v-model:pagination="pagination">
          <template #top>
            <q-toolbar style="padding:0 !important;">
              <q-btn flat round dense icon="category" />
              <q-toolbar-title>
-               Categories
+               Child Categories
              </q-toolbar-title>
              <q-space />
              <GirdList v-model="grid"/>
@@ -39,9 +39,9 @@
                </q-card-section>
  
                <q-card-actions align="right">
-                 <q-btn icon="edit" size="sm" flat dense color="blue" :to="localePath(`/category/child/${props.row._id}`)"/>
+                 <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/category/child/${props.row._id}`"/>
                <q-btn size="sm" flat icon="delete" color="red"
-                 @click="deleteCategory(props.row._id, categoryStore.categories.indexOf(props.row))" />
+                 @click="deleteCategory(props.row, categoryStore.childCategories.indexOf(props.row))" />
              </q-card-actions>
  
              </q-card>
@@ -75,9 +75,9 @@
  
          <template #body-cell-action="props">
            <q-td :props="props">
-             <q-btn icon="edit" size="sm" flat dense color="blue" :to="localePath(`/category/child/${props.row._id}`)"/>
+             <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/category/child/${props.row._id}`"/>
              <q-btn icon="delete" size="sm" class="q-ml-sm" flat dense color="red"
-               @click="deleteCategory(props.row._id, categoryStore.categories.indexOf(props.row))" />
+               @click="deleteCategory(props.row, categoryStore.childCategories.indexOf(props.row))" />
            </q-td>
          </template>
        </q-table>
@@ -92,9 +92,11 @@
  
  });
  
+ const $q = useQuasar();
  const { get } = useLocalStorage();
  const localePath = useLocalePath();
  const categoryStore = useCategoryStore();
+ 
  const grid = ref(false);
  const filter = ref("");
  const pagination = ref({ rowsPerPage: 100 })
@@ -103,14 +105,13 @@
  onMounted(async() => {
     grid.value = get("isGrid")
  }) 
-
-
+ 
  const { data, pending, error } = await useLazyAsyncData("child", async () => {
   return await categoryStore.getCategory();
 })
 
 
- 
+
  
  const columns = ref([
  {
@@ -151,7 +152,25 @@
  ]);
  
  
- const deleteCategory = async (id, index) => categoryStore.deleteCategory(id, index);
+ const deleteCategory = async (category, index) => {
+  $q.dialog({
+        title: `${category.name} toifasini o'chirish`,
+        message: 'Rostan ham ochirilsinmi ?',
+        ok: {
+          push: true,
+          color: "green",
+        },
+        cancel: {
+          push: true,
+          color:"red"
+        },
+        persistent: true
+      }).onOk(async() => {
+        categoryStore.childCategories.splice(index, 1);
+        await categoryStore.deleteCategory(category._id, index);
+      })
+}
+ 
  
  
  

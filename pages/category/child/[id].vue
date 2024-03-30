@@ -1,188 +1,127 @@
 <template>
   <q-page class="p-5">
-    <ElForm ref="ruleFormRef" :model="category" :rules="rules" label-width="120px" label-position="top"
-      class="demo-ruleForm" :size="$q.screen.md ? 'large': 'default'" status-icon>
-      <ElFormItem prop="parentId">
-        <ElCol :span="24">
-            <el-select v-model="category.parent" filterable allow-create default-first-option :reserve-keyword="false"
-              placeholder="* Parent Category tanlang">
-              <el-option v-for="item in categories" :key="item._id" :label="item.slug" :value="(item._id as string)" />
-            </el-select>
-          </ElCol>
-      </ElFormItem>
+    <QForm class="row" @submit="submitForm">
+      <div class="col-12 p-2">
+        <p>Ota Category</p>
+        <QSelect v-model="category.parent" label="Parent Category" :options="options" required emit-value map-options clearable outlined dense :rules="[rules]"/>
+      </div>
+      <div class="col-12 p-2">
+          <p>Category o'zbek tilida</p>
+          <QInput v-model="category.name.uz" outlined dense required autofocus :rules="[rules]"/>
+      </div>
+      <div class="col-12 p-2">
+          <p>Category rus tilida</p>
+          <QInput v-model="category.name.ru" outlined dense required :rules="[rules]"/>
+      </div>
 
-      <ElFormItem prop="name.uz">
-        <ElInput v-model="category.name.uz" placeholder="* Category o'zbek tilida" />
-      </ElFormItem>
+      <div class="col-12 p-2">
+        <p>Category SKU</p>
+          <QInput v-model="category.slug" label="Category Slug" outlined dense required :rules="[rules]"/>
+      </div>
 
-      <ElFormItem prop="name.ru">
-        <ElInput v-model="category.name.ru" placeholder="* Category rus tilida" />
-      </ElFormItem>
+      <div class="col-12 p-2">
+          <p>Category Icon</p>
+          <Uploader v-model="category.icon" :limit="1"/>
+      </div>
 
-      <p class=" text-xl">Categoryga iconka qo'shish</p>
-      <ElFormItem>
-        <Uploader v-model="category.icon" :limit="1" list-type="picture" :width="128" :height="128">
-          <ElButton>
-            <q-icon name="add" size="20px" />
-            Category rasm yuklash
-          </ElButton>
-        </Uploader>
-      </ElFormItem>
+      <div class="col-12 p-2">
+          <p>Category Image</p>
+          <Uploader v-model="category.image" :limit="1"/>
+      </div>
 
-      <p class=" text-xl">Categoryga rasm qo'shish</p>
-      <ElFormItem >
-        <Uploader v-model="category.image" :limit="1" list-type="picture" :width="128" :height="128">
-          <ElButton>
-            <q-icon name="add" size="20px" />
-            Category rasm yuklash
-          </ElButton>
-        </Uploader>
-      </ElFormItem>
+      
+    
+      <div class="col-12 row" v-for="banner, i in category.left_banner">
+  
+        <div class="p-2 col-6">
+          <p>Category left banner o'zbek tilida</p>
+          <Uploader v-model="banner.uz" :limit="1"/>
+      </div>
+      <div class="p-2 col-6">
+          <p>Category left banner rus tilida</p>
+          <Uploader v-model="banner.ru" :limit="1"/>
+      </div>
 
-      <p class=" text-xl">Yon tomonga banner qo'shish</p>
-      <!-- left banner add  -->
-      <ElFormItem required>
-        <ElRow class="w-full" v-for="banner, i in category.left_banner">
-          <ElCol :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-            <ElFormItem prop="left_banner.0.image.uz">
-              <Uploader v-model="banner.image.uz" :limit="1" list-type="picture" :width="822">
-                <ElButton>
-                  <QIcon name="upload" size="20px"></QIcon>
-                  O'zbek tilidagi bannerni yuklash
-                </ElButton>
-              </Uploader>
-            </ElFormItem>
-          </ElCol>
+      <div class="p-2 col-12">
+        <QBtn label="Left banner o'chirish" icon="delete" color="red" @click="category.left_banner.splice(i, 1)"/>
+      </div>
+      </div>
 
-          <ElCol :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-            <ElFormItem prop="left_banner.0.image.ru">
-              <Uploader v-model="banner.image.ru" :limit="1" list-type="picture" :width="822">
-                <ElButton>
-                  <QIcon name="upload" size="20px"></QIcon>
-                  Ruscha tilidagi bannerni yuklash
-                </ElButton>
-              </Uploader>
-            </ElFormItem>
-          </ElCol>
+      <div class="col-12 my-5" v-if="!category.left_banner?.length!!">
+      <QBtn label="Left banner qo'shish" icon="add" color="green" @click="addToLeftBanner"/>
+    </div>
+    
 
 
-          <ElCol :span="24">
-            <ElFormItem prop="left_banner.0.slug">
-              <el-select v-model="banner.slug" size="large" filterable allow-create default-first-option
-                :reserve-keyword="false" placeholder="Bannerga havola yo'lini ko'rsating">
-                <el-option v-for="item in categories" :key="item._id" :label="item.slug"
-                  :value="(item.slug as string)" />
-              </el-select>
-            </ElFormItem>
-          </ElCol>
-        </ElRow>
-
-        <ElButton @click="addToLeftBanner">
-          <q-icon name="add" size="20px" />
-          Yonga banner qo'shish
-        </ElButton>
-      </ElFormItem>
-
-      <p class=" text-xl">Yuqorida turuvchi bannerlar qo'shish</p>
       <!-- top banner add  -->
-      <ElFormItem required>
-        <ElRow class="w-full" v-for="banner, i in category.top_banner">
+      <div class="col-12 row" v-for="banner, i in category.top_banner">  
+        <div class="p-2 col-6">
+          <p>Category top banner o'zbek tilida</p>
+          <Uploader v-model="banner.uz" :limit="1"/>
+      </div>
 
-          <ElCol :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-            <ElFormItem prop="top_banner.0.image.uz">
-              <Uploader v-model="banner.image.uz" :limit="1" list-type="picture">
-                <ElButton>
-                  <QIcon name="upload" size="20px"></QIcon>
-                  O'zbek tilidagi bannerni yuklash
-                </ElButton>
-              </Uploader>
-            </ElFormItem>
-          </ElCol>
+      <div class="p-2 col-6">
+          <p>Category top banner rus tilida</p>
+          <Uploader v-model="banner.ru" :limit="1"/>
+      </div>
 
-          <ElCol :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
-            <ElFormItem prop="top_banner.0.image.ru">
-              <Uploader v-model="banner.image.ru" :limit="1" list-type="picture">
-                <ElButton>
-                  <QIcon name="upload" size="20px"></QIcon>
-                  Rus tilidagi bannerni yuklash
-                </ElButton>
-              </Uploader>
-            </ElFormItem>
-          </ElCol>
+      <div class="p-2 col-12">
+        <QBtn label="Top banner o'chirish" icon="delete" color="red" @click="category.top_banner.splice(i, 1)"/>
+      </div>
+      </div>
+
+      <div class="col-12 my-5" v-if="category.top_banner?.length < 3">
+      <QBtn label="Top banner qo'shish" icon="add" color="green" @click="addToTopBanner"/>
+    </div>
 
 
-          <ElCol :span="24">
-            <ElFormItem prop="top_banner.0.slug">
-              <el-select v-model="banner.slug" filterable allow-create default-first-option :reserve-keyword="false"
-                placeholder="Bannerga havola yo'lini ko'rsating">
-                <el-option v-for="item in categories" :key="item._id" :label="item.slug"
-                  :value="(item.slug as string)" />
-              </el-select>
-            </ElFormItem>
-          </ElCol>
-        </ElRow>
-
-        <ElCol :span="24">
-          <ElButton @click="addToTopBanner">
-            <q-icon name="add" size="20px" />
-            Yuqoriga bannerlar qo'shish
-          </ElButton>
-        </ElCol>
-      </ElFormItem>
-
-
-
-      <ElFormItem>
-        <ElButton @click="submitForm(ruleFormRef)" color="teal">
-          <q-icon name="save" size="20px" />
+      <div class="col-6 p-2 row gap-2">
+        <QBtn type="submit" color="teal" :loading="loading" glossy>
+          <q-icon name="save"/>
           Saqlash
-        </ElButton>
-        <ElButton @click="$router.back()" color="red">
-          <q-icon name="close" size="20px" />
+        </QBtn>
+        <QBtn @click="$router.back()" color="red" glossy>
+          <q-icon name="close" />
           Bekor qilish
-        </ElButton>
-      </ElFormItem>
-
-
-    </ElForm>
+        </QBtn>
+      </div>
+    </QForm>
+    
   </q-page>
 </template>
 
 <script setup lang="ts">
-import type { FormInstance } from 'element-plus'
+const router = useRouter();
 
 definePageMeta({
   layout: "default"
 });
 
+const rules = val => val && val.length > 0 || "Iltimos maydoni to'ldiring"; 
 
 const id = useRoute().params.id as string;
 
 const categoryStore = useCategoryStore();
-  await categoryStore.getCategory();
-  await categoryStore.getOneCategory(id);
+ 
+const {data, pending, error} = await useAsyncData("category-edit", async() => {
+  const [categories, category ] = await Promise.all([
+    await categoryStore.getCategory(),
+    await categoryStore.getOneCategory(id)
+  ]);
 
-   
-const { category, categories } = categoryStore;
-
-
-const ruleFormRef = ref<FormInstance>();
-
-const rules = reactive({
-  "name.uz": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-  "name.ru": [{ required: true, message: "Iltimos maydoni to'ldiring", trigger: "blur" }],
-  "image": [{ required: true, message: "Iltimos rasmni yuklang", trigger: "change" }],
-
-  "left_banner.0.image.uz": [{ required: true, message: "Iltimos banner yuklang", trigger: "change" }],
-  "left_banner.0.image.ru": [{ required: true, message: "Iltimos banner yuklang", trigger: "change" }],
-  "left_banner.0.slug": [{ required: true, message: "Iltimos banner havola (slug)", trigger: "change" }],
-
-  "top_banner.0.image.uz": [{ required: true, message: "Iltimos banner yuklang", trigger: "change" }],
-  "top_banner.0.image.ru": [{ required: true, message: "Iltimos banner yuklang", trigger: "change" }],
-  "top_banner.0.slug": [{ required: true, message: "Iltimos banner havola (slug)", trigger: "change" }],
-
+  return {
+    categories,
+    category
+  }
+  
 })
+   
 
+const { category, subCategories, loading } = storeToRefs(categoryStore);
+const options = subCategories.value.flatMap(cate => ({
+   label: cate.name,
+   value: cate._id
+}))
 
 
 const addToLeftBanner = () => {
@@ -210,16 +149,9 @@ const addToTopBanner = () => {
 
 
 
-const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  await formEl.validate(async (valid, fields) => {
-    if (valid) {
-      console.log('submit!')
-      await categoryStore.updateCategory(id, category);
-    } else {
-      console.log('error submit!', fields)
-    }
-  })
+const submitForm = async () => { 
+    await categoryStore.updateCategory(id, category);
+    router.back();
 }
 
 

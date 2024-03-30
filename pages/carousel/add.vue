@@ -1,6 +1,6 @@
 <template>
     <q-page class="p-5">
-        <ElForm ref="ruleFormRef" v-if="pending" :model="carousel" :rules="rules" label-width="120px" label-position="top"
+        <ElForm ref="ruleFormRef" v-if="!pending" :model="carousel" :rules="rules" label-width="120px" label-position="top"
             class="demo-ruleForm" :size="$q.screen.md ? 'large' : 'default'" status-icon>
 
             <p class="text-xl py-2"> O'zbek tilidagi bannerni yuklash uchun bosing</p>
@@ -15,16 +15,10 @@
 
             <p class="text-xl py-2"> Rus tilidagi bannerni yuklash uchun bosing</p>
             <ElFormItem prop="image.ru">
-                <Uploader v-model="carousel.image.ru">
-                    <ElButton>
-                        <QIcon name="upload" size="20px"></QIcon>
-                        Ruscha tilidagi bannerni yuklash
-                    </ElButton>
-                </Uploader>
+                <Uploader v-model="carousel.image.ru" @delete-image="deleteImage"/>
             </ElFormItem>
 
             <ElFormItem prop="slug">
-                {{ carousel.slug }}
                 <el-select :loading="pending" v-model="carousel.slug" size="large" filterable allow-create
                     default-first-option :reserve-keyword="false" placeholder="Bannerga havola yo'lini ko'rsating">
                     <el-option v-for="item in categories" :key="item._id" :label="item.slug" :value="'/category/'+(item.slug)" />
@@ -32,20 +26,20 @@
             </ElFormItem>
 
 
-            <ElFormItem prop="slug">
+            <!-- <ElFormItem prop="slug">
                 <el-select :loading="pending" v-model="carousel.slug" size="large" filterable allow-create
                     default-first-option :reserve-keyword="false" placeholder="Brendga havola yo'lini ko'rsating">
                     <el-option v-for="item in brendStore.brends" :key="item._id" :label="item.slug" :value="'/brend/'+(item.slug)" />
                 </el-select>
-            </ElFormItem>
+            </ElFormItem> -->
 
             
-            <ElFormItem prop="slug">
+            <!-- <ElFormItem prop="slug">
                 <el-select :loading="pending" v-model="carousel.slug" size="large" filterable allow-create
                     default-first-option :reserve-keyword="false" placeholder="Productsga havola yo'lini ko'rsating">
                     <el-option v-for="item in productStore.products" :key="item._id" :label="item.slug" :value="'/brend/'+(item.slug)" />
                 </el-select>
-            </ElFormItem>
+            </ElFormItem> -->
 
             <ElFormItem>
                 <ElButton @click="submitForm(ruleFormRef)" color="teal">
@@ -103,6 +97,10 @@ const rules = reactive({
 
 })
 
+
+const deleteImage = (imagePath, index) => {
+    
+}
 
 const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return

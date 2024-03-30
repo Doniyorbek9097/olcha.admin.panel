@@ -1,13 +1,14 @@
 import { acceptHMRUpdate, defineStore } from "pinia"
 import type { ICategory } from "~/types";
 import { useRouter } from "#vue-router";
-import { useQuasar } from "quasar";
 
 export const useCategoryStore = defineStore("categoryStore", () => {
+    const router = useRouter();
     const 
         categories = ref<ICategory[]>([]),
         subCategories = ref<ICategory[]>([]),
         childCategories = ref<ICategory[]>([]),
+        loading = ref(false),
         category = ref<ICategory>({
             name: {
                 uz: "",
@@ -21,8 +22,17 @@ export const useCategoryStore = defineStore("categoryStore", () => {
         });
 
     const addCategory = async (category: ICategory) => {
-        const data = await useAPIFetch("/category", { method: "post", body: category });
+       try {
+        loading.value = true;
+        const data = await useAPIFetch("/category-add", { method: "post", body: category });
         return data;
+
+       } catch (error) {
+         console.log(error);
+         
+       } finally {
+        loading.value = false;
+       }
     };
 
 
@@ -30,26 +40,27 @@ export const useCategoryStore = defineStore("categoryStore", () => {
 
     const getCategory = async () => {
         await Reset();
-        const data =  await useAPIFetch("/categories");
-        categories.value = data as ICategory[];
+        const data =  await useAPIFetch("/category-all");
+        categories.value = data?.categories as ICategory[];
         subCategories.value = categories.value.flatMap((cate: ICategory) => cate.children) as ICategory[];
         childCategories.value = subCategories.value.flatMap((cate: ICategory) => cate.children) as ICategory[];
         return data;
     }
 
     const getOneCategory = async (id: string) => {
-        const data = await useAPIFetch(`/category/${id}`);
+        const data = await useAPIFetch(`/category-one/${id}`);
         category.value = data as ICategory;
         return data;
     }
 
     const updateCategory = async (id: string, category: ICategory) => {
-        const data = await useAPIFetch(`/category/${id}`, { method: "put", body: category });
+        const data = await useAPIFetch(`/category-edit/${id}`, { method: "put", body: category });
         return data;
     }
 
     const deleteCategory = async (id: string, index: number) => {
-        const data = await useAPIFetch(`/category/${id}`, { method: "delete" });
+        const data = await useAPIFetch(`/category-delete/${id}`, { method: "delete" });
+        categories.value.splice(index, 1);
         return data;
     }
 
@@ -73,6 +84,7 @@ const Reset = async () => {
         subCategories,
         childCategories,
         category,
+        loading,
         addCategory,
         getCategory,
         getOneCategory,

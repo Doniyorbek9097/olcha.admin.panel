@@ -26,6 +26,7 @@
     "@nuxtjs/i18n": "^8.0.0-beta.10",
     "@pinia/nuxt": "^0.5.1",
     "@quasar/extras": "^1.16.9",
+    "maz-ui": "^3.36.2",
     "pinia": "^2.1.7",
     "quasar": "^2.14.2"
   }

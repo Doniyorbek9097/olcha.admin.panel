@@ -13,6 +13,7 @@ export default defineNuxtConfig({
   modules: [
     'nuxt-quasar-ui',
     '@element-plus/nuxt',
+    'maz-ui/nuxt',
     ['@pinia/nuxt',
       {
         autoImports: ["defineStore", "acceptHMRUpdate"],
@@ -36,6 +37,17 @@ export default defineNuxtConfig({
       "LocalStorage",
       "AppFullscreen" 
     ]
+  },
+
+  mazUi: {
+    injectComponents: true,
+    injectCss: true,
+    injectAos: {
+      injectCss: true,
+    },
+    injectUseToast: true,
+    injectUseThemeHandler: true,
+    devtools: true,
   },
 
   // pwa: {
@@ -92,7 +104,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      baseURL: process.env.BASE_URL || 'http://localhost:5000',
+      baseURL: process.env.BASE_URL || 'http://localhost:5000/api/admin',
       MONGO_URI: process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/Clozzone'
     },
   },

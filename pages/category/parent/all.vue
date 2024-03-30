@@ -1,7 +1,9 @@
 <template>
   <q-page class="q-pa-sm">
      <q-card flat>
-       <q-table :grid="grid" :filter="filter" flat bordered title="Category" :rows="categoryStore.categories"
+       <q-table :grid="grid" :filter="filter" flat bordered title="Category" :rows="categoryStore.categories" 
+      selection="multiple"
+      v-model:selected="selected"
         :columns="columns" :virtual-scroll="pending" v-model:pagination="pagination">
          <template #top>
            <q-toolbar style="padding:0 !important;">
@@ -12,7 +14,6 @@
              <q-space />
              <GirdList v-model="grid"/>
              <q-btn flat round dense icon="add" class="q-mr-xs" :to="localePath('/category/parent/add')" />
- 
            </q-toolbar>
            <q-toolbar>
              <q-space />
@@ -77,13 +78,15 @@
            <q-td :props="props">
              <q-btn icon="edit" size="sm" flat dense color="blue" :to="`/category/parent/${props.row._id}`"/>
              <q-btn icon="delete" size="sm" class="q-ml-sm" flat dense color="red"
-               @click="deleteCategory(props.row._id, categoryStore.categories.indexOf(props.row))" />
+               @click="deleteCategory(props.row, categoryStore.categories.indexOf(props.row))" />
            </q-td>
          </template>
        </q-table>
      </q-card>
- 
-   </q-page>
+    
+     <q-btn v-if="selectedActive" icon="delete" class="fixed bottom-[15%] left-[50%] duration-75 -translate-x-[50%]"></q-btn>
+   
+    </q-page>
  </template>
  
  <script setup>
@@ -91,7 +94,7 @@
      layout:"default"
  
  });
- 
+ const $q = useQuasar();
  const { get } = useLocalStorage();
  const localePath = useLocalePath();
  const categoryStore = useCategoryStore();
@@ -104,30 +107,29 @@ const { data, pending, error } = await useLazyAsyncData("parent", async () => {
  const grid = ref(false);
  const filter = ref("");
  const pagination = ref({ rowsPerPage: 100 })
+const selected = ref([]);
+const selectedActive = ref(false);
 
+watch(selected, () => {
+    if(selected.value.length) {
+      selectedActive.value = true
+    }
+    else {
+      selectedActive.value = false
+    }
+})
  
  onMounted(async() => {
     grid.value = get("isGrid")
- }) 
+ })
+ 
+ 
+ const selectedDelete = () => {
+  
+ }
  
  
  const columns = ref([
- {
-   name: 'image',
-   field: "image",
-   label: 'Image',
-   align: 'left',
-   required: true
- },
-
- {
-   name: 'parent',
-   field: "parent",
-   label: 'Parent Category',
-   align: 'left',
-   required: true
- },
- 
 
  {
    name: 'name',
@@ -149,10 +151,25 @@ const { data, pending, error } = await useLazyAsyncData("parent", async () => {
  
  ]);
  
- 
- const deleteCategory = async (id, index) => {
-  categoryStore.deleteCategory(id, index)
- }
+
+ const deleteCategory = async (category, index) => {
+  $q.dialog({
+        title: `${category.name} toifasini o'chirish`,
+        message: 'Rostan ham ochirilsinmi ?',
+        ok: {
+          push: true,
+          color: "green",
+        },
+        cancel: {
+          push: true,
+          color:"red"
+        },
+        persistent: true
+      }).onOk(async() => {
+        categoryStore.categories.splice(index, 1);
+        await categoryStore.deleteCategory(category._id, index);
+      })
+}
  
  
  

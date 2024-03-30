@@ -42,7 +42,7 @@
                             @click="navigateTo(localePath(`/product/${props.row._id}`))" />
 
                         <q-btn icon="delete" size="sm" class="q-ml-sm" flat dense color="red"
-                            @click="productStore.deleteProduct(props.row._id, productStore.products.indexOf(props.row))" />
+                            @click="deleteProduct(props.row, productStore.products.indexOf(props.row))" />
 
                     </q-td>
                 </template>
@@ -74,7 +74,7 @@
                                 <q-btn type="primary" icon="edit"
                                     @click="navigateTo(localePath(`/product/${props.row._id}`))" />
                                 <q-btn type="primary" icon="delete"
-                                    @click="productStore.deleteProduct(props.row._id, productStore.products.indexOf(props.row))" />
+                                    @click="deleteProduct(props.row, productStore.products.indexOf(props.row))" />
                             </q-card-actions>
 
                         </q-card>
@@ -94,7 +94,7 @@ definePageMeta({
     layout: "default"
 })
 const { get } = useLocalStorage()
-
+const $q = useQuasar();
 const localePath = useLocalePath();
 const { t } = useI18n()
 const productStore = useProductStore();
@@ -168,7 +168,29 @@ const columns = [
         field: 'action'
     },
 
-]
+];
+
+
+
+const deleteProduct = async (product, index) => {
+  $q.dialog({
+        title: `${product.name}ni o'chirish`,
+        message: 'Rostan ham ochirilsinmi ?',
+        ok: {
+          push: true,
+          color: "green",
+        },
+        cancel: {
+          push: true,
+          color:"red"
+        },
+        persistent: true
+      }).onOk(async() => {
+        productStore.products.splice(index, 1);
+        await productStore.deleteProduct(product._id, index);
+      })
+}
+ 
 
 
 
