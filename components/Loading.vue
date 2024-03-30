@@ -1,5 +1,5 @@
 <template>
-    <div class="loading-wrapper">
+    <div v-if="show" class="loading-wrapper">
         <div class="pulse-container">
             <div class="pulse-bubble pulse-bubble-1"></div>
             <div class="pulse-bubble pulse-bubble-2"></div>
@@ -9,20 +9,31 @@
 </template>
 
 <script setup>
+const nuxtApp = useNuxtApp();
+const show = ref(false);
+
+addRouteMiddleware('global-loader', () => {
+    show.value = true
+}, {
+    global: true
+})
+
+nuxtApp.hook('page:finish', () => { show.value = false; })
 </script>
 
 
 <style scoped>
 .loading-wrapper {
     display: flex;
-    height: 100%;
+    height: 100vh;
     width: 100%;
-    position:absolute;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
     justify-content: center;
     align-items: center;
+    background: rgba(245, 242, 242, 0.836);
 }
 
 .pulse-container {
