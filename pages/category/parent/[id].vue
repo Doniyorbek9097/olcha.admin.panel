@@ -38,6 +38,11 @@
           <Uploader v-model="banner.ru" :limit="1"/>
       </div>
 
+      <div class="p-2 col-6">
+          <p>Category left banner Slug</p>
+          <QSelect v-model="banner.slug" label="Banner Slug" :options="options" required emit-value map-options clearable outlined dense :rules="[rules]"/>
+      </div>
+
       <div class="p-2 col-12">
         <QBtn label="Left banner o'chirish" icon="delete" color="red" @click="category.left_banner.splice(i, 1)"/>
       </div>
@@ -59,6 +64,11 @@
       <div class="p-2 col-6">
           <p>Category top banner rus tilida</p>
           <Uploader v-model="banner.ru" :limit="1"/>
+      </div>
+
+      <div class="p-2 col-6">
+          <p>Category top banner SLUG</p>
+          <QSelect v-model="banner.slug" label="Banner Slug" :options="options" required emit-value map-options clearable outlined dense :rules="[rules]"/>
       </div>
 
       <div class="p-2 col-12">
@@ -110,8 +120,17 @@ const {data, pending, error} = await useAsyncData("category-edit", async() => {
   }
   
 })
-   
-const { category, categories } = data.value;
+  
+const rules = val => val && val.length > 0 || "Iltimos maydoni to'ldiring"; 
+
+
+const { category, categories } = storeToRefs(categoryStore);
+
+const options = categories.value.flatMap(cate => ({
+   label: cate.name,
+   value: cate._id
+}))
+
 
 
 const addToLeftBanner = () => {
