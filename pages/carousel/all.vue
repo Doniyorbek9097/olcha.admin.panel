@@ -40,7 +40,7 @@
    
                  <q-card-actions align="right">
                  <q-btn size="sm" flat icon="delete" color="red"
-                   @click="deleteCarousel(props.row._id, carouselStore.carouseles.indexOf(props.row))" />
+                   @click="deleteCarousel(props.row, carouselStore.carouseles.indexOf(props.row))" />
                </q-card-actions>
    
                </q-card>
@@ -64,7 +64,7 @@
            <template #body-cell-action="props">
              <q-td :props="props">
                <q-btn icon="delete" size="sm" class="q-ml-sm" flat dense color="red"
-                 @click="deleteCarousel(props.row._id, carouselStore.carouseles.indexOf(props.row))" />
+                 @click="deleteCarousel(props.row, carouselStore.carouseles.indexOf(props.row))" />
              </q-td>
            </template>
          </q-table>
@@ -83,6 +83,7 @@
    const filter = ref("");
    const pagination = ref({ rowsPerPage: 100 })
    const localePath = useLocalePath();
+   const $q = useQuasar();
    
    const carouselStore = useCarouselStore();
 
@@ -123,10 +124,25 @@
    ]);
    
    
-   const deleteCarousel = async (id, index) => {
-        carouselStore.deleteCarousel(id, index);
-   
-       }
+   const deleteCarousel = async (carousel, index) => {
+        $q.dialog({
+        title: `${carousel.slug}ni o'chirish`,
+        message: 'Rostan ham ochirilsinmi ?',
+        ok: {
+          push: true,
+          color: "green",
+        },
+        cancel: {
+          push: true,
+          color:"red"
+        },
+        persistent: true
+      }).onOk(async() => {
+        carouselStore.carouseles.splice(index, 1);
+        await carouselStore.deleteCarousel(carousel._id, index);
+      })
+
+    }
    
    
    </script>

@@ -4,7 +4,7 @@
       <template #control>
     <div>
         <div class="w-full flex flex-nowrap gap-2" v-if="changeImageUrl">
-            <q-input v-model="input" @keyup.enter="ImgListPush(input)" :label="props.label" dense />
+            <q-input v-model="input" @keyup.enter="ImgListPush(input)" :label="props.label" dense :required="props.required" />
             <q-btn @click="ImgListPush(input)" class="bg-green text-white" label="Qo'shish" dense/>
         </div>
     
@@ -64,6 +64,11 @@ const props = defineProps({
     isEmpty: {
         type: String,
         default:""
+    },
+
+    required: {
+        type:Boolean,
+        default: false
     },
 
     width: Number,
