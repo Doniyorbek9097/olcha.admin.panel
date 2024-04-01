@@ -7,6 +7,7 @@ export const useCarouselStore = defineStore("carouselStore", () => {
     const router = useRouter();
     const $q = useQuasar();
     const carouseles = ref<ICarousel[]>([]);
+    const loading = ref(false);
     const carousel = ref<ICarousel>({
         image: {
             uz: "",
@@ -16,8 +17,10 @@ export const useCarouselStore = defineStore("carouselStore", () => {
     });
 
     const addCarousel = async (carousel: ICarousel) => {
+        loading.value = true;
         const  data = await useAPIFetch("/carousel", { method: "post", body: carousel });
         carousel.value = data as ICarousel;
+        loading.value = false;
         return data;
     }
 
@@ -49,6 +52,7 @@ export const useCarouselStore = defineStore("carouselStore", () => {
     return {
         carouseles,
         carousel,
+        loading,
         addCarousel,
         getCarousel,
         deleteCarousel,

@@ -116,15 +116,15 @@ const { data, pending, error } = await useLazyAsyncData("product-add", async () 
 const rules = val => val && val.length > 0 || "Iltimos maydoni to'ldiring"; 
 
 
-const { categories } = categoryStore;
+const { categories } = storeToRefs(categoryStore);
 const { brends } = brendStore;
-const { product } = productStore;
+const { product, loading } = storeToRefs(productStore);
 
 const parentCategories = ref([]);
 const subCategories = ref([]);
 const childCategories = ref([]);
 
-parentCategories.value = categories.flatMap(cate => ({
+parentCategories.value = categories.value.flatMap(cate => ({
   label: cate.name,
   value: cate._id,
   children:cate.children
@@ -167,7 +167,7 @@ const selectedSubCategory = (id: string) => {
 
 
 const AddPropery = () => {
-  product.properteis?.push({
+  product.value.properteis?.push({
       key: {
          uz:"",
          ru:""
@@ -185,9 +185,8 @@ const AddPropery = () => {
 
 
 
-
 const submitForm = async () => {
-  await productStore.addProduct(product);
+  await productStore.addProduct(product.value);
   router.back();
 }
 

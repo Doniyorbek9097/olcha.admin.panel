@@ -15,7 +15,7 @@
                 <QInput v-model="carousel.slug" dense outlined placeholder="URL" required :rules="[rules]"/>
             </div>
         <div class="col-12 row gap-2 mt-4">
-            <QBtn type="submit" color="teal">
+            <QBtn type="submit" color="teal" :loading="loading">
                     <q-icon name="save" size="20px" />
                     Saqlash
             </QBtn>
@@ -61,14 +61,15 @@ const { data, pending, error } = await useLazyAsyncData("carousel-add", async ()
 
 
 const { categories } = categoryStore;
-const { carousel } = carouselStore;
+const { carousel, loading } = storeToRefs(carouselStore);
 
 const rules = val => val && val.length > 0 || "Iltimos maydoni to'ldiring"; 
 
 
+const addLoading = ref(false);
 const submitForm = async () => {
     try {
-        await carouselStore.addCarousel(carousel);
+        await carouselStore.addCarousel(carousel.value);
         router.back();
     } catch (error) {
         console.log(error);

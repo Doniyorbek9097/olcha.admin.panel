@@ -7,6 +7,7 @@ export const useProductStore = defineStore("productStore", () => {
     const $q = useQuasar();
     const router = useRouter();
     const products = ref<IProduct[]>([]);
+    const loading = ref(false);
     const product = ref<IProduct>({
         name: {
             uz: "",
@@ -35,11 +36,12 @@ export const useProductStore = defineStore("productStore", () => {
 
 
     const addProduct = async (result: IProduct) => {
+        loading.value = true;
         const data = await useAPIFetch("/product-add", {
             method: "post",
             body: result
         });
-
+        loading.value = false;
         return data;
 
     }
@@ -117,6 +119,7 @@ export const useProductStore = defineStore("productStore", () => {
     return {
         products,
         product,
+        loading,
         addProduct,
         getProducts,
         getOneProduct,
