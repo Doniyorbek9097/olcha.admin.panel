@@ -79,6 +79,13 @@
       </q-item-section>
     </q-item>
 
+    <q-item active-class="q-item-no-link-highlighting" :to="localePath('/shop')">
+      <q-item-section avatar><q-icon name="fa fa-store"></q-icon></q-item-section>
+      <q-item-section>
+        <q-item-label>Stores</q-item-label>
+      </q-item-section>
+    </q-item>
+
   </q-list>
 </template>
 

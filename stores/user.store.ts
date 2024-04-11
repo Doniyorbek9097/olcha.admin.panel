@@ -11,52 +11,37 @@ export const useUserStore = defineStore("userStore", () => {
     const $q = useQuasar();
     const router = useRouter();
     const users = ref([]);
-    const user = ref(null);
+    const user = ref({
+        firstname: "",
+        lastname: "",
+        phone_number: "",
+        email: "",
+        gender: "",
+        birthday: "",
+        verified: false
+    });
 
     const IsAuth = async () => {
         const user_id = $q.cookies.get("user_id") ?? null;
-        const token = $q.cookies.get("token") ?? null;
 
-        if (user_id && token) {
-            const { data, status } = await useAPIFetch(`/user/${user_id}`);
+        if (user_id) {
+            const data = await useAPIFetch(`/user/${user_id}`);
+            return data
             
-            status.value == "success" && (user.value = data.value);
-            status.value == "error" && (
-                $q.notify({
-                    message: "User topilmadi",
-                    color: "red",
-                    position: "top-right"
-                })
-            );
         }
 
     }
 
     const Register = async (phone_number: string) => {
 
-        const { status, data, error } = await useAPIFetch("/signup", {
+        const data = await useAPIFetch("/signup", {
             method: "POST",
             body: {
                 phone_number: "998" + phone_number.split(" ").join("")
             }
         });
 
-        status.value == "success" && (
-            $q.notify({
-                message: `${phone_number} ga sms yuborildi Iltimos tasdiqlang`,
-                color: "green",
-                position: "top-right"
-            })
-        );
-
-        status.value == "error" && (
-            $q.notify({
-                message: "Serverda Xatolik",
-                color: "red",
-                position: "top-right"
-            })
-        )
-
+        return data;
 
     }
 

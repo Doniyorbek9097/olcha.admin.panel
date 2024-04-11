@@ -159,7 +159,7 @@ const addToTopBanner = () => {
 
 
 const submitForm = async () => { 
-    await categoryStore.updateCategory(id, category);
+    await categoryStore.updateCategory(id, category.value);
     router.back();
 }
 
