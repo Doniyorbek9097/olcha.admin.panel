@@ -21,7 +21,7 @@ const loading = ref(false);
 
 const getCode = async () => {
   code.value = ""
-  if (phone_number.value.length === 12) {
+  if (phone_number.value.length === 17) {
     try {
       loading.value = true;
       verified.value = false;
@@ -60,10 +60,9 @@ const Tasdiqlash = async () => {
           <div class=" text-2xl">Telefon raqamini kiriting</div>
           <div class=" text-md">Tasdiqlash kodini SMS orqali yuboramiz</div>
         </div>
-        <q-form class="flex flex-col gap-2">
-          <q-input type="tel" v-model="phone_number" required outlined class=" text-xl rounded-sm" prefix="+998"
-            mask="## ### ## ##" placeholder="00 000 00 00" />
-          <q-btn color="green" size="15px" :loading="loading" @click="getCode">Kodni olish</q-btn>
+        <q-form class="flex flex-col gap-2" @submit="getCode">
+          <custom-phone-number v-model="phone_number" required class="text-lg"/>
+          <q-btn type="submit" color="green" size="15px" :loading="loading">Kodni olish</q-btn>
         </q-form>
 
         <div class=" text-center text-sm px-5">

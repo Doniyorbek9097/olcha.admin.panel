@@ -12,21 +12,21 @@
       </div>
 
       <div class="col-6 p-1">
-        <QInput v-model="product.name.uz" label="Mahsulotni nomi uzbek tilida" outlined dense  :rules="[rules]"/>
+        <custom-field v-model="product.name.uz" :maxlength="50" placeholder="Mahsulotni nomi uzbek tilida"/>
       </div>
 
       <div class="col-6 p-1">
-        <QInput v-model="product.name.ru" label="Mahsulotni nomi rus tilida" outlined dense  :rules="[rules]"/>
+        <custom-field v-model="product.name.ru" :maxlength="50" placeholder="Mahsulotni nomi rus tilida"/>
       </div>
 
       <div class="col-12">
         <p>Product tafsif o'zbek tilida</p>
-        <CreatePost v-model="product.discription.uz" isEmpty="Iltimos maydoni to'ldiring"/>
+        <custom-textarea v-model="product.discription.uz" rules="Iltimos maydoni to'ldiring"/>
       </div>
 
       <div class="col-12">
         <p>Product tafsif rus tilida</p>
-        <CreatePost v-model="product.discription.ru" isEmpty="Iltimos maydoni to'ldiring"/>
+        <custom-textarea v-model="product.discription.ru" rules="Iltimos maydoni to'ldiring"/>
       </div>
 
       <div class="col-12">

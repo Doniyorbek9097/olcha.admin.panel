@@ -1,7 +1,7 @@
 <template>
   <div class="editor">
     <q-field ref="fieldRef" dense v-bind:model-value="modelValue" no-error-icon borderless
-      :rules="[val => isEmpty ? (!!val && val !== null) || isEmpty : true]">
+      :rules="[rules]">
 
       <template #control>
         <q-editor v-bind:model-value="modelValue" v-bind="$attrs" :dense="$q.screen.lt.md" ref="disc_uz"
@@ -105,7 +105,7 @@ const props = defineProps({
     default: ""
   },
 
-  isEmpty: {
+  rules: {
     type: String,
     default: ""
   },
@@ -115,6 +115,7 @@ const props = defineProps({
 });
 
 const emits = defineEmits(["update:modelValue", "uploadImage"])
+const rules = val => val && val.length > 0 || props.rules; 
 
 const fieldRef = ref(null)
 
