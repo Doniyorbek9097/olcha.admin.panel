@@ -1,80 +1,101 @@
-<template>
-  <q-page class="flex justify-center items-center p-5">
-    <q-card class=" w-full max-w-[400px] p-5">
-      <el-form ref="ruleFormRef" :model="user" :rules="rules" label-width="120px" label-position="top"
-        class="demo-ruleForm" :size="'large'" status-icon>
-
-          <p class="text-center text-2xl pb-5">Ro'yxatdan o'tish</p>
-
-        <el-form-item prop="phone_number">
-          <el-input v-model="user.phone_number" placeholder="Telefon raqamingiz" />
-        </el-form-item>
-
-        <el-form-item>
-          <el-button class="w-full" type="primary" color="blue" @click="submitForm(ruleFormRef)">
-            Ro'yxatdan o'tish
-          </el-button>
-        </el-form-item>
-
-        <ElFormItem>
-          <ElButton class="w-full" :link="true" @click="navigateTo(localePath('/login'))">Kirish</ElButton>
-        </ElFormItem>
-
-      </el-form>
-    </q-card>
-  </q-page>
-</template>
-
-<script lang="ts" setup>
-import type { FormInstance, FormRules } from 'element-plus'
+<script setup>
 definePageMeta({
   layout: "register"
 })
 
-const localePath = useLocalePath();
-const userStore = useUserStore();
 
-const user = reactive({});
-
-const ruleFormRef = ref<FormInstance>()
-
-const rules = reactive<FormRules<RuleForm>>({
-  firstname: [
-    { required: true, message: 'Iltimos ismingizni kiriting', trigger: 'blur' },
-    { min: 3, max: 20, message: 'Belgi usunligi min-3 max-20', trigger: 'blur' },
-  ],
-
-  phone_number: [
-    { required: true, message: 'Iltimos telefon raqamingiz kiriting', trigger: 'blur' },
-    { min: 7, max: 7, message: 'sonlar usunligi 7 ta bo\'lish kerak', trigger: 'blur' },
-  ],
-
-  email: [
-    { required: true, message: 'Iltimos telefon raqamingiz kiriting', trigger: 'blur' }
-  ],
-
-  password: [
-    { required: true, message: 'Iltimos Parol kiriting', trigger: 'blur' },
-    { min: 10, max: 20, message: 'Belgi usunligi min-10 max-20', trigger: 'blur' },
-  ]
-})
-
-const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  await formEl.validate((valid, fields) => {
-    if (valid) {
-      navigateTo(localePath('/verifyCode'))
-
-    } else {
-      console.log('error submit!', fields)
-    }
-  })
+const close = () => {
+  isShowRegisterForm.value = false;
 }
 
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
+
+import { storeToRefs } from 'pinia'
+const $q = useQuasar();
+const userStore = useUserStore();
+await userStore.GetUser()
+const { user, users, isShowRegisterForm } = storeToRefs(userStore);
+const phone_number = ref("");
+const code = ref("");
+const verified = ref(false);
+const loading = ref(false);
+
+const getCode = async () => {
+  code.value = ""
+  if (phone_number.value.length === 12) {
+    try {
+      loading.value = true;
+      verified.value = false;
+      const { data, pending, error } = await useAsyncData('getCode', async () => await userStore.Register(phone_number.value));
+      loading.value = false;
+      verified.value = true;
+    } catch (error) {
+      verified.value = false;
+    }
+  }
+}
+
+
+const Tasdiqlash = async () => {
+  if (code.value.length === 4) {
+    try {
+      loading.value = true;
+      const { data, pending, error } = await useAsyncData('setCode', async () => await userStore.VerifyCode(code.value, phone_number.value));
+      loading.value = false;
+      await userStore.GetUser()
+    } catch (error) {
+      verified.value = false;
+    }
+  }
 }
 
 
 </script>
+
+<template>
+  <q-page class="flex justify-center items-center p-5">
+    <div class="min-w-[300px] max-w-[500px]" v-bind="$attrs">
+      <div v-if="!verified" class="flex flex-col gap-5">
+
+        <div class="flex flex-col gap-1">
+          <div class=" text-2xl">Telefon raqamini kiriting</div>
+          <div class=" text-md">Tasdiqlash kodini SMS orqali yuboramiz</div>
+        </div>
+        <q-form class="flex flex-col gap-2">
+          <q-input type="tel" v-model="phone_number" required outlined class=" text-xl rounded-sm" prefix="+998"
+            mask="## ### ## ##" placeholder="00 000 00 00" />
+          <q-btn color="green" size="15px" :loading="loading" @click="getCode">Kodni olish</q-btn>
+        </q-form>
+
+        <div class=" text-center text-sm px-5">
+          Avtotizatsiyadan o'tish orqali siz shaxsiy ma'lumotlarni qayta ishlash siyosatiga rozilik
+          bildirasiz
+        </div>
+
+      </div>
+
+
+      <div v-else class="flex flex-col gap-5">
+        <div class="flex flex-col gap-1">
+          <div class=" text-2xl">Tasdiqlash Kodni kiriting</div>
+          <div class=" text-md">Biz sizga tasdiqlash kodini SMS orqali yubordik</div>
+        </div>
+        <q-form class="flex flex-col gap-2">
+          <q-input type="number" v-model="code" required outlined mask="####" placeholder="XXXX"
+            class=" placeholder:text-center text-xl rounded-sm" />
+          <q-btn color="green" size="15px" :loading="loading" @click="Tasdiqlash">Tasdiqlash</q-btn>
+          <q-btn color="black" size="15px" @click="verified = false">Boshqa raqam terish</q-btn>
+
+        </q-form>
+
+        <div class=" text-center text-sm px-5">
+          Avtotizatsiyadan o'tish orqali siz shaxsiy ma'lumotlarni qayta ishlash siyosatiga rozilik
+          bildirasiz
+        </div>
+
+      </div>
+  </div>
+  </q-page>
+</template>
+
+<style scoped>
+</style>

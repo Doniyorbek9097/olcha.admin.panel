@@ -40,8 +40,8 @@
   <script lang="ts" setup>
   import type { FormInstance, FormRules } from 'element-plus'
   definePageMeta({
-      layout: "register"
-  })
+  layout: "register"
+})
   
   const localePath = useLocalePath();
   const userStore = useUserStore();

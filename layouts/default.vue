@@ -1,3 +1,10 @@
+<script setup>
+const userStore = useUserStore();
+const showSidebar = ref(false);
+const showAccount = ref(false);
+
+</script>
+
 <template>
   <q-layout view="lHr LPR lfr">
     <q-header show-if-above bordered>
@@ -46,19 +53,14 @@
 
 
     <q-page-container>
-      <NuxtPage class="min-h-[100vh] overflow-auto" />
+      <slot class="min-h-[100vh] overflow-auto" />
       <Footer />
     </q-page-container>
+    
     <Account v-model="showAccount" />
   </q-layout>
 </template>
   
-<script setup>
-const showSidebar = ref(false);
-const showAccount = ref(false);
 
-
-
-</script>
   
 <style lang="scss" scoped></style>

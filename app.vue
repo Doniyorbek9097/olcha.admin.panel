@@ -2,7 +2,9 @@
   <div>
     <!-- <NuxtLoadingIndicator  color="lime"/> -->
     <Loading/>
-    <NuxtLayout/>
+    <NuxtLayout name="default">
+      <NuxtPage/>
+    </NuxtLayout>
   </div>
 </template>
 
